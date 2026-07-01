@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MathRef — Command Center</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" id="katex-css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<style>
+/* ==========================================================================
+   MathRef Command Center — "instrument bench" identity.
+   Serif display for headings, system sans for controls, monospace for LaTeX.
+   The signature element is the wrist preview: a live 200px canvas seated in
+   a drawn Core Time 2 bezel with a pixel ruler and overflow flags.
+   ========================================================================== */
+:root {
+  --bg: #f4f1ea;            /* warm paper bench top */
+  --panel: #ffffff;
+  --panel-2: #faf8f3;
+  --ink: #1c1a17;
+  --ink-soft: #5c574e;
+  --line: #d8d2c4;
+  --line-strong: #b8b09e;
+  --accent: #0055ff;
+  --accent-ink: #ffffff;
+  --danger: #d21f1f;
+  --ok: #00842c;
+  --warn: #b87400;
+  --sel: #e8e2d2;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --shadow: 0 1px 2px rgba(30,25,15,.08), 0 6px 18px rgba(30,25,15,.07);
+}
+html[data-theme="dark"] {
+  --bg: #17161a;
+  --panel: #201f24;
+  --panel-2: #2a292f;
+  --ink: #ece9e2;
+  --ink-soft: #a49e93;
+  --line: #3a383f;
+  --line-strong: #565360;
+  --sel: #33313a;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.35);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--sans); font-size: 14px; line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+h1,h2,h3 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
+h1 { font-size: 20px; margin: 0; }
+h2 { font-size: 16px; margin: 0 0 10px; }
+h3 { font-size: 14px; margin: 14px 0 6px; color: var(--ink-soft); }
+button, select, input, textarea {
+  font: inherit; color: var(--ink); background: var(--panel);
+  border: 1px solid var(--line-strong); border-radius: 6px; padding: 6px 10px;
+}
+textarea { font-family: var(--mono); font-size: 13px; width: 100%; resize: vertical; }
+button { cursor: pointer; background: var(--panel-2); }
+button:hover { border-color: var(--ink-soft); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 600; }
+button.danger { color: var(--danger); border-color: var(--danger); background: transparent; }
+button.small { padding: 2px 8px; font-size: 12px; border-radius: 5px; }
+label { display: block; margin: 8px 0 3px; font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+input[type="text"], input[type="password"], input[type="number"], select { width: 100%; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.grow { flex: 1; }
+.muted { color: var(--ink-soft); font-size: 12px; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
+
+/* ---- header ---- */
+header {
+  display: flex; align-items: center; gap: 14px; padding: 10px 16px;
+  background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 30;
+}
+header .brand small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+#hdr-db { max-width: 180px; }
+#btn-sync { white-space: nowrap; }
+
+/* ---- tabs ---- */
+nav.tabs { display: flex; gap: 2px; padding: 0 12px; background: var(--panel); border-bottom: 1px solid var(--line); overflow-x: auto; }
+nav.tabs button {
+  border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none;
+  padding: 9px 12px; color: var(--ink-soft); font-weight: 600; white-space: nowrap;
+}
+nav.tabs button.active { color: var(--ink); border-bottom-color: var(--accent); }
+main { padding: 14px; max-width: 1180px; margin: 0 auto; }
+section.tab { display: none; }
+section.tab.active { display: block; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; box-shadow: var(--shadow); }
+.cols { display: grid; grid-template-columns: minmax(320px, 1fr) 300px; gap: 14px; align-items: start; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+
+/* ---- symbol toolbar ---- */
+.symbar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.symbar .grp { position: relative; }
+.symbar .grp > button { font-family: var(--serif); }
+.symbar .pop {
+  display: none; position: absolute; z-index: 20; top: 100%; left: 0; margin-top: 4px;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 8px; padding: 6px;
+  box-shadow: var(--shadow); grid-template-columns: repeat(6, 1fr); gap: 4px; min-width: 230px;
+}
+.symbar .grp.open .pop { display: grid; }
+.symbar .pop button { padding: 4px 2px; font-family: var(--serif); font-size: 15px; }
+
+/* ---- block editor ---- */
+.block {
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; background: var(--panel-2);
+}
+.block .row { margin-bottom: 6px; }
+.block textarea { min-height: 54px; }
+.swatches { display: flex; gap: 4px; }
+.swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); padding: 0; }
+.swatch.sel { border-color: var(--ink); box-shadow: 0 0 0 2px var(--accent); }
+
+/* ---- wrist preview (signature element) ---- */
+.wrist { position: sticky; top: 106px; }
+.bezel {
+  width: 248px; margin: 0 auto; background: #14161a; border-radius: 34px; padding: 22px 22px;
+  border: 1px solid #000; box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.35);
+  position: relative;
+}
+.bezel::before, .bezel::after {
+  content: ""; position: absolute; right: -5px; width: 5px; height: 26px; background: #26292f;
+  border-radius: 0 3px 3px 0; border: 1px solid #000;
+}
+.bezel::before { top: 52px; }
+.bezel::after { bottom: 52px; }
+.screenwrap { width: 200px; height: 228px; overflow: hidden; background: #fff; position: relative; outline: 1px solid #000; }
+#preview-scroll { position: absolute; left: 0; top: 0; width: 200px; }
+.pxruler { display: flex; justify-content: space-between; width: 244px; margin: 4px auto 0; font-family: var(--mono); font-size: 9px; color: var(--ink-soft); }
+.ovflags { margin-top: 8px; font-size: 12px; }
+.ovflags .bad { color: var(--danger); font-weight: 600; }
+.ovflags .good { color: var(--ok); font-weight: 600; }
+
+/* content rendered inside the 200px canvas */
+.wcontent { width: 200px; background: #fff; color: #000; padding: 2px; font-family: Georgia, serif; }
+.wcontent .blk { margin: 2px 0; position: relative; }
+.wcontent .blk.overflow { outline: 2px solid #d21f1f; outline-offset: -2px; }
+.wcontent .seg { display: block; white-space: nowrap; cursor: pointer; }
+.wcontent .cont-end::after { content: " ↴"; color: #555; font-size: .8em; }
+.wcontent .cont-start::before { content: "↳ "; color: #555; font-size: .8em; }
+.wcontent svg { display: block; }
+.fs-S { font-size: 13px; } .fs-M { font-size: 16px; } .fs-L { font-size: 20px; }
+
+/* ---- lists / library ---- */
+.item-row {
+  display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-bottom: 1px solid var(--line);
+}
+.item-row:hover { background: var(--sel); }
+.item-row .t { font-weight: 600; }
+.item-row .path { font-size: 11px; color: var(--ink-soft); }
+.pill { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; border: 1px solid var(--line-strong); color: var(--ink-soft); }
+.pill.fc { color: var(--accent); border-color: var(--accent); }
+
+/* ---- stats ---- */
+.statgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+.stat b { display: block; font-family: var(--serif); font-size: 24px; }
+table.log { width: 100%; border-collapse: collapse; font-size: 12px; }
+table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+
+/* ---- modal ---- */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50; }
+.modal-bg.open { display: flex; align-items: center; justify-content: center; }
+.modal { background: var(--panel); border-radius: 10px; padding: 16px; max-width: 560px; width: calc(100% - 30px); max-height: 84vh; overflow: auto; box-shadow: var(--shadow); }
+.tokline { display: flex; flex-wrap: wrap; gap: 0; font-family: var(--mono); font-size: 14px; margin: 10px 0; }
+.tok { padding: 3px 1px; }
+.gap { width: 12px; text-align: center; cursor: pointer; color: var(--line-strong); border-radius: 3px; }
+.gap:hover { background: var(--sel); color: var(--ink); }
+.gap.split { color: var(--danger); font-weight: 700; }
+
+#toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 20px; z-index: 60; display: none; font-weight: 600; }
+#measure { position: absolute; left: -9999px; top: 0; }
+.qa-tabs button { border-radius: 6px 6px 0 0; border-bottom: 0; }
+.qa-tabs button.active { background: var(--accent); color: #fff; }
+.queue-badge { background: var(--warn); color: #fff; border-radius: 9px; font-size: 10px; padding: 0 6px; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><h1>MathRef</h1><small>Command Center</small></div>
+  <select id="hdr-db" title="Active database"></select>
+  <span class="grow"></span>
+  <button id="btn-theme" class="small" title="Light / Dark">◐</button>
+  <button id="btn-sync" class="primary">Sync to Watch</button>
+</header>
+
+<nav class="tabs">
+  <button data-tab="editor" class="active">Editor</button>
+  <button data-tab="library">Library</button>
+  <button data-tab="queue">Review Queue<span id="queue-n" class="queue-badge" style="display:none">0</span></button>
+  <button data-tab="databases">Databases</button>
+  <button data-tab="stats">Stats</button>
+  <button data-tab="settings">Settings</button>
+</nav>
+
+<main>
+
+<!-- ============================ EDITOR ============================ -->
+<section class="tab active" id="tab-editor">
+  <div class="cols">
+    <div class="panel">
+      <div class="row">
+        <h2 class="grow" id="ed-heading">New Datablock</h2>
+        <select id="ed-type" style="width:auto">
+          <option value="db">Datablock</option>
+          <option value="fc">Flashcard</option>
+        </select>
+        <button id="ed-new" class="small">New</button>
+      </div>
+
+      <div class="row qa-tabs" id="ed-qa" style="display:none; margin-top:6px">
+        <button id="qa-q" class="active">Question page</button>
+        <button id="qa-a">Answer page</button>
+        <span class="grow"></span>
+        <button id="qa-dup" class="small" title="Duplicate this page to replace the other">Duplicate → other page</button>
+        <button id="qa-import" class="small" title="Import an independent copy of a datablock">Import datablock…</button>
+      </div>
+
+      <h3>Symbol toolbar</h3>
+      <div class="symbar" id="symbar"></div>
+
+      <h3>Content blocks</h3>
+      <div id="blocks"></div>
+      <div class="row">
+        <button id="add-text" class="small">+ Text</button>
+        <button id="add-math" class="small">+ Math</button>
+        <button id="add-svg" class="small">+ SVG</button>
+        <span class="grow"></span>
+        <button id="btn-ai">✦ Format with AI</button>
+      </div>
+
+      <h3>Metadata</h3>
+      <label>Title</label>
+      <input type="text" id="md-title" placeholder="e.g. Heat equation — separation of variables">
+      <div class="row">
+        <div class="grow">
+          <label>Created</label>
+          <input type="text" id="md-created" readonly>
+        </div>
+        <div class="grow">
+          <label>Last modified</label>
+          <input type="text" id="md-modified" readonly>
+        </div>
+      </div>
+      <label>Categories (multi-select)</label>
+      <select id="md-cats" multiple size="4"></select>
+      <label>Tags (comma separated)</label>
+      <input type="text" id="md-tags" placeholder="pde, fourier">
+      <label>Notes / source reference</label>
+      <input type="text" id="md-notes" placeholder="Kreyszig §12.5">
+      <label>Content font size</label>
+      <select id="md-fontsz">
+        <option value="S">Small</option>
+        <option value="M" selected>Medium</option>
+        <option value="L">Large</option>
+      </select>
+      <div id="md-linked"></div>
+      <div id="md-srs" style="display:none"></div>
+    </div>
+
+    <div class="wrist">
+      <div class="panel">
+        <div class="bezel"><div class="screenwrap"><div id="preview-scroll"></div></div></div>
+        <div class="pxruler"><span>0</span><span>50</span><span>100</span><span>150</span><span>200px</span></div>
+        <div class="row" style="justify-content:center; margin-top:6px">
+          <button id="pv-up" class="small">▲ page</button>
+          <span class="muted" id="pv-page">page 1/1</span>
+          <button id="pv-down" class="small">▼ page</button>
+          <button id="pv-mode" class="small" title="Toggle live preview / compiled bitmap">Live</button>
+        </div>
+        <div class="ovflags" id="ovflags"></div>
+        <hr>
+        <button id="btn-save" class="primary" style="width:100%">Save to database</button>
+        <div class="muted" id="save-hint" style="margin-top:6px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ LIBRARY ============================ -->
+<section class="tab" id="tab-library">
+  <div class="panel">
+    <div class="row">
+      <input type="text" id="lib-search" class="grow" placeholder="Search titles, tags, categories, notes…">
+      <button id="lib-import-item" class="small">Import item JSON…</button>
+    </div>
+    <div id="lib-list"></div>
+    <hr>
+    <h2>Categories</h2>
+    <div id="cat-list"></div>
+    <div class="row" style="margin-top:8px">
+      <input type="text" id="cat-name" placeholder="New category name" class="grow">
+      <select id="cat-parent" style="width:auto"><option value="">(top level)</option></select>
+      <button id="cat-add" class="small">Add</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ QUEUE ============================ -->
+<section class="tab" id="tab-queue">
+  <div class="panel">
+    <h2>Bulk upload</h2>
+    <p class="muted">Upload a structured JSON file of raw datablocks. Each is passed through AI formatting and auto-splitting, then held here for manual inspection, overflow resolution and approval. See <span style="font-family:var(--mono)">samples/bulk-upload-sample.json</span>.</p>
+    <div class="row">
+      <input type="file" id="bulk-file" accept=".json">
+      <button id="bulk-run">Run AI pipeline</button>
+      <span class="muted" id="bulk-status"></span>
+    </div>
+    <hr>
+    <h2>Review queue</h2>
+    <div id="queue-list"></div>
+  </div>
+</section>
+
+<!-- ============================ DATABASES ============================ -->
+<section class="tab" id="tab-databases">
+  <div class="panel">
+    <h2>Databases</h2>
+    <p class="muted">Multiple databases can be loaded; exactly one is active. The active database syncs automatically to the watch on the next Bluetooth connection after you press “Sync to Watch”.</p>
+    <div id="db-list"></div>
+    <div class="row" style="margin-top:10px">
+      <input type="text" id="db-new-name" placeholder="New database name" class="grow">
+      <button id="db-create" class="small">Create</button>
+      <button id="db-import" class="small">Import full JSON…</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ STATS ============================ -->
+<section class="tab" id="tab-stats">
+  <div class="panel">
+    <h2>Statistics dashboard</h2>
+    <div class="statgrid" id="stat-cards"></div>
+    <h3>Due per category</h3>
+    <div id="stat-cats"></div>
+    <h3>Per-card performance</h3>
+    <select id="stat-card-sel"></select>
+    <div id="stat-card-hist"></div>
+    <h3>Session log (latest 100)</h3>
+    <div style="max-height:300px; overflow:auto"><table class="log" id="stat-log"></table></div>
+  </div>
+</section>
+
+<!-- ============================ SETTINGS ============================ -->
+<section class="tab" id="tab-settings">
+  <div class="cols">
+    <div class="panel">
+      <h2>Appearance</h2>
+      <label>System theme (phone chrome + watch menus)</label>
+      <select id="st-theme"><option value="light">Light</option><option value="dark">Dark</option></select>
+      <label>Watch accent colour</label>
+      <div class="swatches" id="st-accent"></div>
+      <label>Watch menu font size</label>
+      <select id="st-menufont"><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select>
+
+      <h2 style="margin-top:18px">SM-2 configuration</h2>
+      <div class="row">
+        <div class="grow"><label>Starting easiness</label><input type="number" id="sm-startEF" step="0.05" min="1.3"></div>
+        <div class="grow"><label>Minimum easiness</label><input type="number" id="sm-minEF" step="0.05" min="1.0"></div>
+      </div>
+      <div class="row">
+        <div class="grow"><label>First interval (days)</label><input type="number" id="sm-firstIvl" min="1"></div>
+        <div class="grow"><label>Second interval (days)</label><input type="number" id="sm-secondIvl" min="1"></div>
+      </div>
+      <button id="st-save" class="primary" style="margin-top:10px">Save settings (send to watch)</button>
+
+      <h2 style="margin-top:18px">SM-2 resets</h2>
+      <p class="muted">Per-card resets live on each card in the Library. These act across the active database.</p>
+      <div class="row"><button id="rs-all" class="danger small">All cards · all profiles</button></div>
+      <div class="row" style="margin-top:6px"><button id="rs-global" class="danger small">All cards · global profile only</button></div>
+      <div class="row" style="margin-top:6px">
+        <select id="rs-cat-sel" style="width:auto"></select>
+        <button id="rs-cat" class="danger small">All cards · this category profile</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>AI formatting</h2>
+      <label>Anthropic API key</label>
+      <input type="password" id="st-apikey" placeholder="sk-ant-…">
+      <label>Model</label>
+      <input type="text" id="st-model" value="claude-sonnet-4-6">
+      <p class="muted">Used only by “Format with AI” and the bulk pipeline. Everything else runs offline.</p>
+      <h2 style="margin-top:18px">Companion</h2>
+      <label>Config page URL (stored on phone)</label>
+      <input type="text" id="st-cfgurl" placeholder="https://you.github.io/mathref-command-center/index.html">
+      <button id="st-cache-katex" class="small" style="margin-top:10px">Cache KaTeX assets for offline use</button>
+      <div class="muted" id="katex-cache-status" style="margin-top:4px"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- split-marker editor modal -->
+<div class="modal-bg" id="split-modal">
+  <div class="modal">
+    <h2>Split markers</h2>
+    <p class="muted">Click a gap between tokens to toggle a <span style="font-family:var(--mono)">%%SPLIT%%</span> marker. Segments render on separate lines with continuation indicators.</p>
+    <div class="tokline" id="split-toks"></div>
+    <div class="row" style="justify-content:flex-end">
+      <button id="split-cancel" class="small">Cancel</button>
+      <button id="split-apply" class="primary small">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- datablock import picker modal -->
+<div class="modal-bg" id="pick-modal">
+  <div class="modal">
+    <h2>Import a datablock copy</h2>
+    <p class="muted">Creates a fully independent copy on this page; the original datablock is never modified.</p>
+    <div id="pick-list"></div>
+    <div class="row" style="justify-content:flex-end; margin-top:8px"><button id="pick-cancel" class="small">Cancel</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="measure"></div>
+<input type="file" id="file-db-import" accept=".json" style="display:none">
+<input type="file" id="file-item-import" accept=".json" style="display:none">
+
+<script>
+'use strict';
+/* ===========================================================================
+ * MathRef Command Center — application logic
+ *
+ * State model (localStorage 'mcc_state'):
+ *   { databases:[{id,name,settings,categories,items,srs,stats,queue}],
+ *     activeDb, ui:{theme,apiKey,model,configUrl} }
+ *
+ * Item source model (superset of the compiled bundle item):
+ *   db: {id,type:'db',title,created,modified,cats,tags,notes,fontsz,
+ *        blocks:[{type:'text'|'math'|'svg',src,color}], img:{w,h,pal,data}}
+ *   fc: {..., qblocks, ablocks, q:{...}, a:{...}}
+ *
+ * Compiled bundle handed to pkjs on sync (must match src/pkjs/index.js):
+ *   {v:1,name,settings:{theme,accent,menuFont,sm2},categories,items,srs,stats}
+ * =========================================================================== */
+
+/* ---------------- palette (must stay legible on the Core Time 2) ---------- */
+/* Each entry: display name, CSS rgb, Pebble GColor8 ARGB8 byte.
+ * Indices 0-3 system, 4-9 accents, 10-15 pale anti-alias tints. */
+var PALETTE = [
+  { n:'white',  rgb:[255,255,255], argb8:0xFF },
+  { n:'black',  rgb:[0,0,0],       argb8:0xC0 },
+  { n:'dkgray', rgb:[85,85,85],    argb8:0xD5 },
+  { n:'ltgray', rgb:[170,170,170], argb8:0xEA },
+  { n:'blue',   rgb:[0,85,255],    argb8:0xC7 },
+  { n:'green',  rgb:[0,170,0],     argb8:0xC8 },
+  { n:'amber',  rgb:[255,170,0],   argb8:0xF8 },
+  { n:'red',    rgb:[255,0,0],     argb8:0xF0 },
+  { n:'purple', rgb:[170,0,170],   argb8:0xE2 },
+  { n:'cyan',   rgb:[0,170,170],   argb8:0xCA },
+  { n:'p-blue',   rgb:[170,170,255], argb8:0xEB },
+  { n:'p-green',  rgb:[170,255,170], argb8:0xEE },
+  { n:'p-amber',  rgb:[255,255,170], argb8:0xFE },
+  { n:'p-red',    rgb:[255,170,170], argb8:0xFA },
+  { n:'p-purple', rgb:[255,170,255], argb8:0xFB },
+  { n:'p-cyan',   rgb:[170,255,255], argb8:0xEF }
+];
+var CONTENT_COLORS = ['black','blue','green','amber','red','purple','cyan'];
+var ACCENTS = ['blue','green','amber','red','purple','cyan'];
+function palByName(n){ for (var i=0;i<PALETTE.length;i++) if (PALETTE[i].n===n) return PALETTE[i]; return PALETTE[1]; }
+function cssRgb(p){ return 'rgb('+p.rgb[0]+','+p.rgb[1]+','+p.rgb[2]+')'; }
+
+var SCREEN_W = 200, SCREEN_H = 228, PAGE_OVERLAP = 20, PAGE_STEP = SCREEN_H - PAGE_OVERLAP;
+var SPLIT = '%%SPLIT%%';
+
+/* ------------------------------- state ----------------------------------- */
+var STATE_KEY = 'mcc_state';
+var S = null;
+
+function defaultSettings(){
+  return { theme:'light', accent:'blue', menuFont:'M',
+           sm2:{ startEF:2.5, minEF:1.3, firstIvl:1, secondIvl:6 } };
+}
+function newDb(name){
+  return { id:'db_'+Date.now().toString(36), name:name,
+           settings: defaultSettings(), categories:[], items:[],
+           srs:{}, stats:{log:[]}, queue:[] };
+}
+function loadState(){
+  try { S = JSON.parse(localStorage.getItem(STATE_KEY)); } catch(e){ S = null; }
+  if (!S || !S.databases || !S.databases.length) {
+    S = { databases:[newDb('My Mathematics')], activeDb:null,
+          ui:{theme:'light', apiKey:'', model:'claude-sonnet-4-6', configUrl:''} };
+    S.activeDb = S.databases[0].id;
+  }
+  if (!S.ui) S.ui = {theme:'light', apiKey:'', model:'claude-sonnet-4-6', configUrl:''};
+}
+function saveState(){
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(S)); }
+  catch(e){ toast('Storage full — export & prune databases'); }
+}
+function db(){ 
+  for (var i=0;i<S.databases.length;i++) if (S.databases[i].id===S.activeDb) return S.databases[i];
+  return S.databases[0];
+}
+
+/* -------------------- runtime state handed over by pkjs ------------------- */
+/* pkjs opens us with '#runtime=' + encodeURIComponent(JSON.stringify(
+ *   {srs, stats, name})) so the dashboard reflects reviews done on the wrist
+ * since the last sync. The phone is the source of truth for review state. */
+function mergeRuntime(){
+  var h = location.hash || '';
+  var m = h.match(/#runtime=(.*)$/);
+  if (!m) return;
+  try {
+    var rt = JSON.parse(decodeURIComponent(m[1]));
+    var d = db();
+    if (rt && rt.name && rt.name === d.name) {
+      if (rt.srs) d.srs = rt.srs;
+      if (rt.stats) d.stats = rt.stats;
+      saveState();
+      toast('Loaded live review state from watch companion');
+    }
+  } catch(e){}
+}
+
+/* --------------------------------- utils ---------------------------------- */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function toast(msg){
+  var t = $('toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._h); t._h = setTimeout(function(){ t.style.display='none'; }, 2600);
+}
+function fmtDate(sec){ return sec ? new Date(sec*1000).toISOString().slice(0,10) : '—'; }
+function nowSec(){ return Math.floor(Date.now()/1000); }
+function uid(p){ return p + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function deepCopy(o){ return JSON.parse(JSON.stringify(o)); }
+function download(name, text){
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type:'application/json'}));
+  a.download = name; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 5000);
+}
+function catPath(catId){
+  var d = db(), parts = [], id = catId, guard = 0;
+  while (id && guard++ < 12) {
+    var c = null;
+    for (var i=0;i<d.categories.length;i++) if (d.categories[i].id===id) c = d.categories[i];
+    if (!c) break;
+    parts.unshift(c.name); id = c.parent;
+  }
+  return parts.join(' › ') || '(uncategorised)';
+}
+function itemPaths(it){
+  if (!it.cats || !it.cats.length) return '(uncategorised)';
+  return it.cats.map(catPath).join('  ·  ');
+}
+
+/* ============================ KaTeX offline cache ========================== */
+/* KaTeX operates fully offline after initial load: on first use we fetch the
+ * stylesheet, inline every font it references as a data URI and keep the
+ * result in localStorage. The cached CSS is also what we embed inside the
+ * SVG foreignObject when rasterising, so fonts survive the snapshot. */
+var KATEX_CSS_KEY = 'mcc_katex_css';
+var katexCssInline = null;
+
+function ensureKatexAssets(){
+  if (katexCssInline) return Promise.resolve(katexCssInline);
+  var cached = localStorage.getItem(KATEX_CSS_KEY);
+  if (cached) { katexCssInline = cached; return Promise.resolve(cached); }
+  var link = $('katex-css');
+  var base = link.href.replace(/katex\.min\.css$/, '');
+  return fetch(link.href).then(function(r){ return r.text(); }).then(function(css){
+    var urls = [];
+    css.replace(/url\((fonts\/[^)]+?\.woff2)\)/g, function(_, u){ urls.push(u); return _; });
+    urls = urls.filter(function(u,i){ return urls.indexOf(u)===i; });
+    return Promise.all(urls.map(function(u){
+      return fetch(base + u).then(function(r){ return r.arrayBuffer(); }).then(function(buf){
+        var b = new Uint8Array(buf), s = '';
+        for (var i=0;i<b.length;i++) s += String.fromCharCode(b[i]);
+        return { u:u, d:'data:font/woff2;base64,' + btoa(s) };
+      }).catch(function(){ return {u:u, d:null}; });
+    })).then(function(fonts){
+      fonts.forEach(function(f){
+        if (f.d) css = css.split('url('+f.u+')').join('url('+f.d+')');
+      });
+      // strip non-woff2 fallbacks so the CSS stays lean
+      css = css.replace(/,url\(fonts\/[^)]+\) format\("(woff|truetype)"\)/g, '');
+      katexCssInline = css;
+      try { localStorage.setItem(KATEX_CSS_KEY, css); } catch(e){ /* too big — keep in memory */ }
+      return css;
+    });
+  });
+}
+
+/* ============================ block rendering ============================== */
+/* Render an item's blocks into a 200px-wide DOM tree. Math blocks are split
+ * at %%SPLIT%% markers; every non-final segment gets a trailing continuation
+ * glyph and every continuation a leading one. Each block reports overflow if
+ * its content is wider than 200px, which paints the red border and gates the
+ * save button. */
+function renderBlocks(blocks, fontsz, forSnapshot){
+  var root = document.createElement('div');
+  root.className = 'wcontent fs-' + (fontsz || 'M');
+  (blocks || []).forEach(function(b, bi){
+    var el = document.createElement('div');
+    el.className = 'blk';
+    el.dataset.bi = bi;
+    var color = cssRgb(palByName(b.color || 'black'));
+    if (b.type === 'svg') {
+      el.innerHTML = b.src || '';
+      var sv = el.querySelector('svg');
+      if (sv) { sv.setAttribute('width', '200'); sv.removeAttribute('height'); }
+    } else if (b.type === 'math') {
+      var segs = String(b.src || '').split(SPLIT);
+      segs.forEach(function(seg, si){
+        var sp = document.createElement('span');
+        sp.className = 'seg' + (si < segs.length-1 ? ' cont-end' : '') + (si > 0 ? ' cont-start' : '');
+        sp.style.color = color;
+        sp.dataset.bi = bi;
+        try { katex.render(seg, sp, {throwOnError:false, displayMode:false}); }
+        catch(e){ sp.textContent = seg; }
+        el.appendChild(sp);
+      });
+    } else { // text
+      var segs2 = String(b.src || '').split(SPLIT);
+      segs2.forEach(function(seg, si){
+        var sp = document.createElement('span');
+        sp.className = 'seg' + (si < segs2.length-1 ? ' cont-end' : '') + (si > 0 ? ' cont-start' : '');
+        sp.style.color = color;
+        sp.style.whiteSpace = 'normal';
+        sp.dataset.bi = bi;
+        sp.textContent = seg;
+        el.appendChild(sp);
+      });
+    }
+    root.appendChild(el);
+  });
+  return root;
+}
+
+/* Measure overflow: mount in the hidden measuring area, compare each block's
+ * scrollWidth against the 200px canvas. Returns [{bi, w}] for offenders. */
+function measureOverflow(root){
+  var meas = $('measure');
+  meas.innerHTML = '';
+  meas.appendChild(root);
+  var bad = [];
+  var blks = root.querySelectorAll('.blk');
+  for (var i=0;i<blks.length;i++){
+    var w = blks[i].scrollWidth;
+    var segs = blks[i].querySelectorAll('.seg');
+    for (var j=0;j<segs.length;j++) w = Math.max(w, segs[j].scrollWidth);
+    if (w > SCREEN_W) { bad.push({bi:i, w:w}); blks[i].classList.add('overflow'); }
+  }
+  var h = root.scrollHeight;
+  meas.removeChild(root);
+  return { bad:bad, height:h };
+}
+
+/* ============================ rasterisation ================================ */
+/* DOM -> SVG foreignObject -> canvas -> nearest-palette quantise -> 4bpp pack.
+ * The packed format is exactly what src/c/imgrx.c expects: 2px per byte, high
+ * nibble first, stride ceil(w/2), palette bytes as GColor8 ARGB8. */
+function snapshotToCanvas(root, height){
+  return ensureKatexAssets().then(function(css){
+    var clone = root.cloneNode(true);
+    clone.style.margin = '0';
+    var xhtml = new XMLSerializer().serializeToString(clone);
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+SCREEN_W+'" height="'+height+'">' +
+      '<foreignObject width="100%" height="100%">' +
+      '<div xmlns="http://www.w3.org/1999/xhtml">' +
+      '<style>' + css + inlineAppCss() + '</style>' + xhtml + '</div>' +
+      '</foreignObject></svg>';
+    var url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    return new Promise(function(res, rej){
+      var img = new Image();
+      img.onload = function(){
+        var cv = document.createElement('canvas');
+        cv.width = SCREEN_W; cv.height = height;
+        var cx = cv.getContext('2d');
+        cx.fillStyle = '#fff';
+        cx.fillRect(0,0,SCREEN_W,height);
+        cx.drawImage(img, 0, 0);
+        res(cv);
+      };
+      img.onerror = function(){ rej(new Error('snapshot failed')); };
+      img.src = url;
+    });
+  });
+}
+/* the slice of app CSS the snapshot needs (content styles only) */
+function inlineAppCss(){
+  return '.wcontent{width:200px;background:#fff;color:#000;padding:2px;font-family:Georgia,serif}' +
+    '.wcontent .blk{margin:2px 0}.wcontent .seg{display:block;white-space:nowrap}' +
+    '.wcontent .cont-end::after{content:" \\21B4";color:#555;font-size:.8em}' +
+    '.wcontent .cont-start::before{content:"\\21B3 ";color:#555;font-size:.8em}' +
+    '.wcontent svg{display:block}.fs-S{font-size:13px}.fs-M{font-size:16px}.fs-L{font-size:20px}' +
+    '.blk.overflow{outline:none!important}';
+}
+function quantizeAndPack(canvas){
+  var w = canvas.width, h = canvas.height;
+  var data = canvas.getContext('2d').getImageData(0,0,w,h).data;
+  var stride = Math.ceil(w/2);
+  var out = new Uint8Array(stride*h);
+  for (var y=0;y<h;y++){
+    for (var x=0;x<w;x++){
+      var o = (y*w + x)*4;
+      var a = data[o+3]/255;
+      var r = Math.round(data[o]*a + 255*(1-a));   // composite on white
+      var g = Math.round(data[o+1]*a + 255*(1-a));
+      var b = Math.round(data[o+2]*a + 255*(1-a));
+      var best = 0, bd = 1e9;
+      for (var p=0;p<16;p++){
+        var c = PALETTE[p].rgb;
+        var dr=r-c[0], dg=g-c[1], dbb=b-c[2];
+        var dist = 2*dr*dr + 4*dg*dg + 3*dbb*dbb;  // perceptual-ish weights
+        if (dist < bd){ bd = dist; best = p; }
+      }
+      var idx = y*stride + (x>>1);
+      if ((x & 1) === 0) out[idx] = (best << 4);
+      else out[idx] |= best;
+    }
+  }
+  var bin = '';
+  for (var i=0;i<out.length;i++) bin += String.fromCharCode(out[i]);
+  return { w:w, h:h, pal: PALETTE.map(function(p){return p.argb8;}), data: btoa(bin) };
+}
+/* Full compile of one page of blocks -> {w,h,pal,data} or throws on overflow */
+function compileBlocks(blocks, fontsz){
+  var root = renderBlocks(blocks, fontsz, true);
+  var m = measureOverflow(root);
+  if (m.bad.length) return Promise.reject({overflow:m.bad});
+  var h = Math.max(1, Math.min(m.height, 4096));   // sanity ceiling
+  var root2 = renderBlocks(blocks, fontsz, true);  // fresh, unmarked tree
+  return snapshotToCanvas(root2, h).then(quantizeAndPack);
+}
+
+/* ============================ symbol toolbar =============================== */
+var SYMBOLS = {
+  'Greek': ['\\alpha','\\beta','\\gamma','\\delta','\\epsilon','\\zeta','\\eta','\\theta','\\lambda','\\mu','\\pi','\\rho','\\sigma','\\tau','\\phi','\\psi','\\omega','\\Gamma','\\Delta','\\Theta','\\Lambda','\\Sigma','\\Phi','\\Omega'],
+  'Operators': ['+','-','\\times','\\div','\\cdot','\\pm','\\mp','\\ast','\\circ','\\oplus','\\otimes','\\nabla','\\partial'],
+  'Fractions': ['\\frac{a}{b}','\\dfrac{a}{b}','\\tfrac{a}{b}','\\binom{n}{k}'],
+  'Integrals': ['\\int','\\int_{a}^{b}','\\iint','\\iiint','\\oint','\\,dx','\\,dt'],
+  'Sums': ['\\sum','\\sum_{i=1}^{n}','\\prod','\\prod_{i=1}^{n}','\\lim_{x\\to 0}','\\lim_{n\\to\\infty}'],
+  'Roots': ['\\sqrt{x}','\\sqrt[n]{x}'],
+  'Matrices': ['\\begin{pmatrix}a&b\\\\c&d\\end{pmatrix}','\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}','\\begin{vmatrix}a&b\\\\c&d\\end{vmatrix}'],
+  'Relations': ['=','\\ne','<','>','\\le','\\ge','\\approx','\\equiv','\\propto','\\sim','\\subset','\\subseteq','\\in','\\notin'],
+  'Logic': ['\\forall','\\exists','\\neg','\\land','\\lor','\\implies','\\iff','\\therefore','\\because'],
+  'Brackets': ['()','[]','\\{\\}','\\left(\\right)','\\left[\\right]','\\langle\\rangle','|x|','\\|x\\|']
+};
+var GRP_LABEL = {Greek:'αβγ', Operators:'±×', Fractions:'a⁄b', Integrals:'∫', Sums:'Σ', Roots:'√', Matrices:'[ ]', Relations:'≤≥', Logic:'∀∃', Brackets:'( )'};
+function buildSymbar(){
+  var bar = $('symbar');
+  Object.keys(SYMBOLS).forEach(function(k){
+    var g = document.createElement('div'); g.className = 'grp';
+    var b = document.createElement('button'); b.className='small'; b.textContent = GRP_LABEL[k]; b.title = k;
+    b.onclick = function(e){
+      e.stopPropagation();
+      var was = g.classList.contains('open');
+      document.querySelectorAll('.grp.open').forEach(function(x){x.classList.remove('open');});
+      if (!was) g.classList.add('open');
+    };
+    var pop = document.createElement('div'); pop.className='pop';
+    SYMBOLS[k].forEach(function(sym){
+      var sb = document.createElement('button');
+      try { katex.render(sym.replace(/\\,d[xt]/,'dx'), sb, {throwOnError:false}); }
+      catch(e){ sb.textContent = sym; }
+      if (!sb.textContent.trim()) sb.textContent = sym;
+      sb.title = sym;
+      sb.onclick = function(){ insertAtCursor(sym); g.classList.remove('open'); };
+      pop.appendChild(sb);
+    });
+    g.appendChild(b); g.appendChild(pop); bar.appendChild(g);
+  });
+  document.body.addEventListener('click', function(){
+    document.querySelectorAll('.grp.open').forEach(function(x){x.classList.remove('open');});
+  });
+}
+var lastTextarea = null;
+function insertAtCursor(text){
+  var ta = lastTextarea;
+  if (!ta) { toast('Click into a block first'); return; }
+  var s = ta.selectionStart||0, e = ta.selectionEnd||0;
+  ta.value = ta.value.slice(0,s) + text + ta.value.slice(e);
+  ta.selectionStart = ta.selectionEnd = s + text.length;
+  ta.focus();
+  ta.dispatchEvent(new Event('input'));
+}
+
+/* ================================ editor =================================== */
+/* One shared WYSIWYG editor. For flashcards it hosts two independent page
+ * buffers (Question / Answer) behind the qa tabs; for datablocks a single
+ * buffer. Saving compiles every page to a bitmap; overflow anywhere keeps the
+ * save button disabled. */
+var ED = null;      // editing buffer
+var edPage = 'q';   // active flashcard page
+var pvMode = 'live';
+var pvPage = 0;
+
+function newEditBuffer(type, from){
+  var d = db();
+  var b = from ? deepCopy(from) : {
+    id: uid(type), type: type, title:'',
+    created: nowSec(), modified: nowSec(),
+    cats: [], tags: [], notes: '', fontsz: 'M'
+  };
+  if (!from) {
+    if (type==='db') b.blocks = [{type:'math', src:'', color:'black'}];
+    else { b.qblocks = [{type:'math', src:'', color:'black'}];
+           b.ablocks = [{type:'math', src:'', color:'black'}]; }
+  }
+  b._dirty = true;
+  return b;
+}
+function edBlocks(){
+  if (ED.type==='db') return ED.blocks;
+  return edPage==='q' ? ED.qblocks : ED.ablocks;
+}
+function setEdBlocks(bl){
+  if (ED.type==='db') ED.blocks = bl;
+  else if (edPage==='q') ED.qblocks = bl; else ED.ablocks = bl;
+}
+
+function renderEditor(){
+  $('ed-heading').textContent = (ED.id && findItem(ED.id) ? 'Editing: ' : 'New ') +
+      (ED.title || (ED.type==='db' ? 'Datablock' : 'Flashcard'));
+  $('ed-type').value = ED.type;
+  $('ed-type').disabled = !!findItem(ED.id);
+  $('ed-qa').style.display = ED.type==='fc' ? 'flex' : 'none';
+  $('qa-q').classList.toggle('active', edPage==='q');
+  $('qa-a').classList.toggle('active', edPage==='a');
+
+  // blocks
+  var host = $('blocks'); host.innerHTML = '';
+  edBlocks().forEach(function(b, i){
+    var el = document.createElement('div'); el.className = 'block';
+    var r1 = document.createElement('div'); r1.className='row';
+    var sel = document.createElement('select'); sel.style.width='auto';
+    ['text','math','svg'].forEach(function(t){
+      var o = document.createElement('option'); o.value=t; o.textContent=t; sel.appendChild(o);
+    });
+    sel.value = b.type;
+    sel.onchange = function(){ b.type = sel.value; refreshPreview(); };
+    r1.appendChild(sel);
+    var sw = document.createElement('div'); sw.className='swatches';
+    CONTENT_COLORS.forEach(function(cn){
+      var s = document.createElement('button'); s.className='swatch'+(b.color===cn?' sel':'');
+      s.style.background = cssRgb(palByName(cn)); s.title = cn;
+      s.onclick = function(){ b.color = cn; renderEditor(); refreshPreview(); };
+      sw.appendChild(s);
+    });
+    r1.appendChild(sw);
+    var spacer = document.createElement('span'); spacer.className='grow'; r1.appendChild(spacer);
+    var up = document.createElement('button'); up.className='small'; up.textContent='↑';
+    up.onclick = function(){ if(i>0){ var bl=edBlocks(); bl.splice(i-1,0,bl.splice(i,1)[0]); renderEditor(); refreshPreview(); } };
+    var dn = document.createElement('button'); dn.className='small'; dn.textContent='↓';
+    dn.onclick = function(){ var bl=edBlocks(); if(i<bl.length-1){ bl.splice(i+1,0,bl.splice(i,1)[0]); renderEditor(); refreshPreview(); } };
+    var del = document.createElement('button'); del.className='small danger'; del.textContent='✕';
+    del.onclick = function(){ edBlocks().splice(i,1); renderEditor(); refreshPreview(); };
+    r1.appendChild(up); r1.appendChild(dn); r1.appendChild(del);
+    el.appendChild(r1);
+    var ta = document.createElement('textarea');
+    ta.value = b.src || '';
+    ta.placeholder = b.type==='svg' ? '<svg viewBox="0 0 200 120">…</svg>'
+                   : b.type==='math' ? '\\frac{\\partial u}{\\partial t} = k %%SPLIT%% \\frac{\\partial^2 u}{\\partial x^2}'
+                   : 'Plain explanatory text';
+    ta.oninput = function(){ b.src = ta.value; ED._dirty = true; refreshPreviewSoon(); };
+    ta.onfocus = function(){ lastTextarea = ta; };
+    el.appendChild(ta);
+    host.appendChild(el);
+  });
+
+  // metadata
+  $('md-title').value = ED.title || '';
+  $('md-created').value = fmtDate(ED.created);
+  $('md-modified').value = fmtDate(ED.modified);
+  $('md-tags').value = (ED.tags||[]).join(', ');
+  $('md-notes').value = ED.notes || '';
+  $('md-fontsz').value = ED.fontsz || 'M';
+  var cs = $('md-cats'); cs.innerHTML = '';
+  db().categories.forEach(function(c){
+    var o = document.createElement('option'); o.value = c.id; o.textContent = catPath(c.id);
+    o.selected = (ED.cats||[]).indexOf(c.id) >= 0;
+    cs.appendChild(o);
+  });
+
+  renderLinked();
+  renderSrsPanel();
+  refreshPreview();
+}
+
+function renderLinked(){
+  var host = $('md-linked'); host.innerHTML = '<h3>Linked items</h3>';
+  var d = db(), any = false;
+  d.items.forEach(function(it){
+    if (it.id === ED.id) return;
+    var shared = (it.cats||[]).some(function(c){ return (ED.cats||[]).indexOf(c)>=0; });
+    if (!shared || !(ED.cats||[]).length) return;
+    any = true;
+    var r = document.createElement('div'); r.className='muted';
+    r.textContent = (it.type==='fc'?'? ':'▤ ') + it.title;
+    host.appendChild(r);
+  });
+  if (!any) host.innerHTML += '<div class="muted">No items share this item’s categories yet.</div>';
+}
+
+/* Flashcard-only hidden metadata: SM-2 variables per profile plus the
+ * non-SM-2 overflow performance log. Read-only display + per-card resets. */
+function renderSrsPanel(){
+  var host = $('md-srs');
+  if (ED.type !== 'fc' || !findItem(ED.id)) { host.style.display='none'; return; }
+  host.style.display = 'block';
+  var d = db(), s = d.srs[ED.id] || {global:null, cats:{}};
+  var html = '<h3>SM-2 profiles (hidden metadata)</h3>';
+  function prof(name, p){
+    if (!p) return '<div class="muted">' + esc(name) + ': new card</div>';
+    return '<div class="muted">' + esc(name) + ': EF ' + (p.ef||0).toFixed(2) +
+      ' · reps ' + (p.reps||0) + ' · ivl ' + (p.ivl||0) + 'd · due ' + fmtDate(p.due) +
+      ' · last ' + fmtDate(p.last) + '</div>';
+  }
+  html += prof('Global', s.global);
+  (ED.cats||[]).forEach(function(cid){ html += prof(catPath(cid), (s.cats||{})[cid]); });
+  var ovl = (d.stats.log||[]).filter(function(e){ return e.card===ED.id && e.overflow; });
+  html += '<div class="muted">Overflow-session reviews (never touch SM-2): ' + ovl.length + '</div>';
+  html += '<div class="row" style="margin-top:6px">' +
+    '<button class="danger small" onclick="resetCard(\''+ED.id+'\',null)">Reset card · all profiles</button>' +
+    '<button class="danger small" onclick="resetCard(\''+ED.id+'\',\'global\')">Reset card · global</button></div>';
+  var csel = '<select id="rs-card-cat" style="width:auto">';
+  (ED.cats||[]).forEach(function(cid){ csel += '<option value="'+cid+'">'+esc(catPath(cid))+'</option>'; });
+  csel += '</select>';
+  if ((ED.cats||[]).length)
+    html += '<div class="row" style="margin-top:6px">' + csel +
+      ' <button class="danger small" onclick="resetCard(\''+ED.id+'\',document.getElementById(\'rs-card-cat\').value)">Reset card · this category</button></div>';
+  host.innerHTML = html;
+}
+
+/* ---- live preview inside the bezel ---- */
+var pvTimer = null;
+function refreshPreviewSoon(){ clearTimeout(pvTimer); pvTimer = setTimeout(refreshPreview, 250); }
+function refreshPreview(){
+  pullMeta();
+  var host = $('preview-scroll'); host.innerHTML = '';
+  var flags = $('ovflags');
+  if (pvMode === 'bitmap') { renderBitmapPreview(); return; }
+  var root = renderBlocks(edBlocks(), ED.fontsz);
+  var m = measureOverflow(root);
+  host.appendChild(root);
+  attachSplitClicks(root);
+  var pages = Math.max(1, 1 + Math.ceil(Math.max(0, m.height - SCREEN_H) / PAGE_STEP));
+  pvPage = Math.min(pvPage, pages-1);
+  host.style.top = (-pvPage * PAGE_STEP) + 'px';
+  $('pv-page').textContent = 'page ' + (pvPage+1) + '/' + pages;
+  if (m.bad.length){
+    flags.innerHTML = '<span class="bad">▲ ' + m.bad.length + ' block(s) exceed 200px</span>' +
+      '<div class="muted">Resolve with AI reformatting, manual LaTeX edits, or split markers (click the expression).</div>';
+    $('btn-save').disabled = true;
+    $('save-hint').textContent = 'Save is disabled until all overflow is resolved.';
+  } else {
+    flags.innerHTML = '<span class="good">✓ fits 200px</span>';
+    $('btn-save').disabled = false;
+    $('save-hint').textContent = ED.type==='fc' ? 'Both pages compile on save.' : '';
+  }
+}
+function renderBitmapPreview(){
+  var img = ED.type==='db' ? ED.img : (edPage==='q' ? ED.q : ED.a);
+  var host = $('preview-scroll');
+  if (!img){ host.innerHTML = '<div class="muted" style="padding:10px">No compiled bitmap yet — save first.</div>'; $('ovflags').innerHTML=''; return; }
+  var cv = drawBitmap(img);
+  host.appendChild(cv);
+  var pages = img.h <= SCREEN_H ? 1 : 1 + Math.ceil((img.h - SCREEN_H) / PAGE_STEP);
+  pvPage = Math.min(pvPage, pages-1);
+  host.style.top = (-pvPage * PAGE_STEP) + 'px';
+  $('pv-page').textContent = 'page ' + (pvPage+1) + '/' + pages + ' (bitmap, 20px overlap)';
+  $('ovflags').innerHTML = '<span class="good">Compiled ' + img.w + '×' + img.h + ' · 4bpp</span>';
+}
+function drawBitmap(img){
+  var cv = document.createElement('canvas');
+  cv.width = img.w; cv.height = img.h;
+  cv.style.display = 'block';
+  var cx = cv.getContext('2d');
+  var out = cx.createImageData(img.w, img.h);
+  var bytes = atob(img.data);
+  var stride = Math.ceil(img.w/2);
+  for (var y=0;y<img.h;y++){
+    for (var x=0;x<img.w;x++){
+      var by = bytes.charCodeAt(y*stride + (x>>1));
+      var pi = (x&1)===0 ? (by>>4)&0xF : by&0xF;
+      var rgb = PALETTE[pi].rgb;
+      var o = (y*img.w+x)*4;
+      out.data[o]=rgb[0]; out.data[o+1]=rgb[1]; out.data[o+2]=rgb[2]; out.data[o+3]=255;
+    }
+  }
+  cx.putImageData(out,0,0);
+  return cv;
+}
+
+function pullMeta(){
+  ED.title = $('md-title').value.trim();
+  ED.tags = $('md-tags').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
+  ED.notes = $('md-notes').value;
+  ED.fontsz = $('md-fontsz').value;
+  ED.cats = Array.prototype.filter.call($('md-cats').options, function(o){return o.selected;})
+            .map(function(o){return o.value;});
+}
+
+/* ---- split marker editor (click a rendered expression) ---- */
+/* Clicking any rendered segment opens the marker editor for its block: the
+ * LaTeX source is tokenised at top-level structural boundaries and each gap
+ * toggles a %%SPLIT%% marker. (Mapping a pixel-precise click position back
+ * to a LaTeX index is not reliable across KaTeX layouts, so the editor is
+ * anchored to the clicked expression — documented in the README.) */
+var splitTarget = null;
+function attachSplitClicks(root){
+  root.querySelectorAll('.seg').forEach(function(sp){
+    sp.onclick = function(){
+      var bi = parseInt(sp.dataset.bi, 10);
+      var b = edBlocks()[bi];
+      if (!b || b.type==='svg') return;
+      openSplitEditor(b);
+    };
+  });
+}
+function tokenizeTopLevel(src){
+  // split at top-level whitespace and after binary relations/operators,
+  // never inside {} [] () groups — these are the structural boundaries.
+  var toks = [], cur = '', depth = 0;
+  for (var i=0;i<src.length;i++){
+    var ch = src[i];
+    if (ch==='{'||ch==='['||ch==='(') depth++;
+    if (ch==='}'||ch===']'||ch===')') depth--;
+    cur += ch;
+    var boundary = depth<=0 && (ch===' ' || (i+1<src.length && '=+-<>'.indexOf(src[i+1])>=0 && ch!=='\\'));
+    if (boundary && cur.trim()){ toks.push(cur); cur=''; }
+  }
+  if (cur) toks.push(cur);
+  return toks.length ? toks : [src];
+}
+function openSplitEditor(block){
+  splitTarget = block;
+  var parts = String(block.src||'').split(SPLIT);
+  var host = $('split-toks'); host.innerHTML = '';
+  var toks = [], splits = [];
+  parts.forEach(function(p, pi){
+    var t = tokenizeTopLevel(p);
+    t.forEach(function(x, xi){
+      toks.push(x);
+      splits.push(pi < parts.length-1 && xi === t.length-1);
+    });
+  });
+  toks.forEach(function(t, i){
+    var sp = document.createElement('span'); sp.className='tok'; sp.textContent = t;
+    host.appendChild(sp);
+    if (i < toks.length-1){
+      var g = document.createElement('span'); g.className='gap'+(splits[i]?' split':'');
+      g.textContent = splits[i] ? '‖' : '·';
+      g.onclick = function(){ splits[i] = !splits[i]; g.className='gap'+(splits[i]?' split':''); g.textContent = splits[i]?'‖':'·'; };
+      host.appendChild(g);
+    }
+  });
+  $('split-apply').onclick = function(){
+    var out = '';
+    toks.forEach(function(t, i){ out += t; if (i<toks.length-1 && splits[i]) out += SPLIT; });
+    splitTarget.src = out;
+    $('split-modal').classList.remove('open');
+    renderEditor();
+  };
+  $('split-modal').classList.add('open');
+}
+
+/* ============================== save / find ================================ */
+function findItem(id){
+  var d = db();
+  for (var i=0;i<d.items.length;i++) if (d.items[i].id===id) return d.items[i];
+  return null;
+}
+function saveItem(){
+  pullMeta();
+  if (!ED.title){ toast('Give the item a title first'); return; }
+  $('btn-save').disabled = true;
+  $('save-hint').textContent = 'Compiling bitmaps…';
+  var jobs;
+  if (ED.type==='db'){
+    jobs = compileBlocks(ED.blocks, ED.fontsz).then(function(img){ ED.img = img; });
+  } else {
+    jobs = compileBlocks(ED.qblocks, ED.fontsz).then(function(q){ ED.q = q;
+      return compileBlocks(ED.ablocks, ED.fontsz); }).then(function(a){ ED.a = a; });
+  }
+  jobs.then(function(){
+    ED.modified = nowSec();
+    ED._dirty = false;
+    var d = db(), ex = findItem(ED.id);
+    var clean = deepCopy(ED); delete clean._dirty; delete clean._queueId;
+    if (ex) d.items[d.items.indexOf(ex)] = clean;
+    else { if (!clean.created) clean.created = nowSec(); d.items.push(clean); }
+    if (ED._queueId){                       // bulk-pipeline approval
+      d.queue = d.queue.filter(function(q){ return q.id !== ED._queueId; });
+      delete ED._queueId;
+      renderQueue();
+    }
+    saveState();
+    $('save-hint').textContent = '';
+    toast('Saved “' + ED.title + '”');
+    renderEditor(); renderLibrary(); renderStats();
+  }).catch(function(err){
+    $('btn-save').disabled = false;
+    if (err && err.overflow){
+      $('save-hint').textContent = 'Overflow on ' + (ED.type==='fc' ? 'a page' : 'a block') + ' — resolve before saving.';
+      toast('Overflow detected — save blocked');
+      refreshPreview();
+    } else {
+      $('save-hint').textContent = 'Compile failed: ' + (err && err.message || err);
+    }
+  });
+}
+
+/* =============================== library =================================== */
+function renderLibrary(){
+  var d = db(), q = ($('lib-search').value||'').toLowerCase().trim();
+  var host = $('lib-list'); host.innerHTML = '';
+  var shown = d.items.filter(function(it){
+    if (!q) return true;
+    var hay = [it.title, (it.tags||[]).join(' '), it.notes||'',
+               (it.cats||[]).map(catPath).join(' ')].join(' ').toLowerCase();
+    return hay.indexOf(q) >= 0;
+  });
+  if (!shown.length) host.innerHTML = '<div class="muted" style="padding:8px">No items' + (q?' match “'+esc(q)+'”':'') + '.</div>';
+  shown.forEach(function(it){
+    var r = document.createElement('div'); r.className='item-row';
+    r.innerHTML = '<span class="pill' + (it.type==='fc'?' fc':'') + '">' + (it.type==='fc'?'card':'block') + '</span>' +
+      '<div class="grow"><div class="t">' + esc(it.title) + '</div>' +
+      '<div class="path">' + esc(itemPaths(it)) + (it.tags&&it.tags.length ? ' · #' + esc(it.tags.join(' #')) : '') + '</div></div>';
+    var edb = document.createElement('button'); edb.className='small'; edb.textContent='Edit';
+    edb.onclick = function(){ ED = deepCopy(it); edPage='q'; pvPage=0; showTab('editor'); renderEditor(); };
+    var exb = document.createElement('button'); exb.className='small'; exb.textContent='Export';
+    exb.onclick = function(){ download(it.title.replace(/\W+/g,'_') + '.item.json', JSON.stringify({v:1, item: it}, null, 2)); };
+    var dlb = document.createElement('button'); dlb.className='small danger'; dlb.textContent='Delete';
+    dlb.onclick = function(){
+      if (!confirm('Delete “' + it.title + '” and its SM-2 state?')) return;
+      d.items.splice(d.items.indexOf(it), 1);
+      delete d.srs[it.id];
+      saveState(); renderLibrary(); renderStats();
+    };
+    r.appendChild(edb); r.appendChild(exb); r.appendChild(dlb);
+    host.appendChild(r);
+  });
+}
+
+function renderCats(){
+  var d = db(), host = $('cat-list'); host.innerHTML = '';
+  var par = $('cat-parent'); par.innerHTML = '<option value="">(top level)</option>';
+  d.categories.forEach(function(c){
+    var r = document.createElement('div'); r.className='item-row';
+    r.innerHTML = '<div class="grow">' + esc(catPath(c.id)) + '</div>';
+    var rn = document.createElement('button'); rn.className='small'; rn.textContent='Rename';
+    rn.onclick = function(){
+      var n = prompt('Rename category', c.name);
+      if (n){ c.name = n; saveState(); renderCats(); renderLibrary(); }
+    };
+    var dl = document.createElement('button'); dl.className='small danger'; dl.textContent='Delete';
+    dl.onclick = function(){
+      var kids = d.categories.some(function(x){ return x.parent===c.id; });
+      if (kids){ toast('Delete or re-parent subcategories first'); return; }
+      if (!confirm('Delete category “' + c.name + '”? Items keep their other categories.')) return;
+      d.categories.splice(d.categories.indexOf(c),1);
+      d.items.forEach(function(it){ it.cats = (it.cats||[]).filter(function(x){return x!==c.id;}); });
+      Object.keys(d.srs).forEach(function(iid){ if (d.srs[iid].cats) delete d.srs[iid].cats[c.id]; });
+      saveState(); renderCats(); renderLibrary();
+    };
+    r.appendChild(rn); r.appendChild(dl);
+    host.appendChild(r);
+    var o = document.createElement('option'); o.value=c.id; o.textContent=catPath(c.id); par.appendChild(o);
+  });
+  var rsel = $('rs-cat-sel'); rsel.innerHTML='';
+  d.categories.forEach(function(c){
+    var o = document.createElement('option'); o.value=c.id; o.textContent=catPath(c.id); rsel.appendChild(o);
+  });
+}
+
+/* ============================ SM-2 reset scopes ============================ */
+function resetCard(itemId, scope){
+  var d = db(), s = d.srs[itemId];
+  if (!s){ toast('Card has no review state yet'); return; }
+  if (!confirm('Reset SM-2 state? This cannot be undone.')) return;
+  if (scope === null || scope === undefined) delete d.srs[itemId];        // all profiles
+  else if (scope === 'global') s.global = null;                            // global only
+  else if (s.cats) delete s.cats[scope];                                   // one category
+  saveState(); renderSrsPanel(); renderStats(); toast('Reset done');
+}
+function resetAllProfiles(){ 
+  if (!confirm('Reset EVERY card, EVERY profile?')) return;
+  db().srs = {}; saveState(); renderStats(); toast('All SM-2 state cleared');
+}
+function resetGlobalProfile(){
+  if (!confirm('Reset the GLOBAL profile on every card?')) return;
+  var srs = db().srs;
+  Object.keys(srs).forEach(function(k){ srs[k].global = null; });
+  saveState(); renderStats(); toast('Global profiles cleared');
+}
+function resetCategoryProfile(catId){
+  if (!catId) return;
+  if (!confirm('Reset the “' + catPath(catId) + '” profile on every card?')) return;
+  var srs = db().srs;
+  Object.keys(srs).forEach(function(k){ if (srs[k].cats) delete srs[k].cats[catId]; });
+  saveState(); renderStats(); toast('Category profiles cleared');
+}
+
+/* ============================ AI formatting ================================ */
+/* Single system prompt used for both the editor button and the bulk pipeline.
+ * The browser calls the Anthropic API directly with the user's key. */
+var AI_SYSTEM =
+'You format mathematics for a 200px-wide, 16-colour smartwatch screen. ' +
+'Respond ONLY with a JSON object, no markdown fences, no prose: ' +
+'{"blocks":[{"type":"text"|"math"|"svg","src":"...","color":"black|blue|green|amber|red|purple|cyan"}]}. ' +
+'Rules: math blocks use KaTeX-compatible LaTeX. Any expression that could exceed ' +
+'200px at 16px font MUST contain %%SPLIT%% markers placed ONLY at structural ' +
+'boundaries (between equalities, after binary relations, between summed terms) ' +
+'so that every segment is a valid standalone expression. Prefer several short ' +
+'segments over one long one. Keep text blocks under ~28 characters per natural ' +
+'line. Use colour sparingly and meaningfully (e.g. blue for definitions, green ' +
+'for results, red for warnings). If a graph genuinely helps, add ONE svg block: ' +
+'a complete <svg viewBox="0 0 200 H"> (H<=200) using ONLY these stroke/fill ' +
+'colours: #000000 #0055ff #00aa00 #ffaa00 #ff0000 #aa00aa #00aaaa, white ' +
+'background, 1.5-2px strokes, minimal axis labels in a plain font. ' +
+'Return between 1 and 12 blocks total.';
+
+function aiFormat(rawText){
+  var key = S.ui.apiKey;
+  if (!key){ toast('Add your Anthropic API key in Settings first'); return Promise.reject('no key'); }
+  return fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', 'x-api-key':key,
+              'anthropic-version':'2023-06-01',
+              'anthropic-dangerous-direct-browser-access':'true' },
+    body: JSON.stringify({
+      model: S.ui.model || 'claude-sonnet-4-6',
+      max_tokens: 2000,
+      system: AI_SYSTEM,
+      messages:[{ role:'user', content:'Format this for the watch:\n\n' + rawText }]
+    })
+  }).then(function(r){
+    if (!r.ok) return r.text().then(function(t){ throw new Error('API ' + r.status + ': ' + t.slice(0,180)); });
+    return r.json();
+  }).then(function(data){
+    var text = (data.content||[]).filter(function(b){return b.type==='text';})
+               .map(function(b){return b.text;}).join('\n');
+    var clean = text.replace(/```json|```/g,'').trim();
+    var parsed = JSON.parse(clean);
+    if (!parsed.blocks || !parsed.blocks.length) throw new Error('empty response');
+    parsed.blocks.forEach(function(b){
+      if (CONTENT_COLORS.indexOf(b.color)<0) b.color = 'black';
+      if (['text','math','svg'].indexOf(b.type)<0) b.type = 'text';
+      b.src = String(b.src||'');
+    });
+    return parsed.blocks;
+  });
+}
+
+/* Editor button: sends the current page's raw sources through the formatter */
+function aiFormatEditor(){
+  var raw = edBlocks().map(function(b){
+    return (b.type==='math' ? '$' + b.src + '$' : b.src);
+  }).join('\n');
+  if (!raw.trim()){ toast('Nothing to format'); return; }
+  $('btn-ai').disabled = true; $('btn-ai').textContent = '✦ Formatting…';
+  function done(){ $('btn-ai').disabled = false; $('btn-ai').textContent = '✦ Format with AI'; }
+  aiFormat(raw).then(function(blocks){
+    setEdBlocks(blocks);
+    ED._dirty = true;
+    renderEditor();
+    toast('AI formatting applied — review before saving');
+    done();
+  }).catch(function(e){
+    if (e !== 'no key') toast('AI formatting failed: ' + (e.message||e));
+    done();
+  });
+}
+
+/* ============================ bulk pipeline ================================ */
+/* Upload JSON -> AI iterates each raw item -> review queue -> manual approve.
+ * File format (samples/bulk-upload-sample.json):
+ *   {"items":[{"title":"...","raw":"...","cats":["Calculus"],"tags":[],"notes":""}]} */
+function runBulk(){
+  var f = $('bulk-file').files[0];
+  if (!f){ toast('Choose a JSON file first'); return; }
+  var reader = new FileReader();
+  reader.onload = function(){
+    var spec;
+    try { spec = JSON.parse(reader.result); } catch(e){ toast('Invalid JSON'); return; }
+    var items = spec.items || [];
+    if (!items.length){ toast('No items in file'); return; }
+    var d = db(), i = 0;
+    $('bulk-status').textContent = 'Processing 0/' + items.length + '…';
+    function next(){
+      if (i >= items.length){
+        $('bulk-status').textContent = 'Done — ' + items.length + ' item(s) queued for review.';
+        saveState(); renderQueue(); return;
+      }
+      var raw = items[i];
+      aiFormat(String(raw.raw||raw.title||'')).then(function(blocks){
+        d.queue.push({
+          id: uid('q'), title: raw.title || ('Imported ' + (i+1)),
+          catNames: raw.cats || [], tags: raw.tags || [], notes: raw.notes || '',
+          blocks: blocks, error: null
+        });
+      }).catch(function(e){
+        d.queue.push({
+          id: uid('q'), title: raw.title || ('Imported ' + (i+1)),
+          catNames: raw.cats || [], tags: raw.tags || [], notes: raw.notes || '',
+          blocks: [{type:'text', src:String(raw.raw||''), color:'black'}],
+          error: 'AI failed (' + (e.message||e) + ') — raw text kept'
+        });
+      }).then(function(){
+        i++;
+        $('bulk-status').textContent = 'Processing ' + i + '/' + items.length + '…';
+        saveState(); renderQueue();
+        setTimeout(next, 300); // gentle rate limit
+      });
+    }
+    next();
+  };
+  reader.readAsText(f);
+}
+
+function renderQueue(){
+  var d = db(), host = $('queue-list'); host.innerHTML = '';
+  var badge = $('queue-n');
+  badge.style.display = d.queue.length ? 'inline-block' : 'none';
+  badge.textContent = d.queue.length;
+  if (!d.queue.length){ host.innerHTML = '<div class="muted">Queue is empty.</div>'; return; }
+  d.queue.forEach(function(q){
+    var r = document.createElement('div'); r.className='item-row';
+    r.innerHTML = '<div class="grow"><div class="t">' + esc(q.title) + '</div>' +
+      '<div class="path">' + q.blocks.length + ' block(s)' +
+      (q.error ? ' · <span style="color:var(--danger)">' + esc(q.error) + '</span>' : '') + '</div></div>';
+    var op = document.createElement('button'); op.className='small'; op.textContent='Open in editor';
+    op.onclick = function(){
+      ED = newEditBuffer('db');
+      ED.title = q.title; ED.tags = q.tags; ED.notes = q.notes;
+      ED.blocks = deepCopy(q.blocks);
+      // map category names -> ids, creating them at top level when missing
+      ED.cats = (q.catNames||[]).map(function(n){
+        var c = db().categories.filter(function(x){return x.name===n;})[0];
+        if (!c){ c = {id:uid('cat'), name:n, parent:''}; db().categories.push(c); }
+        return c.id;
+      });
+      ED._queueId = q.id;
+      saveState(); renderCats();
+      showTab('editor'); renderEditor();
+      toast('Approve by saving; the queue entry clears automatically');
+    };
+    var dl = document.createElement('button'); dl.className='small danger'; dl.textContent='Discard';
+    dl.onclick = function(){
+      d.queue.splice(d.queue.indexOf(q),1);
+      saveState(); renderQueue();
+    };
+    r.appendChild(op); r.appendChild(dl);
+    host.appendChild(r);
+  });
+}
+
+/* ============================== databases ================================== */
+function renderDbs(){
+  var host = $('db-list'); host.innerHTML = '';
+  var hdr = $('hdr-db'); hdr.innerHTML = '';
+  S.databases.forEach(function(d){
+    var o = document.createElement('option'); o.value=d.id; o.textContent=d.name;
+    o.selected = d.id===S.activeDb; hdr.appendChild(o);
+
+    var r = document.createElement('div'); r.className='item-row';
+    r.innerHTML = '<div class="grow"><div class="t">' + esc(d.name) +
+      (d.id===S.activeDb ? ' <span class="pill fc">active</span>' : '') + '</div>' +
+      '<div class="path">' + d.items.length + ' items · ' + d.categories.length + ' categories</div></div>';
+    if (d.id !== S.activeDb){
+      var act = document.createElement('button'); act.className='small'; act.textContent='Make active';
+      act.onclick = function(){ S.activeDb = d.id; saveState(); refreshAll(); toast('“' + d.name + '” is now active'); };
+      r.appendChild(act);
+    }
+    var rn = document.createElement('button'); rn.className='small'; rn.textContent='Rename';
+    rn.onclick = function(){ var n = prompt('Rename database', d.name); if (n){ d.name=n; saveState(); renderDbs(); } };
+    var ex = document.createElement('button'); ex.className='small'; ex.textContent='Export';
+    ex.onclick = function(){ download(d.name.replace(/\W+/g,'_') + '.mathref.json', JSON.stringify({v:1, database:d}, null, 2)); };
+    var dl = document.createElement('button'); dl.className='small danger'; dl.textContent='Delete';
+    dl.onclick = function(){
+      if (S.databases.length===1){ toast('Cannot delete the only database'); return; }
+      if (!confirm('Delete database “' + d.name + '” entirely?')) return;
+      S.databases.splice(S.databases.indexOf(d),1);
+      if (S.activeDb===d.id) S.activeDb = S.databases[0].id;
+      saveState(); refreshAll();
+    };
+    r.appendChild(rn); r.appendChild(ex); r.appendChild(dl);
+    host.appendChild(r);
+  });
+  hdr.onchange = function(){ S.activeDb = hdr.value; saveState(); refreshAll(); };
+}
+function importDbFile(file){
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var j = JSON.parse(reader.result);
+      var d = j.database || j;               // accept raw or wrapped
+      if (!d.items) throw new Error('no items');
+      d.id = uid('db');
+      if (!d.settings) d.settings = defaultSettings();
+      if (!d.srs) d.srs = {};
+      if (!d.stats) d.stats = {log:[]};
+      if (!d.queue) d.queue = [];
+      if (!d.name) d.name = 'Imported ' + fmtDate(nowSec());
+      S.databases.push(d);
+      saveState(); renderDbs();
+      toast('Imported “' + d.name + '”');
+    } catch(e){ toast('Import failed: ' + e.message); }
+  };
+  reader.readAsText(file);
+}
+function importItemFile(file){
+  var reader = new FileReader();
+  reader.onload = function(){
+    try {
+      var j = JSON.parse(reader.result);
+      var it = j.item || j;
+      if (!it.type || !it.title) throw new Error('not an item export');
+      it.id = uid(it.type);                  // fresh id, independent copy
+      db().items.push(it);
+      saveState(); renderLibrary();
+      toast('Imported item “' + it.title + '”');
+    } catch(e){ toast('Import failed: ' + e.message); }
+  };
+  reader.readAsText(file);
+}
+
+/* ================================ stats ==================================== */
+function sm2DueCount(scopeCatId){
+  var d = db(), n = 0, now = nowSec();
+  d.items.forEach(function(it){
+    if (it.type!=='fc') return;
+    if (scopeCatId && (it.cats||[]).indexOf(scopeCatId)<0) return;
+    var s = d.srs[it.id];
+    var p = scopeCatId ? (s && s.cats && s.cats[scopeCatId]) : (s && s.global);
+    if (!p || !p.due || p.due <= now) n++;   // new cards count as due
+  });
+  return n;
+}
+function renderStats(){
+  var d = db(), log = (d.stats && d.stats.log) || [];
+  var days = {}, now = new Date();
+  log.forEach(function(e){ days[new Date(e.t*1000).toISOString().slice(0,10)] = true; });
+  var streak = 0;
+  for (var i=0;;i++){
+    var dt = new Date(now.getTime() - i*86400000).toISOString().slice(0,10);
+    if (days[dt]) streak++;
+    else if (i===0) continue;   // today can still be pending
+    else break;
+  }
+  var srsReviews = log.filter(function(e){ return !e.overflow; });
+  var good = srsReviews.filter(function(e){ return e.rating >= 2; }).length; // Good/Easy
+  var retention = srsReviews.length ? Math.round(100*good/srsReviews.length) : 0;
+  var weekAgo = nowSec() - 7*86400;
+  var vol7 = log.filter(function(e){ return e.t >= weekAgo; }).length;
+  var today0 = new Date(); today0.setHours(0,0,0,0);
+  var volToday = log.filter(function(e){ return e.t*1000 >= today0.getTime(); }).length;
+
+  var cards = [
+    ['Streak', streak + 'd'],
+    ['Due now (global)', sm2DueCount(null)],
+    ['Retention', retention + '%'],
+    ['Reviews today', volToday],
+    ['Reviews · 7 days', vol7],
+    ['Flashcards', d.items.filter(function(i){return i.type==='fc';}).length],
+    ['Datablocks', d.items.filter(function(i){return i.type==='db';}).length]
+  ];
+  $('stat-cards').innerHTML = cards.map(function(c){
+    return '<div class="stat"><b>' + c[1] + '</b><span class="muted">' + c[0] + '</span></div>';
+  }).join('');
+
+  $('stat-cats').innerHTML = d.categories.map(function(c){
+    return '<div class="item-row"><div class="grow">' + esc(catPath(c.id)) + '</div>' +
+      '<span class="pill">' + sm2DueCount(c.id) + ' due</span></div>';
+  }).join('') || '<div class="muted">No categories.</div>';
+
+  var sel = $('stat-card-sel'); sel.innerHTML = '<option value="">— choose a card —</option>';
+  d.items.filter(function(i){return i.type==='fc';}).forEach(function(it){
+    var o = document.createElement('option'); o.value=it.id; o.textContent=it.title; sel.appendChild(o);
+  });
+  sel.onchange = function(){
+    var id = sel.value, host = $('stat-card-hist');
+    if (!id){ host.innerHTML=''; return; }
+    var hist = log.filter(function(e){ return e.card===id; });
+    var names = ['Again','Hard','Good','Easy'];
+    host.innerHTML = hist.length ? hist.slice(-30).reverse().map(function(e){
+      return '<div class="muted">' + fmtDate(e.t) + ' — ' + names[e.rating] +
+        (e.overflow ? ' <span class="pill">overflow session</span>' : '') + '</div>';
+    }).join('') : '<div class="muted">No reviews logged yet.</div>';
+  };
+
+  var names2 = ['Again','Hard','Good','Easy'];
+  var sess = ['Daily','Category','Overflow·G','Overflow·C'];
+  $('stat-log').innerHTML = '<tr><th>Date</th><th>Card</th><th>Rating</th><th>Session</th></tr>' +
+    log.slice(-100).reverse().map(function(e){
+      var it = findItem(e.card);
+      return '<tr><td>' + fmtDate(e.t) + '</td><td>' + esc(it?it.title:e.card) +
+        '</td><td>' + names2[e.rating] + '</td><td>' + (sess[e.session]||e.session) + '</td></tr>';
+    }).join('');
+}
+
+/* =============================== settings ================================== */
+function renderSettings(){
+  var st = db().settings;
+  $('st-theme').value = st.theme;
+  $('st-menufont').value = st.menuFont;
+  var host = $('st-accent'); host.innerHTML = '';
+  ACCENTS.forEach(function(a){
+    var s = document.createElement('button');
+    s.className = 'swatch' + (st.accent===a?' sel':'');
+    s.style.background = cssRgb(palByName(a)); s.title = a;
+    s.onclick = function(){ st.accent = a; saveState(); renderSettings(); };
+    host.appendChild(s);
+  });
+  $('sm-startEF').value = st.sm2.startEF;
+  $('sm-minEF').value = st.sm2.minEF;
+  $('sm-firstIvl').value = st.sm2.firstIvl;
+  $('sm-secondIvl').value = st.sm2.secondIvl;
+  $('st-apikey').value = S.ui.apiKey || '';
+  $('st-model').value = S.ui.model || 'claude-sonnet-4-6';
+  $('st-cfgurl').value = S.ui.configUrl || '';
+}
+function pullSettings(){
+  var st = db().settings;
+  st.theme = $('st-theme').value;
+  st.menuFont = $('st-menufont').value;
+  st.sm2.startEF = parseFloat($('sm-startEF').value) || 2.5;
+  st.sm2.minEF = parseFloat($('sm-minEF').value) || 1.3;
+  st.sm2.firstIvl = parseInt($('sm-firstIvl').value,10) || 1;
+  st.sm2.secondIvl = parseInt($('sm-secondIvl').value,10) || 6;
+  S.ui.apiKey = $('st-apikey').value.trim();
+  S.ui.model = $('st-model').value.trim() || 'claude-sonnet-4-6';
+  S.ui.configUrl = $('st-cfgurl').value.trim();
+  applyTheme(st.theme);
+  saveState();
+}
+
+/* ================================= sync ==================================== */
+/* Compile the active database into the pkjs bundle and hand it back through
+ * pebblejs://close. Items missing compiled bitmaps are skipped with a
+ * warning (they were never saved successfully). NOTE: the close-URL payload
+ * has practical size limits — see README for guidance on very large sets. */
+function compileBundle(){
+  var d = db();
+  var items = [], skipped = 0;
+  d.items.forEach(function(it){
+    var out = { id: it.id, type: it.type, title: it.title, cats: it.cats || [] };
+    if (it.type === 'db'){
+      if (!it.img){ skipped++; return; }
+      out.img = it.img;
+    } else {
+      if (!it.q || !it.a){ skipped++; return; }
+      out.q = it.q; out.a = it.a;
+    }
+    items.push(out);
+  });
+  return {
+    skipped: skipped,
+    bundle: {
+      v: 1, name: d.name,
+      settings: d.settings,
+      categories: d.categories,
+      items: items,
+      srs: d.srs,
+      stats: d.stats
+    }
+  };
+}
+function syncToWatch(){
+  pullSettings();
+  var c = compileBundle();
+  if (c.skipped) toast(c.skipped + ' uncompiled item(s) skipped');
+  var payload = { type:'sync', bundle: c.bundle };
+  if (S.ui.configUrl) payload.configUrl = S.ui.configUrl;
+  var enc = encodeURIComponent(JSON.stringify(payload));
+  document.location = 'pebblejs://close#' + enc;
+}
+function sendSettingsOnly(){
+  pullSettings();
+  var payload = { type:'settings', settings: db().settings };
+  if (S.ui.configUrl) payload.configUrl = S.ui.configUrl;
+  document.location = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(payload));
+}
+
+/* ================================ shell ==================================== */
+function applyTheme(t){ document.documentElement.setAttribute('data-theme', t==='dark'?'dark':'light'); }
+function showTab(name){
+  document.querySelectorAll('nav.tabs button').forEach(function(b){
+    b.classList.toggle('active', b.dataset.tab===name);
+  });
+  document.querySelectorAll('section.tab').forEach(function(s){
+    s.classList.toggle('active', s.id==='tab-'+name);
+  });
+}
+function refreshAll(){
+  renderDbs(); renderCats(); renderLibrary(); renderQueue(); renderStats(); renderSettings();
+  ED = newEditBuffer($('ed-type').value || 'db');
+  renderEditor();
+}
+
+/* ================================= init ==================================== */
+document.addEventListener('DOMContentLoaded', function(){
+  loadState();
+  mergeRuntime();
+  applyTheme(db().settings.theme);
+  buildSymbar();
+  refreshAll();
+
+  document.querySelectorAll('nav.tabs button').forEach(function(b){
+    b.onclick = function(){ showTab(b.dataset.tab); };
+  });
+  $('btn-theme').onclick = function(){
+    var st = db().settings;
+    st.theme = st.theme==='dark' ? 'light' : 'dark';
+    applyTheme(st.theme); saveState(); renderSettings();
+  };
+  $('btn-sync').onclick = syncToWatch;
+
+  // editor
+  $('ed-new').onclick = function(){ ED = newEditBuffer($('ed-type').value); edPage='q'; pvPage=0; renderEditor(); };
+  $('ed-type').onchange = function(){
+    if (findItem(ED.id)) return;
+    ED = newEditBuffer($('ed-type').value); edPage='q'; pvPage=0; renderEditor();
+  };
+  $('qa-q').onclick = function(){ edPage='q'; pvPage=0; renderEditor(); };
+  $('qa-a').onclick = function(){ edPage='a'; pvPage=0; renderEditor(); };
+  $('qa-dup').onclick = function(){
+    if (!confirm('Replace the ' + (edPage==='q'?'Answer':'Question') + ' page with a copy of this page?')) return;
+    if (edPage==='q') ED.ablocks = deepCopy(ED.qblocks); else ED.qblocks = deepCopy(ED.ablocks);
+    toast('Page duplicated'); renderEditor();
+  };
+  $('qa-import').onclick = function(){
+    var host = $('pick-list'); host.innerHTML = '';
+    var dbs = db().items.filter(function(i){ return i.type==='db' && i.blocks; });
+    if (!dbs.length) host.innerHTML = '<div class="muted">No datablocks available.</div>';
+    dbs.forEach(function(it){
+      var r = document.createElement('div'); r.className='item-row';
+      r.innerHTML = '<div class="grow">' + esc(it.title) + '</div>';
+      var b = document.createElement('button'); b.className='small'; b.textContent='Copy here';
+      b.onclick = function(){
+        setEdBlocks(deepCopy(it.blocks));   // independent copy — original untouched
+        $('pick-modal').classList.remove('open');
+        renderEditor();
+        toast('Copied “' + it.title + '” — edits stay on this card only');
+      };
+      r.appendChild(b); host.appendChild(r);
+    });
+    $('pick-modal').classList.add('open');
+  };
+  $('pick-cancel').onclick = function(){ $('pick-modal').classList.remove('open'); };
+  $('split-cancel').onclick = function(){ $('split-modal').classList.remove('open'); };
+
+  $('add-text').onclick = function(){ edBlocks().push({type:'text', src:'', color:'black'}); renderEditor(); };
+  $('add-math').onclick = function(){ edBlocks().push({type:'math', src:'', color:'black'}); renderEditor(); };
+  $('add-svg').onclick  = function(){ edBlocks().push({type:'svg',  src:'', color:'black'}); renderEditor(); };
+  $('btn-ai').onclick = aiFormatEditor;
+  $('btn-save').onclick = saveItem;
+  ['md-title','md-tags','md-notes'].forEach(function(id){ $(id).oninput = function(){ ED._dirty=true; }; });
+  $('md-fontsz').onchange = refreshPreview;
+  $('md-cats').onchange = function(){ pullMeta(); renderLinked(); renderSrsPanel(); };
+
+  $('pv-up').onclick = function(){ pvPage = Math.max(0, pvPage-1); refreshPreview(); };
+  $('pv-down').onclick = function(){ pvPage++; refreshPreview(); };
+  $('pv-mode').onclick = function(){
+    pvMode = pvMode==='live' ? 'bitmap' : 'live';
+    $('pv-mode').textContent = pvMode==='live' ? 'Live' : 'Bitmap';
+    pvPage = 0; refreshPreview();
+  };
+
+  // library
+  $('lib-search').oninput = renderLibrary;
+  $('lib-import-item').onclick = function(){ $('file-item-import').click(); };
+  $('file-item-import').onchange = function(){ if (this.files[0]) importItemFile(this.files[0]); this.value=''; };
+  $('cat-add').onclick = function(){
+    var n = $('cat-name').value.trim();
+    if (!n){ toast('Name the category'); return; }
+    db().categories.push({id:uid('cat'), name:n, parent:$('cat-parent').value || ''});
+    $('cat-name').value = '';
+    saveState(); renderCats(); renderEditor();
+  };
+
+  // queue
+  $('bulk-run').onclick = runBulk;
+
+  // databases
+  $('db-create').onclick = function(){
+    var n = $('db-new-name').value.trim();
+    if (!n){ toast('Name the database'); return; }
+    S.databases.push(newDb(n)); $('db-new-name').value='';
+    saveState(); renderDbs();
+  };
+  $('db-import').onclick = function(){ $('file-db-import').click(); };
+  $('file-db-import').onchange = function(){ if (this.files[0]) importDbFile(this.files[0]); this.value=''; };
+
+  // settings
+  $('st-theme').onchange = function(){ pullSettings(); };
+  $('st-menufont').onchange = function(){ pullSettings(); };
+  $('st-save').onclick = sendSettingsOnly;
+  $('rs-all').onclick = resetAllProfiles;
+  $('rs-global').onclick = resetGlobalProfile;
+  $('rs-cat').onclick = function(){ resetCategoryProfile($('rs-cat-sel').value); };
+  $('st-cache-katex').onclick = function(){
+    $('katex-cache-status').textContent = 'Caching…';
+    ensureKatexAssets().then(function(){
+      $('katex-cache-status').textContent = 'KaTeX CSS + fonts cached (' +
+        Math.round((localStorage.getItem(KATEX_CSS_KEY)||'').length/1024) + ' KB).';
+    }).catch(function(){ $('katex-cache-status').textContent = 'Caching failed — check connection.'; });
+  };
+});
+</script>
+</body>
+</html>
