@@ -6,6 +6,7 @@
 <title>MathRef — Command Center</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" id="katex-css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathlive"></script>
 <style>
 /* ==========================================================================
    MathRef Command Center — "instrument bench" identity.
@@ -112,6 +113,9 @@ section.tab.active { display: block; }
 }
 .block .row { margin-bottom: 6px; }
 .block textarea { min-height: 76px; font-size: 14px; }
+.block .inlabel { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); margin: 6px 0 2px; }
+.block math-field { display: block; width: 100%; min-height: 52px; font-size: 18px; background: #fff; color: #000; border: 1px solid var(--line-strong); border-radius: 6px; padding: 6px 8px; }
+
 .swatches { display: flex; gap: 4px; }
 .swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); padding: 0; }
 .swatch.sel { border-color: var(--ink); box-shadow: 0 0 0 2px var(--accent); }
@@ -140,11 +144,13 @@ section.tab.active { display: block; }
 .wcontent { width: 200px; background: #fff; color: #000; padding: 2px; font-family: Georgia, serif; text-align: center; }
 .wcontent .blk { margin: 2px 0; position: relative; }
 .wcontent .blk.overflow { outline: 2px solid #d21f1f; outline-offset: -2px; }
-.wcontent .seg { display: block; white-space: nowrap; cursor: pointer; }
+.wcontent .seg { display: table; margin: 0 auto; max-width: 100%; white-space: nowrap; cursor: pointer; }
 .wcontent .cont-end::after { content: " ↴"; color: #555; font-size: .8em; }
 .wcontent .cont-start::before { content: "↳ "; color: #555; font-size: .8em; }
 .wcontent svg { display: block; margin: 0 auto; }
 .fs-S { font-size: 13px; } .fs-M { font-size: 16px; } .fs-L { font-size: 20px; }
+.wcontent.scrollmode { width: max-content; min-width: 200px; max-width: 400px; text-align: left; }
+.wcontent.scrollmode .seg { margin: 0; }
 
 /* ---- lists / library ---- */
 .item-row {
@@ -254,6 +260,12 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
       <input type="text" id="md-tags" placeholder="pde, fourier">
       <label>Notes / source reference</label>
       <input type="text" id="md-notes" placeholder="Kreyszig §12.5">
+      <label>Watch rendering</label>
+      <div class="row" style="margin:2px 0 4px">
+        <label style="margin:0; text-transform:none; letter-spacing:0; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink)">
+          <input type="checkbox" id="md-scroll" style="width:auto"> Scroll mode (pan on watch, up to 400×512px)
+        </label>
+      </div>
       <label>Content font size</label>
       <select id="md-fontsz">
         <option value="S">Small</option>
@@ -269,9 +281,11 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
         <div class="bezel"><div class="screenwrap"><div id="preview-scroll"></div></div></div>
         <div class="pxruler"><span>0</span><span>50</span><span>100</span><span>150</span><span>200px</span></div>
         <div class="row" style="justify-content:center; margin-top:6px">
-          <button id="pv-up" class="small">▲ page</button>
+          <button id="pv-up" class="small">▲</button>
           <span class="muted" id="pv-page">page 1/1</span>
-          <button id="pv-down" class="small">▼ page</button>
+          <button id="pv-down" class="small">▼</button>
+          <button id="pv-left" class="small" style="display:none">◀</button>
+          <button id="pv-right" class="small" style="display:none">▶</button>
           <button id="pv-mode" class="small" title="Toggle live preview / compiled bitmap">Live</button>
         </div>
         <div class="ovflags" id="ovflags"></div>
@@ -470,6 +484,8 @@ function palByName(n){ for (var i=0;i<PALETTE.length;i++) if (PALETTE[i].n===n) 
 function cssRgb(p){ return 'rgb('+p.rgb[0]+','+p.rgb[1]+','+p.rgb[2]+')'; }
 
 var SCREEN_W = 200, SCREEN_H = 228, PAGE_OVERLAP = 20, PAGE_STEP = SCREEN_H - PAGE_OVERLAP;
+var SCROLL_MAX_W = 400, SCROLL_MAX_H = 512, SCROLL_MAX_BYTES = 49152;
+var PAN_PREVIEW_STEP = 60;
 var SPLIT = '%%SPLIT%%';
 
 /* ------------------------------- state ----------------------------------- */
@@ -598,9 +614,9 @@ function ensureKatexAssets(){
  * glyph and every continuation a leading one. Each block reports overflow if
  * its content is wider than 200px, which paints the red border and gates the
  * save button. */
-function renderBlocks(blocks, fontsz, forSnapshot){
+function renderBlocks(blocks, fontsz, scroll){
   var root = document.createElement('div');
-  root.className = 'wcontent fs-' + (fontsz || 'M');
+  root.className = 'wcontent fs-' + (fontsz || 'M') + (scroll ? ' scrollmode' : '');
   (blocks || []).forEach(function(b, bi){
     var el = document.createElement('div');
     el.className = 'blk';
@@ -661,12 +677,12 @@ function measureOverflow(root){
 /* DOM -> SVG foreignObject -> canvas -> nearest-palette quantise -> 4bpp pack.
  * The packed format is exactly what src/c/imgrx.c expects: 2px per byte, high
  * nibble first, stride ceil(w/2), palette bytes as GColor8 ARGB8. */
-function snapshotToCanvas(root, height){
+function snapshotToCanvas(root, width, height){
   return ensureKatexAssets().then(function(css){
     var clone = root.cloneNode(true);
     clone.style.margin = '0';
     var xhtml = new XMLSerializer().serializeToString(clone);
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+SCREEN_W+'" height="'+height+'">' +
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'">' +
       '<foreignObject width="100%" height="100%">' +
       '<div xmlns="http://www.w3.org/1999/xhtml">' +
       '<style>' + css + inlineAppCss() + '</style>' + xhtml + '</div>' +
@@ -676,7 +692,7 @@ function snapshotToCanvas(root, height){
       var img = new Image();
       img.onload = function(){
         var cv = document.createElement('canvas');
-        cv.width = SCREEN_W; cv.height = height;
+        cv.width = width; cv.height = height;
         var cx = cv.getContext('2d');
         cx.fillStyle = '#fff';
         cx.fillRect(0,0,SCREEN_W,height);
@@ -691,10 +707,11 @@ function snapshotToCanvas(root, height){
 /* the slice of app CSS the snapshot needs (content styles only) */
 function inlineAppCss(){
   return '.wcontent{width:200px;background:#fff;color:#000;padding:2px;font-family:Georgia,serif;text-align:center}' +
-    '.wcontent .blk{margin:2px 0}.wcontent .seg{display:block;white-space:nowrap}' +
+    '.wcontent .blk{margin:2px 0}.wcontent .seg{display:table;margin:0 auto;max-width:100%;white-space:nowrap}' +
     '.wcontent .cont-end::after{content:" \\21B4";color:#555;font-size:.8em}' +
     '.wcontent .cont-start::before{content:"\\21B3 ";color:#555;font-size:.8em}' +
     '.wcontent svg{display:block;margin:0 auto}.fs-S{font-size:13px}.fs-M{font-size:16px}.fs-L{font-size:20px}' +
+    '.wcontent.scrollmode{width:max-content;min-width:200px;max-width:400px;text-align:left}.wcontent.scrollmode .seg{margin:0}' +
     '.blk.overflow{outline:none!important}';
 }
 function quantizeAndPack(canvas){
@@ -725,14 +742,44 @@ function quantizeAndPack(canvas){
   for (var i=0;i<out.length;i++) bin += String.fromCharCode(out[i]);
   return { w:w, h:h, pal: PALETTE.map(function(p){return p.argb8;}), data: btoa(bin) };
 }
-/* Full compile of one page of blocks -> {w,h,pal,data} or throws on overflow */
-function compileBlocks(blocks, fontsz){
-  var root = renderBlocks(blocks, fontsz, true);
+/* Full compile of one page of blocks -> {w,h,pal,data}.
+ * Static mode: 200px wide, overflow rejected, short content padded onto a
+ * full 228px-tall white canvas, vertically centered (so the watch draws a
+ * centered card with zero draw-time logic).
+ * Scroll mode: natural width up to 400px, height up to 512px, rejected only
+ * when the packed 4bpp budget (49152 bytes) is blown. */
+function compileBlocks(blocks, fontsz, scroll){
+  if (scroll){
+    var sroot = renderBlocks(blocks, fontsz, true);
+    var meas = $('measure'); meas.innerHTML=''; meas.appendChild(sroot);
+    var w = Math.min(SCROLL_MAX_W, Math.max(SCREEN_W, sroot.scrollWidth));
+    if (w % 2) w++;                                  // even width packs cleanly
+    var h = Math.max(1, Math.min(sroot.scrollHeight, SCROLL_MAX_H));
+    var over = sroot.scrollWidth > SCROLL_MAX_W || sroot.scrollHeight > SCROLL_MAX_H;
+    meas.removeChild(sroot);
+    var packed = Math.ceil(w/2) * h;
+    if (over || packed > SCROLL_MAX_BYTES)
+      return Promise.reject({budget:{w:w, h:h, bytes:packed}});
+    var sroot2 = renderBlocks(blocks, fontsz, true);
+    sroot2.style.width = w + 'px';
+    return snapshotToCanvas(sroot2, w, h).then(quantizeAndPack);
+  }
+  var root = renderBlocks(blocks, fontsz);
   var m = measureOverflow(root);
   if (m.bad.length) return Promise.reject({overflow:m.bad});
-  var h = Math.max(1, Math.min(m.height, 4096));   // sanity ceiling
-  var root2 = renderBlocks(blocks, fontsz, true);  // fresh, unmarked tree
-  return snapshotToCanvas(root2, h).then(quantizeAndPack);
+  var h2 = Math.max(1, Math.min(m.height, 4096));   // sanity ceiling
+  var root2 = renderBlocks(blocks, fontsz);         // fresh, unmarked tree
+  return snapshotToCanvas(root2, SCREEN_W, h2).then(function(cv){
+    if (h2 < SCREEN_H){
+      var pad = document.createElement('canvas');
+      pad.width = SCREEN_W; pad.height = SCREEN_H;
+      var cx = pad.getContext('2d');
+      cx.fillStyle = '#fff'; cx.fillRect(0,0,SCREEN_W,SCREEN_H);
+      cx.drawImage(cv, 0, Math.floor((SCREEN_H - h2)/2));
+      cv = pad;
+    }
+    return quantizeAndPack(cv);
+  });
 }
 
 /* ============================ symbol toolbar =============================== */
@@ -796,6 +843,7 @@ var ED = null;      // editing buffer
 var edPage = 'q';   // active flashcard page
 var pvMode = 'live';
 var pvPage = 0;
+var pvX = 0;
 
 function newEditBuffer(type, from){
   var d = db();
@@ -866,7 +914,39 @@ function renderEditor(){
                    : 'Plain explanatory text';
     ta.oninput = function(){ b.src = ta.value; ED._dirty = true; refreshPreviewSoon(); };
     ta.onfocus = function(){ lastTextarea = ta; };
-    el.appendChild(ta);
+    if (b.type === 'math'){
+      var l1 = document.createElement('div'); l1.className='inlabel'; l1.textContent='LaTeX source';
+      el.appendChild(l1);
+      el.appendChild(ta);
+      // Visual (WYSIWYG) editor: MathLive math-field. Type ASCII shortcuts
+      // (1/2, sqrt, alpha, ^2 ...) or open its keyboard for any symbol/object.
+      // It edits the same LaTeX as the textarea; %%SPLIT%% markers are kept
+      // only while editing the raw source, so visual edits drop them.
+      var l2 = document.createElement('div'); l2.className='inlabel';
+      l2.textContent = 'Visual editor — ASCII shortcuts + symbol keyboard';
+      el.appendChild(l2);
+      var mf = document.createElement('math-field');
+      mf.textContent = String(b.src||'').split(SPLIT).join(' ');
+      var mfEditing = false;
+      mf.addEventListener('input', function(){
+        mfEditing = true;
+        b.src = mf.value !== undefined ? mf.value : mf.textContent;
+        ta.value = b.src;
+        ED._dirty = true; refreshPreviewSoon();
+        mfEditing = false;
+      });
+      var taInput = ta.oninput;
+      ta.oninput = function(){
+        taInput();
+        if (mfEditing) return;
+        var v = String(b.src||'').split(SPLIT).join(' ');
+        if (mf.setValue) { if (mf.value !== v) mf.setValue(v, {silenceNotifications:true}); }
+        else mf.textContent = v;
+      };
+      el.appendChild(mf);
+    } else {
+      el.appendChild(ta);
+    }
     host.appendChild(el);
   });
 
@@ -877,6 +957,7 @@ function renderEditor(){
   $('md-tags').value = (ED.tags||[]).join(', ');
   $('md-notes').value = ED.notes || '';
   $('md-fontsz').value = ED.fontsz || 'M';
+  $('md-scroll').checked = !!ED.scroll;
   var cs = $('md-cats'); cs.innerHTML = '';
   db().categories.forEach(function(c){
     var o = document.createElement('option'); o.value = c.id; o.textContent = catPath(c.id);
@@ -941,7 +1022,45 @@ function refreshPreview(){
   pullMeta();
   var host = $('preview-scroll'); host.innerHTML = '';
   var flags = $('ovflags');
+  var scroll = !!ED.scroll;
+  $('pv-left').style.display = scroll ? '' : 'none';
+  $('pv-right').style.display = scroll ? '' : 'none';
   if (pvMode === 'bitmap') { renderBitmapPreview(); return; }
+
+  if (scroll){
+    var sroot = renderBlocks(edBlocks(), ED.fontsz, true);
+    var meas = $('measure'); meas.innerHTML=''; meas.appendChild(sroot);
+    var w = Math.min(SCROLL_MAX_W, Math.max(SCREEN_W, sroot.scrollWidth));
+    var hh = Math.min(sroot.scrollHeight, SCROLL_MAX_H);
+    var overW = sroot.scrollWidth > SCROLL_MAX_W, overH = sroot.scrollHeight > SCROLL_MAX_H;
+    meas.removeChild(sroot);
+    sroot.style.width = w + 'px';
+    host.appendChild(sroot);
+    attachSplitClicks(sroot);
+    pvX = Math.max(0, Math.min(pvX, w - SCREEN_W));
+    var maxY = Math.max(0, hh - SCREEN_H);
+    pvPage = Math.max(0, Math.min(pvPage, Math.ceil(maxY / PAN_PREVIEW_STEP)));
+    host.style.left = (-pvX) + 'px';
+    host.style.top = (-Math.min(pvPage * PAN_PREVIEW_STEP, maxY)) + 'px';
+    $('pv-page').textContent = 'pan ' + pvX + ',' + Math.min(pvPage * PAN_PREVIEW_STEP, maxY);
+    var packed = Math.ceil(w/2) * hh;
+    if (overW || overH || packed > SCROLL_MAX_BYTES){
+      flags.innerHTML = '<span class="bad">▲ over scroll budget: ' + w + '×' + hh +
+        ' ≈ ' + Math.round(packed/1024) + 'KB / 48KB max' + (overW ? ', width > 400px' : '') +
+        (overH ? ', height > 512px' : '') + '</span>';
+      $('btn-save').disabled = true;
+      $('save-hint').textContent = 'Save is disabled until the scroll budget fits.';
+    } else {
+      flags.innerHTML = '<span class="good">✓ scroll card ' + w + '×' + hh +
+        ' · ' + Math.round(packed/1024) + 'KB of 48KB</span>' +
+        '<div class="muted">Pans on the watch: drag the touchscreen (both axes); Up/Down buttons nudge vertically.</div>';
+      $('btn-save').disabled = false;
+      $('save-hint').textContent = ED.type==='fc' ? 'Both pages compile on save.' : '';
+    }
+    return;
+  }
+
+  host.style.left = '0px';
   var root = renderBlocks(edBlocks(), ED.fontsz);
   var m = measureOverflow(root);
   host.appendChild(root);
@@ -967,11 +1086,22 @@ function renderBitmapPreview(){
   if (!img){ host.innerHTML = '<div class="muted" style="padding:10px">No compiled bitmap yet — save first.</div>'; $('ovflags').innerHTML=''; return; }
   var cv = drawBitmap(img);
   host.appendChild(cv);
-  var pages = img.h <= SCREEN_H ? 1 : 1 + Math.ceil((img.h - SCREEN_H) / PAGE_STEP);
-  pvPage = Math.min(pvPage, pages-1);
-  host.style.top = (-pvPage * PAGE_STEP) + 'px';
-  $('pv-page').textContent = 'page ' + (pvPage+1) + '/' + pages + ' (bitmap, 20px overlap)';
-  $('ovflags').innerHTML = '<span class="good">Compiled ' + img.w + '×' + img.h + ' · 4bpp</span>';
+  if (ED.scroll){
+    pvX = Math.max(0, Math.min(pvX, img.w - SCREEN_W));
+    var maxY = Math.max(0, img.h - SCREEN_H);
+    var y = Math.min(pvPage * PAN_PREVIEW_STEP, maxY);
+    host.style.left = (-pvX) + 'px';
+    host.style.top = (-y) + 'px';
+    $('pv-page').textContent = 'pan ' + pvX + ',' + y + ' (bitmap)';
+  } else {
+    host.style.left = '0px';
+    var pages = img.h <= SCREEN_H ? 1 : 1 + Math.ceil((img.h - SCREEN_H) / PAGE_STEP);
+    pvPage = Math.min(pvPage, pages-1);
+    host.style.top = (-pvPage * PAGE_STEP) + 'px';
+    $('pv-page').textContent = 'page ' + (pvPage+1) + '/' + pages + ' (bitmap, 20px overlap)';
+  }
+  $('ovflags').innerHTML = '<span class="good">Compiled ' + img.w + '×' + img.h + ' · 4bpp' +
+    (ED.scroll ? ' · scroll' : '') + '</span>';
 }
 function drawBitmap(img){
   var cv = document.createElement('canvas');
@@ -999,6 +1129,7 @@ function pullMeta(){
   ED.tags = $('md-tags').value.split(',').map(function(s){return s.trim();}).filter(Boolean);
   ED.notes = $('md-notes').value;
   ED.fontsz = $('md-fontsz').value;
+  ED.scroll = $('md-scroll').checked;
   ED.cats = Array.prototype.filter.call($('md-cats').options, function(o){return o.selected;})
             .map(function(o){return o.value;});
 }
@@ -1080,10 +1211,10 @@ function saveItem(){
   $('save-hint').textContent = 'Compiling bitmaps…';
   var jobs;
   if (ED.type==='db'){
-    jobs = compileBlocks(ED.blocks, ED.fontsz).then(function(img){ ED.img = img; });
+    jobs = compileBlocks(ED.blocks, ED.fontsz, ED.scroll).then(function(img){ ED.img = img; });
   } else {
-    jobs = compileBlocks(ED.qblocks, ED.fontsz).then(function(q){ ED.q = q;
-      return compileBlocks(ED.ablocks, ED.fontsz); }).then(function(a){ ED.a = a; });
+    jobs = compileBlocks(ED.qblocks, ED.fontsz, ED.scroll).then(function(q){ ED.q = q;
+      return compileBlocks(ED.ablocks, ED.fontsz, ED.scroll); }).then(function(a){ ED.a = a; });
   }
   jobs.then(function(){
     ED.modified = nowSec();
@@ -1107,6 +1238,10 @@ function saveItem(){
       $('save-hint').textContent = 'Overflow on ' + (ED.type==='fc' ? 'a page' : 'a block') + ' — resolve before saving.';
       toast('Overflow detected — save blocked');
       refreshPreview();
+    } else if (err && err.budget){
+      $('save-hint').textContent = 'Over the scroll budget (' + err.budget.w + '×' + err.budget.h +
+        ' = ' + Math.round(err.budget.bytes/1024) + 'KB of 48KB) — shrink content or split into items.';
+      toast('Scroll budget exceeded — save blocked');
     } else {
       $('save-hint').textContent = 'Compile failed: ' + (err && err.message || err);
     }
@@ -1548,6 +1683,7 @@ function compileBundle(){
   var items = [], skipped = 0;
   d.items.forEach(function(it){
     var out = { id: it.id, type: it.type, title: it.title, cats: it.cats || [] };
+    if (it.scroll) out.scroll = true;
     if (it.type === 'db'){
       if (!it.img){ skipped++; return; }
       out.img = it.img;
@@ -1660,10 +1796,13 @@ document.addEventListener('DOMContentLoaded', function(){
   $('btn-save').onclick = saveItem;
   ['md-title','md-tags','md-notes'].forEach(function(id){ $(id).oninput = function(){ ED._dirty=true; }; });
   $('md-fontsz').onchange = refreshPreview;
+  $('md-scroll').onchange = function(){ pvX = 0; pvPage = 0; refreshPreview(); };
   $('md-cats').onchange = function(){ pullMeta(); renderLinked(); renderSrsPanel(); };
 
   $('pv-up').onclick = function(){ pvPage = Math.max(0, pvPage-1); refreshPreview(); };
   $('pv-down').onclick = function(){ pvPage++; refreshPreview(); };
+  $('pv-left').onclick = function(){ pvX = Math.max(0, pvX - PAN_PREVIEW_STEP); refreshPreview(); };
+  $('pv-right').onclick = function(){ pvX += PAN_PREVIEW_STEP; refreshPreview(); };
   $('pv-mode').onclick = function(){
     pvMode = pvMode==='live' ? 'bitmap' : 'live';
     $('pv-mode').textContent = pvMode==='live' ? 'Live' : 'Bitmap';
