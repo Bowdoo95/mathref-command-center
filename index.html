@@ -319,6 +319,7 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
     <div class="row">
       <input type="text" id="lib-search" class="grow" placeholder="Search titles, tags, categories, notes…">
       <button id="lib-import-item" class="small">Import item JSON…</button>
+      <button id="lib-org-export" class="small" title="Compact summary of categories, tags and existing titles — paste into an LLM extraction prompt">⧉ Export organisation for LLM</button>
     </div>
     <div id="lib-list"></div>
     <hr>
@@ -2128,6 +2129,32 @@ document.addEventListener('DOMContentLoaded', function(){
   // library
   $('lib-search').oninput = renderLibrary;
   $('lib-import-item').onclick = function(){ $('file-item-import').click(); };
+  $('lib-org-export').onclick = function(){
+    var d = db();
+    var tags = {};
+    d.items.forEach(function(it){ (it.tags||[]).forEach(function(t){ tags[t]=(tags[t]||0)+1; }); });
+    var org = {
+      database: d.name,
+      categories: d.categories.map(function(c){ return catPath(c.id); }).sort(),
+      tags_in_use: tags,
+      existing_items: d.items.slice(0, 400).map(function(it){
+        return { title: it.title, type: it.type,
+                 kind: it.type==='fc' ? (it.kind||'recall') : undefined,
+                 cats: (it.cats||[]).map(catPath), tags: it.tags||[] };
+      }),
+      counts: {
+        datablocks: d.items.filter(function(i){return i.type==='db';}).length,
+        recall_cards: d.items.filter(function(i){return i.type==='fc' && (i.kind||'recall')==='recall';}).length,
+        question_cards: d.items.filter(function(i){return i.type==='fc' && i.kind==='question';}).length
+      }
+    };
+    var txt = JSON.stringify(org, null, 1);
+    download(d.name.replace(/\W+/g,'_') + '.organisation.json', txt);
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      navigator.clipboard.writeText(txt).then(function(){ toast('Organisation summary copied + downloaded'); },
+                                              function(){ toast('Organisation summary downloaded'); });
+    else toast('Organisation summary downloaded');
+  };
   $('file-item-import').onchange = function(){ if (this.files[0]) importItemFile(this.files[0]); this.value=''; };
   $('cat-add').onclick = function(){
     var n = $('cat-name').value.trim();
