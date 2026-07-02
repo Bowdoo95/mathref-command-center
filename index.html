@@ -141,12 +141,12 @@ section.tab.active { display: block; }
 .ovflags .good { color: var(--ok); font-weight: 600; }
 
 /* content rendered inside the 200px canvas */
-.wcontent { width: 200px; background: #fff; color: #000; padding: 2px; font-family: Georgia, serif; text-align: center; }
+.wcontent { width: 200px; background: #fff; color: #000; padding: 2px; font-family: Georgia, serif; text-align: center; font-weight: 700; }
 .wcontent .blk { margin: 2px 0; position: relative; }
 .wcontent .blk.overflow { outline: 2px solid #d21f1f; outline-offset: -2px; }
 .wcontent .seg { display: table; margin: 0 auto; max-width: 100%; white-space: nowrap; cursor: pointer; }
-.wcontent .cont-end::after { content: " ↴"; color: #555; font-size: .8em; }
-.wcontent .cont-start::before { content: "↳ "; color: #555; font-size: .8em; }
+.wcontent .cont-end::after { content: " ↴"; color: #aaa; font-weight: 400; font-size: .8em; }
+.wcontent .cont-start::before { content: "↳ "; color: #aaa; font-weight: 400; font-size: .8em; }
 .wcontent svg { display: block; margin: 0 auto; }
 .fs-S { font-size: 13px; } .fs-M { font-size: 16px; } .fs-L { font-size: 20px; }
 .wcontent.scrollmode { width: max-content; min-width: 200px; max-width: 400px; text-align: left; }
@@ -767,7 +767,7 @@ function snapshotToCanvas(root, width, height){
 }
 /* the slice of app CSS the snapshot needs (content styles only) */
 function inlineAppCss(){
-  return '.wcontent{width:200px;background:#fff;color:#000;padding:2px;font-family:Georgia,serif;text-align:center}' +
+  return '.wcontent{width:200px;background:#fff;color:#000;padding:2px;font-family:Georgia,serif;text-align:center;font-weight:700}' +
     '.wcontent .blk{margin:2px 0}.wcontent .seg{display:table;margin:0 auto;max-width:100%;white-space:nowrap}' +
     '.wcontent .cont-end::after{content:" \\21B4";color:#555;font-size:.8em}' +
     '.wcontent .cont-start::before{content:"\\21B3 ";color:#555;font-size:.8em}' +
@@ -1151,7 +1151,12 @@ function refreshPreview(){
   attachSplitClicks(root);
   var pages = Math.max(1, 1 + Math.ceil(Math.max(0, m.height - SCREEN_H) / PAGE_STEP));
   pvPage = Math.min(pvPage, pages-1);
-  host.style.top = (-pvPage * PAGE_STEP) + 'px';
+  // Mirror the watch: single-page content floats vertically centered (the
+  // compiler pads the bitmap the same way, so preview == wrist).
+  if (pages === 1 && m.height < SCREEN_H)
+    host.style.top = Math.floor((SCREEN_H - m.height)/2) + 'px';
+  else
+    host.style.top = (-pvPage * PAGE_STEP) + 'px';
   $('pv-page').textContent = 'page ' + (pvPage+1) + '/' + pages;
   if (m.bad.length){
     flags.innerHTML = '<span class="bad">▲ ' + m.bad.length + ' block(s) exceed 200px</span>' +
@@ -1460,6 +1465,10 @@ var AI_SYSTEM =
 'You format mathematics for a 200px-wide, 16-colour smartwatch screen. ' +
 'Respond ONLY with a JSON object, no markdown fences, no prose: ' +
 '{"blocks":[{"type":"text"|"math"|"svg","src":"...","color":"black|blue|green|amber|red|purple|cyan"}]}. ' +
+'Content renders BOLD at ~26 characters per line on a 200px screen, so keep lines short. ' +
+'Colour hints: if a line of input begins with {{blue}}, {{green}}, {{amber}}, {{red}}, ' +
+'{{purple}} or {{cyan}}, strip the tag and give that block the named colour; otherwise ' +
+'default to black and add colour yourself only for genuine semantic emphasis. ' +
 'Rules: math blocks use KaTeX-compatible LaTeX. Any expression that could exceed ' +
 '200px at 16px font MUST contain %%SPLIT%% markers placed ONLY at structural ' +
 'boundaries (between equalities, after binary relations, between summed terms) ' +
