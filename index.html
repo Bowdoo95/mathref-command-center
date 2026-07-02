@@ -220,6 +220,15 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
         <button id="ed-new" class="small">New</button>
       </div>
 
+      <div class="row" id="ed-vars" style="display:none; margin-top:6px">
+        <span class="muted">Variant</span>
+        <button id="var-prev" class="small">◀</button>
+        <span class="muted" id="var-label">1 / 1</span>
+        <button id="var-next" class="small">▶</button>
+        <button id="var-add" class="small" title="Add a new variant, starting as a copy of this one">+ Add variant</button>
+        <button id="var-del" class="small danger">✕</button>
+        <span class="muted grow" style="text-align:right">rotates each showing, loops</span>
+      </div>
       <div class="row qa-tabs" id="ed-qa" style="display:none; margin-top:6px">
         <button id="qa-q" class="active">Question page</button>
         <button id="qa-a">Answer page</button>
@@ -260,6 +269,13 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
       <input type="text" id="md-tags" placeholder="pde, fourier">
       <label>Notes / source reference</label>
       <input type="text" id="md-notes" placeholder="Kreyszig §12.5">
+      <div id="md-kind-wrap" style="display:none">
+        <label>Card kind (independent queues &amp; budgets)</label>
+        <select id="md-kind">
+          <option value="recall">Instant Recall — quick fact/formula (~10–15s)</option>
+          <option value="question">Question — multi-step problem (~1–5min)</option>
+        </select>
+      </div>
       <label>Watch rendering</label>
       <div class="row" style="margin:2px 0 4px">
         <label style="margin:0; text-transform:none; letter-spacing:0; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink)">
@@ -372,6 +388,44 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
       <div class="swatches" id="st-accent"></div>
       <label>Watch menu font size</label>
       <select id="st-menufont"><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select>
+
+      <h2 style="margin-top:18px">Daily review budgets</h2>
+      <div class="row">
+        <div class="grow"><label>Instant Recall / day</label><input type="number" id="tg-recall" min="1"></div>
+        <div class="grow"><label>Questions / day</label><input type="number" id="tg-question" min="1"></div>
+      </div>
+      <p class="muted">Independent queues: filling one budget never blocks due cards from the other. New bulk-uploaded cards are introduced adaptively within spare budget.</p>
+
+      <h2 style="margin-top:18px">Hourly micro-review</h2>
+      <label style="text-transform:none; letter-spacing:0; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink)">
+        <input type="checkbox" id="mi-en" style="width:auto"> Enable wrist micro-reviews (Instant Recall only)
+      </label>
+      <div class="row">
+        <div class="grow"><label>Mon–Fri from (hour)</label><input type="number" id="mi-wds" min="0" max="23"></div>
+        <div class="grow"><label>until</label><input type="number" id="mi-wde" min="1" max="24"></div>
+      </div>
+      <div class="row">
+        <div class="grow"><label>Sat–Sun from (hour)</label><input type="number" id="mi-wes" min="0" max="23"></div>
+        <div class="grow"><label>until</label><input type="number" id="mi-wee" min="1" max="24"></div>
+      </div>
+      <p class="muted">At most one buzz per hour inside these windows, and only when a recall card is actually due — otherwise the watch never wakes.</p>
+
+      <h2 style="margin-top:18px">Scheduling algorithm</h2>
+      <label>Scheduler</label>
+      <select id="st-sched">
+        <option value="fsrs">FSRS-4.5 (recommended)</option>
+        <option value="sm2">SM-2 (legacy)</option>
+      </select>
+      <div class="row">
+        <div class="grow"><label>Recall retention target</label><input type="number" id="rt-recall" step="0.01" min="0.7" max="0.97"></div>
+        <div class="grow"><label>Question retention target</label><input type="number" id="rt-question" step="0.01" min="0.7" max="0.97"></div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button id="fsrs-opt" class="small">⚙ Optimize FSRS parameters from my review history</button>
+        <button id="fsrs-reset" class="small">Reset to defaults</button>
+      </div>
+      <div class="muted" id="fsrs-opt-status"></div>
+      <p class="muted">FSRS schedules each card from a fitted memory model (difficulty · stability · retrievability) so intervals target these retention probabilities directly. Lower retention = fewer, longer reviews. Existing SM-2 state migrates automatically on the next rating. The SM-2 block below only applies when the legacy scheduler is selected.</p>
 
       <h2 style="margin-top:18px">SM-2 configuration</h2>
       <div class="row">
@@ -494,12 +548,16 @@ var S = null;
 
 function defaultSettings(){
   return { theme:'light', accent:'blue', menuFont:'M',
-           sm2:{ startEF:2.5, minEF:1.3, firstIvl:1, secondIvl:6 } };
+           sm2:{ startEF:2.5, minEF:1.3, firstIvl:1, secondIvl:6 },
+           scheduler:'fsrs',
+           retention:{ recall:0.90, question:0.85 },
+           targets:{ recall:30, question:4 },
+           micro:{ enabled:false, wdStart:9, wdEnd:21, weStart:11, weEnd:18 } };
 }
 function newDb(name){
   return { id:'db_'+Date.now().toString(36), name:name,
            settings: defaultSettings(), categories:[], items:[],
-           srs:{}, stats:{log:[]}, queue:[] };
+           srs:{}, stats:{log:[]}, queue:[], staging:[], intakeLog:[] };
 }
 function loadState(){
   try { S = JSON.parse(localStorage.getItem(STATE_KEY)); } catch(e){ S = null; }
@@ -533,6 +591,8 @@ function mergeRuntime(){
     if (rt && rt.name && rt.name === d.name) {
       if (rt.srs) d.srs = rt.srs;
       if (rt.stats) d.stats = rt.stats;
+      if (rt.staging) d.staging = rt.staging;   // phone owns promotion state
+      if (rt.metrics) S._metrics = rt.metrics;
       saveState();
       toast('Loaded live review state from watch companion');
     }
@@ -854,19 +914,32 @@ function newEditBuffer(type, from){
   };
   if (!from) {
     if (type==='db') b.blocks = [{type:'math', src:'', color:'black'}];
-    else { b.qblocks = [{type:'math', src:'', color:'black'}];
-           b.ablocks = [{type:'math', src:'', color:'black'}]; }
+    else b.variants = [{ qblocks:[{type:'math', src:'', color:'black'}],
+                         ablocks:[{type:'math', src:'', color:'black'}] }];
   }
+  if (b.type==='fc' && !b.variants){
+    // legacy single-variant card: wrap its pages as variant 1
+    b.variants = [{ qblocks: b.qblocks || [{type:'math',src:'',color:'black'}],
+                    ablocks: b.ablocks || [{type:'math',src:'',color:'black'}] }];
+  }
+  b._curVar = 0;
   b._dirty = true;
   return b;
 }
+function curVariant(){
+  if (!ED.variants) ED.variants = [{qblocks:[], ablocks:[]}];
+  ED._curVar = Math.min(ED._curVar || 0, ED.variants.length - 1);
+  return ED.variants[ED._curVar];
+}
 function edBlocks(){
   if (ED.type==='db') return ED.blocks;
-  return edPage==='q' ? ED.qblocks : ED.ablocks;
+  var v = curVariant();
+  return edPage==='q' ? v.qblocks : v.ablocks;
 }
 function setEdBlocks(bl){
-  if (ED.type==='db') ED.blocks = bl;
-  else if (edPage==='q') ED.qblocks = bl; else ED.ablocks = bl;
+  if (ED.type==='db'){ ED.blocks = bl; return; }
+  var v = curVariant();
+  if (edPage==='q') v.qblocks = bl; else v.ablocks = bl;
 }
 
 function renderEditor(){
@@ -875,6 +948,12 @@ function renderEditor(){
   $('ed-type').value = ED.type;
   $('ed-type').disabled = !!findItem(ED.id);
   $('ed-qa').style.display = ED.type==='fc' ? 'flex' : 'none';
+  $('ed-vars').style.display = ED.type==='fc' ? 'flex' : 'none';
+  if (ED.type==='fc'){
+    curVariant();
+    $('var-label').textContent = (ED._curVar+1) + ' / ' + ED.variants.length;
+    $('var-del').disabled = ED.variants.length <= 1;
+  }
   $('qa-q').classList.toggle('active', edPage==='q');
   $('qa-a').classList.toggle('active', edPage==='a');
 
@@ -958,6 +1037,8 @@ function renderEditor(){
   $('md-notes').value = ED.notes || '';
   $('md-fontsz').value = ED.fontsz || 'M';
   $('md-scroll').checked = !!ED.scroll;
+  $('md-kind-wrap').style.display = ED.type==='fc' ? '' : 'none';
+  $('md-kind').value = ED.kind || 'recall';
   var cs = $('md-cats'); cs.innerHTML = '';
   db().categories.forEach(function(c){
     var o = document.createElement('option'); o.value = c.id; o.textContent = catPath(c.id);
@@ -995,7 +1076,9 @@ function renderSrsPanel(){
   var html = '<h3>SM-2 profiles (hidden metadata)</h3>';
   function prof(name, p){
     if (!p) return '<div class="muted">' + esc(name) + ': new card</div>';
-    return '<div class="muted">' + esc(name) + ': EF ' + (p.ef||0).toFixed(2) +
+    var mem = p.s ? ('S ' + p.s.toFixed(1) + 'd · D ' + (p.d||0).toFixed(1))
+                  : ('EF ' + (p.ef||0).toFixed(2));
+    return '<div class="muted">' + esc(name) + ': ' + mem +
       ' · reps ' + (p.reps||0) + ' · ivl ' + (p.ivl||0) + 'd · due ' + fmtDate(p.due) +
       ' · last ' + fmtDate(p.last) + '</div>';
   }
@@ -1081,7 +1164,9 @@ function refreshPreview(){
   }
 }
 function renderBitmapPreview(){
-  var img = ED.type==='db' ? ED.img : (edPage==='q' ? ED.q : ED.a);
+  var img;
+  if (ED.type==='db') img = ED.img;
+  else { var vv = curVariant(); img = edPage==='q' ? vv.qImg : vv.aImg; }
   var host = $('preview-scroll');
   if (!img){ host.innerHTML = '<div class="muted" style="padding:10px">No compiled bitmap yet — save first.</div>'; $('ovflags').innerHTML=''; return; }
   var cv = drawBitmap(img);
@@ -1130,6 +1215,7 @@ function pullMeta(){
   ED.notes = $('md-notes').value;
   ED.fontsz = $('md-fontsz').value;
   ED.scroll = $('md-scroll').checked;
+  if (ED.type==='fc') ED.kind = $('md-kind').value;
   ED.cats = Array.prototype.filter.call($('md-cats').options, function(o){return o.selected;})
             .map(function(o){return o.value;});
 }
@@ -1213,19 +1299,34 @@ function saveItem(){
   if (ED.type==='db'){
     jobs = compileBlocks(ED.blocks, ED.fontsz, ED.scroll).then(function(img){ ED.img = img; });
   } else {
-    jobs = compileBlocks(ED.qblocks, ED.fontsz, ED.scroll).then(function(q){ ED.q = q;
-      return compileBlocks(ED.ablocks, ED.fontsz, ED.scroll); }).then(function(a){ ED.a = a; });
+    curVariant();
+    // Compile every variant's question + answer sequentially; any overflow
+    // anywhere blocks the save (the toast names the offending variant).
+    jobs = ED.variants.reduce(function(chain, v, vi){
+      return chain.then(function(){
+        return compileBlocks(v.qblocks, ED.fontsz, ED.scroll).then(function(q){ v.qImg = q;
+          return compileBlocks(v.ablocks, ED.fontsz, ED.scroll); }).then(function(a){ v.aImg = a; });
+      }).catch(function(err){ err._variant = vi + 1; throw err; });
+    }, Promise.resolve()).then(function(){
+      // legacy mirrors: first variant doubles as item.q/item.a
+      ED.qblocks = ED.variants[0].qblocks; ED.ablocks = ED.variants[0].ablocks;
+      ED.q = ED.variants[0].qImg; ED.a = ED.variants[0].aImg;
+    });
   }
   jobs.then(function(){
     ED.modified = nowSec();
     ED._dirty = false;
     var d = db(), ex = findItem(ED.id);
-    var clean = deepCopy(ED); delete clean._dirty; delete clean._queueId;
+    var clean = deepCopy(ED); delete clean._dirty; delete clean._queueId; delete clean._stage;
     if (ex) d.items[d.items.indexOf(ex)] = clean;
     else { if (!clean.created) clean.created = nowSec(); d.items.push(clean); }
     if (ED._queueId){                       // bulk-pipeline approval
       d.queue = d.queue.filter(function(q){ return q.id !== ED._queueId; });
-      delete ED._queueId;
+      if (ED._stage && clean.type === 'fc'){
+        if (!d.staging) d.staging = [];
+        if (d.staging.indexOf(clean.id) < 0) d.staging.push(clean.id);
+      }
+      delete ED._queueId; delete ED._stage;
       renderQueue();
     }
     saveState();
@@ -1235,7 +1336,10 @@ function saveItem(){
   }).catch(function(err){
     $('btn-save').disabled = false;
     if (err && err.overflow){
-      $('save-hint').textContent = 'Overflow on ' + (ED.type==='fc' ? 'a page' : 'a block') + ' — resolve before saving.';
+      if (err._variant && ED.variants && ED.variants.length > 1){
+        ED._curVar = err._variant - 1; renderEditor();
+      }
+      $('save-hint').textContent = 'Overflow on ' + (err._variant ? ('variant ' + err._variant) : (ED.type==='fc' ? 'a page' : 'a block')) + ' — resolve before saving.';
       toast('Overflow detected — save blocked');
       refreshPreview();
     } else if (err && err.budget){
@@ -1261,11 +1365,20 @@ function renderLibrary(){
   if (!shown.length) host.innerHTML = '<div class="muted" style="padding:8px">No items' + (q?' match “'+esc(q)+'”':'') + '.</div>';
   shown.forEach(function(it){
     var r = document.createElement('div'); r.className='item-row';
+    var dormant = (d.staging||[]).indexOf(it.id) >= 0;
     r.innerHTML = '<span class="pill' + (it.type==='fc'?' fc':'') + '">' + (it.type==='fc'?'card':'block') + '</span>' +
+      (dormant ? '<span class="pill">dormant</span>' : '') +
+      (it.variants && it.variants.length>1 ? '<span class="pill">'+it.variants.length+' vars</span>' : '') +
       '<div class="grow"><div class="t">' + esc(it.title) + '</div>' +
       '<div class="path">' + esc(itemPaths(it)) + (it.tags&&it.tags.length ? ' · #' + esc(it.tags.join(' #')) : '') + '</div></div>';
     var edb = document.createElement('button'); edb.className='small'; edb.textContent='Edit';
-    edb.onclick = function(){ ED = deepCopy(it); edPage='q'; pvPage=0; showTab('editor'); renderEditor(); };
+    edb.onclick = function(){
+      ED = deepCopy(it);
+      if (ED.type==='fc' && !ED.variants)
+        ED.variants = [{ qblocks: ED.qblocks||[], ablocks: ED.ablocks||[],
+                         qImg: ED.q, aImg: ED.a }];
+      ED._curVar = 0; edPage='q'; pvPage=0; showTab('editor'); renderEditor();
+    };
     var exb = document.createElement('button'); exb.className='small'; exb.textContent='Export';
     exb.onclick = function(){ download(it.title.replace(/\W+/g,'_') + '.item.json', JSON.stringify({v:1, item: it}, null, 2)); };
     var dlb = document.createElement('button'); dlb.className='small danger'; dlb.textContent='Delete';
@@ -1431,20 +1544,48 @@ function runBulk(){
         saveState(); renderQueue(); return;
       }
       var raw = items[i];
-      aiFormat(String(raw.raw||raw.title||'')).then(function(blocks){
-        d.queue.push({
-          id: uid('q'), title: raw.title || ('Imported ' + (i+1)),
-          catNames: raw.cats || [], tags: raw.tags || [], notes: raw.notes || '',
-          blocks: blocks, error: null
+      var isCard = raw.q !== undefined && raw.a !== undefined;
+      var base = {
+        id: uid('q'), title: raw.title || ('Imported ' + (i+1)),
+        catNames: raw.cats || [], tags: raw.tags || [], notes: raw.notes || '',
+        error: null
+      };
+      var work;
+      if (isCard){
+        base.fc = true;
+        base.kind = raw.kind === 'question' ? 'question' : 'recall';
+        // Primary q/a plus any "variants": [{q,a}, ...] — each pair runs
+        // through the AI formatter and lands as a rotating variant.
+        var pairs = [{q: raw.q, a: raw.a}].concat(
+          Array.isArray(raw.variants) ? raw.variants.filter(function(v){
+            return v && v.q !== undefined && v.a !== undefined; }) : []);
+        base.variants = [];
+        work = pairs.reduce(function(chain, pair){
+          return chain.then(function(){
+            var ent = {};
+            return aiFormat(String(pair.q)).then(function(qb){ ent.qblocks = qb;
+              return aiFormat(String(pair.a)); }).then(function(ab){
+              ent.ablocks = ab; base.variants.push(ent); });
+          });
+        }, Promise.resolve()).then(function(){
+          base.qblocks = base.variants[0].qblocks;
+          base.ablocks = base.variants[0].ablocks;
         });
-      }).catch(function(e){
-        d.queue.push({
-          id: uid('q'), title: raw.title || ('Imported ' + (i+1)),
-          catNames: raw.cats || [], tags: raw.tags || [], notes: raw.notes || '',
-          blocks: [{type:'text', src:String(raw.raw||''), color:'black'}],
-          error: 'AI failed (' + (e.message||e) + ') — raw text kept'
-        });
+      } else {
+        work = aiFormat(String(raw.raw||raw.title||'')).then(function(b){ base.blocks = b; });
+      }
+      work.catch(function(e){
+        base.error = 'AI failed (' + (e.message||e) + ') — raw text kept';
+        if (isCard){
+          var mkv = function(q,a){ return { qblocks:[{type:'text', src:String(q||''), color:'black'}],
+                                            ablocks:[{type:'text', src:String(a||''), color:'black'}] }; };
+          base.variants = [mkv(raw.q, raw.a)].concat(
+            (Array.isArray(raw.variants)?raw.variants:[]).map(function(v){ return mkv(v.q, v.a); }));
+          base.qblocks = base.variants[0].qblocks;
+          base.ablocks = base.variants[0].ablocks;
+        } else base.blocks = [{type:'text', src:String(raw.raw||''), color:'black'}];
       }).then(function(){
+        d.queue.push(base);
         i++;
         $('bulk-status').textContent = 'Processing ' + i + '/' + items.length + '…';
         saveState(); renderQueue();
@@ -1469,9 +1610,17 @@ function renderQueue(){
       (q.error ? ' · <span style="color:var(--danger)">' + esc(q.error) + '</span>' : '') + '</div></div>';
     var op = document.createElement('button'); op.className='small'; op.textContent='Open in editor';
     op.onclick = function(){
-      ED = newEditBuffer('db');
+      ED = newEditBuffer(q.fc ? 'fc' : 'db');
       ED.title = q.title; ED.tags = q.tags; ED.notes = q.notes;
-      ED.blocks = deepCopy(q.blocks);
+      if (q.fc){
+        ED.kind = q.kind || 'recall';
+        ED.variants = q.variants ? deepCopy(q.variants)
+          : [{qblocks: deepCopy(q.qblocks), ablocks: deepCopy(q.ablocks)}];
+        ED._curVar = 0;
+        ED._stage = true;   // bulk cards start dormant (adaptive intake)
+      } else {
+        ED.blocks = deepCopy(q.blocks);
+      }
       // map category names -> ids, creating them at top level when missing
       ED.cats = (q.catNames||[]).map(function(n){
         var c = db().categories.filter(function(x){return x.name===n;})[0];
@@ -1603,7 +1752,20 @@ function renderStats(){
     ['Flashcards', d.items.filter(function(i){return i.type==='fc';}).length],
     ['Datablocks', d.items.filter(function(i){return i.type==='db';}).length]
   ];
-  $('stat-cards').innerHTML = cards.map(function(c){
+  var mhtml = '';
+  if (S._metrics){
+    ['recall','question'].forEach(function(k){
+      var m = S._metrics[k]; if (!m) return;
+      var col = m.health==='Optimal' ? 'var(--ok)' : m.health==='Heavy' ? 'var(--warn)' : 'var(--danger)';
+      mhtml += '<div class="stat"><b style="color:'+col+'">' + m.health + '</b>' +
+        '<span class="muted">' + (k==='recall'?'Instant Recall':'Questions') + ' queue</span>' +
+        '<div class="muted">' + m.due + ' due / ' + m.target + ' target · ' + m.doneToday + ' done</div>' +
+        '<div class="muted">~' + m.projectedMinutes + ' min today · ' + m.retention + '% retention</div>' +
+        '<div class="muted">' + m.staged + ' dormant · ' + m.intakeVelocityPerWeek + '/wk intake' +
+        (m.staged ? ' · ETA ' + (m.dormantEtaDays<0?'—':m.dormantEtaDays+'d') : '') + '</div></div>';
+    });
+  }
+  $('stat-cards').innerHTML = mhtml + cards.map(function(c){
     return '<div class="stat"><b>' + c[1] + '</b><span class="muted">' + c[0] + '</span></div>';
   }).join('');
 
@@ -1650,6 +1812,15 @@ function renderSettings(){
     s.onclick = function(){ st.accent = a; saveState(); renderSettings(); };
     host.appendChild(s);
   });
+  $('st-sched').value = st.scheduler || 'fsrs';
+  var rt = st.retention || {recall:0.90, question:0.85};
+  $('rt-recall').value = rt.recall; $('rt-question').value = rt.question;
+  var tg = st.targets || {recall:30, question:4};
+  $('tg-recall').value = tg.recall; $('tg-question').value = tg.question;
+  var mi = st.micro || {enabled:false, wdStart:9, wdEnd:21, weStart:11, weEnd:18};
+  $('mi-en').checked = !!mi.enabled;
+  $('mi-wds').value = mi.wdStart; $('mi-wde').value = mi.wdEnd;
+  $('mi-wes').value = mi.weStart; $('mi-wee').value = mi.weEnd;
   $('sm-startEF').value = st.sm2.startEF;
   $('sm-minEF').value = st.sm2.minEF;
   $('sm-firstIvl').value = st.sm2.firstIvl;
@@ -1662,6 +1833,16 @@ function pullSettings(){
   var st = db().settings;
   st.theme = $('st-theme').value;
   st.menuFont = $('st-menufont').value;
+  st.scheduler = $('st-sched').value;
+  st.retention = { recall: Math.min(0.97, Math.max(0.7, parseFloat($('rt-recall').value) || 0.90)),
+                   question: Math.min(0.97, Math.max(0.7, parseFloat($('rt-question').value) || 0.85)) };
+  st.targets = { recall: parseInt($('tg-recall').value,10) || 30,
+                 question: parseInt($('tg-question').value,10) || 4 };
+  st.micro = { enabled: $('mi-en').checked,
+               wdStart: parseInt($('mi-wds').value,10) || 9,
+               wdEnd:   parseInt($('mi-wde').value,10) || 21,
+               weStart: parseInt($('mi-wes').value,10) || 11,
+               weEnd:   parseInt($('mi-wee').value,10) || 18 };
   st.sm2.startEF = parseFloat($('sm-startEF').value) || 2.5;
   st.sm2.minEF = parseFloat($('sm-minEF').value) || 1.3;
   st.sm2.firstIvl = parseInt($('sm-firstIvl').value,10) || 1;
@@ -1684,12 +1865,18 @@ function compileBundle(){
   d.items.forEach(function(it){
     var out = { id: it.id, type: it.type, title: it.title, cats: it.cats || [] };
     if (it.scroll) out.scroll = true;
+    if (it.type === 'fc') out.kind = it.kind || 'recall';
     if (it.type === 'db'){
       if (!it.img){ skipped++; return; }
       out.img = it.img;
     } else {
       if (!it.q || !it.a){ skipped++; return; }
       out.q = it.q; out.a = it.a;
+      if (it.variants && it.variants.length > 1){
+        var vars = [];
+        it.variants.forEach(function(v){ if (v.qImg && v.aImg) vars.push({q:v.qImg, a:v.aImg}); });
+        if (vars.length > 1) out.vars = vars;
+      }
     }
     items.push(out);
   });
@@ -1701,7 +1888,11 @@ function compileBundle(){
       categories: d.categories,
       items: items,
       srs: d.srs,
-      stats: d.stats
+      stats: d.stats,
+      staging: (d.staging || []).filter(function(id){
+        return items.some(function(it){ return it.id === id; });
+      }),
+      intakeLog: d.intakeLog || []
     }
   };
 }
@@ -1719,6 +1910,115 @@ function sendSettingsOnly(){
   var payload = { type:'settings', settings: db().settings };
   if (S.ui.configUrl) payload.configUrl = S.ui.configUrl;
   document.location = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(payload));
+}
+
+/* ============================ FSRS optimizer ================================
+ * Personal parameter tuning, entirely in-browser (no server, no torch).
+ * Objective: the same one the reference optimizer uses — minimize the binary
+ * cross-entropy between the model's predicted retrievability at each logged
+ * review and the actual outcome (Again = forgot; Hard/Good/Easy = recalled).
+ * Method: replay every (card, profile) review sequence under candidate
+ * weights, and run 3 sweeps of coordinate descent over the highest-impact
+ * parameters, testing multiplicative steps per coordinate. Gradient-free,
+ * a few hundred ms per thousand reviews, and it can only accept a candidate
+ * that scores strictly better than the incumbent on YOUR data.
+ * Guardrails: needs >=400 usable reviews; every weight clamped to a sane
+ * range; result stored per-database (settings.fsrsW) and always resettable.
+ * ========================================================================== */
+var FSRS_DEFAULT_W = [0.4872, 1.4003, 3.7145, 13.8206, 5.1618, 1.2298, 0.8975, 0.031,
+                      1.6474, 0.1367, 1.0461, 2.1072, 0.0793, 0.3246, 1.587, 0.2272, 2.8755];
+var FSRS_DECAY = -0.5, FSRS_FACTOR = 19/81;
+// indices worth tuning without a full optimizer, with clamp ranges:
+var FSRS_TUNABLE = [
+  {i:0,  lo:0.1,  hi:5},    {i:1,  lo:0.2, hi:8},
+  {i:2,  lo:0.5,  hi:20},   {i:3,  lo:1,   hi:60},
+  {i:6,  lo:0.2,  hi:3},    {i:8,  lo:0.5, hi:3.5},
+  {i:10, lo:0.3,  hi:2.5},  {i:15, lo:0.05,hi:0.9},
+  {i:16, lo:1.1,  hi:5}
+];
+
+function buildReviewSequences(){
+  var d = db(), seqs = {};
+  (d.stats.log||[]).forEach(function(e){
+    if (e.overflow) return;
+    var key = e.card + '|' + (e.cat || 'g');
+    (seqs[key] = seqs[key] || []).push({t: e.t, g: (e.rating|0) + 1});
+  });
+  var out = [];
+  Object.keys(seqs).forEach(function(k){
+    var arr = seqs[k].sort(function(a,b){ return a.t - b.t; });
+    if (arr.length >= 2) out.push(arr);
+  });
+  return out;
+}
+
+function fsrsReplayLoss(W, seqs){
+  function clampD(x){ return Math.min(10, Math.max(1, x)); }
+  function D0(g){ return clampD(W[4] - (g-3)*W[5]); }
+  var loss = 0, n = 0;
+  for (var q=0; q<seqs.length; q++){
+    var seq = seqs[q];
+    var sVal = W[seq[0].g - 1], dVal = D0(seq[0].g);
+    var lastT = seq[0].t;
+    for (var i=1; i<seq.length; i++){
+      var ev = seq[i];
+      var el = Math.max(0.003, (ev.t - lastT)/86400); // >=~4 min avoids R==1
+      var R = Math.pow(1 + FSRS_FACTOR*el/sVal, FSRS_DECAY);
+      var recalled = ev.g > 1;
+      var p = Math.min(0.9999, Math.max(0.0001, R));
+      loss += recalled ? -Math.log(p) : -Math.log(1-p);
+      n++;
+      // state update with the ACTUAL grade (teacher forcing)
+      dVal = clampD(W[7]*D0(3) + (1-W[7])*(dVal - W[6]*(ev.g-3)));
+      if (ev.g === 1){
+        sVal = Math.min(W[11]*Math.pow(dVal,-W[12])*(Math.pow(sVal+1,W[13])-1)*Math.exp(W[14]*(1-R)), sVal);
+      } else {
+        var hp = ev.g===2 ? W[15] : 1, eb = ev.g===4 ? W[16] : 1;
+        sVal = sVal*(1 + Math.exp(W[8])*(11-dVal)*Math.pow(sVal,-W[9])*(Math.exp(W[10]*(1-R))-1)*hp*eb);
+      }
+      sVal = Math.min(36500, Math.max(0.05, sVal));
+      lastT = ev.t;
+    }
+  }
+  return { loss: n ? loss/n : Infinity, n: n };
+}
+
+function optimizeFsrs(){
+  var st = db().settings;
+  var seqs = buildReviewSequences();
+  var base = (st.fsrsW && st.fsrsW.length===17) ? st.fsrsW.slice() : FSRS_DEFAULT_W.slice();
+  var probe = fsrsReplayLoss(base, seqs);
+  if (probe.n < 400){
+    $('fsrs-opt-status').textContent = 'Only ' + probe.n +
+      ' usable reviews — tuning needs at least 400 to beat the defaults reliably. Keep reviewing.';
+    return;
+  }
+  var W = base.slice(), best = probe.loss;
+  var steps = [0.7, 0.85, 1.18, 1.4];
+  for (var sweep=0; sweep<3; sweep++){
+    FSRS_TUNABLE.forEach(function(tp){
+      var cur = W[tp.i], bestV = cur;
+      steps.forEach(function(m){
+        var cand = Math.min(tp.hi, Math.max(tp.lo, cur*m));
+        if (cand === bestV) return;
+        W[tp.i] = cand;
+        var l = fsrsReplayLoss(W, seqs).loss;
+        if (l < best - 1e-6){ best = l; bestV = cand; }
+      });
+      W[tp.i] = bestV;
+    });
+  }
+  var improve = (probe.loss - best)/probe.loss*100;
+  if (improve < 0.05){
+    $('fsrs-opt-status').textContent = 'Defaults already fit your ' + probe.n +
+      ' reviews well (no measurable improvement) — leaving them unchanged.';
+    return;
+  }
+  st.fsrsW = W.map(function(x){ return Math.round(x*10000)/10000; });
+  saveState();
+  $('fsrs-opt-status').textContent = 'Tuned on ' + probe.n + ' reviews: log-loss ' +
+    probe.loss.toFixed(4) + ' → ' + best.toFixed(4) + ' (−' + improve.toFixed(1) +
+    '%). Sync to Watch to apply.';
 }
 
 /* ================================ shell ==================================== */
@@ -1760,6 +2060,22 @@ document.addEventListener('DOMContentLoaded', function(){
   $('ed-type').onchange = function(){
     if (findItem(ED.id)) return;
     ED = newEditBuffer($('ed-type').value); edPage='q'; pvPage=0; renderEditor();
+  };
+  $('var-prev').onclick = function(){ if(ED._curVar>0){ ED._curVar--; pvPage=0; renderEditor(); } };
+  $('var-next').onclick = function(){ if(ED._curVar<ED.variants.length-1){ ED._curVar++; pvPage=0; renderEditor(); } };
+  $('var-add').onclick = function(){
+    var v = curVariant();
+    ED.variants.push(deepCopy(v));            // start from a copy of this one
+    ED._curVar = ED.variants.length-1;
+    ED._dirty = true; renderEditor();
+    toast('Variant ' + ED.variants.length + ' added — edit it into a fresh version');
+  };
+  $('var-del').onclick = function(){
+    if (ED.variants.length<=1) return;
+    if (!confirm('Delete variant ' + (ED._curVar+1) + '?')) return;
+    ED.variants.splice(ED._curVar,1);
+    ED._curVar = Math.max(0, ED._curVar-1);
+    ED._dirty = true; renderEditor();
   };
   $('qa-q').onclick = function(){ edPage='q'; pvPage=0; renderEditor(); };
   $('qa-a').onclick = function(){ edPage='a'; pvPage=0; renderEditor(); };
@@ -1841,6 +2157,14 @@ document.addEventListener('DOMContentLoaded', function(){
   $('rs-all').onclick = resetAllProfiles;
   $('rs-global').onclick = resetGlobalProfile;
   $('rs-cat').onclick = function(){ resetCategoryProfile($('rs-cat-sel').value); };
+  $('fsrs-opt').onclick = function(){
+    $('fsrs-opt-status').textContent = 'Replaying review history…';
+    setTimeout(optimizeFsrs, 30);
+  };
+  $('fsrs-reset').onclick = function(){
+    delete db().settings.fsrsW; saveState();
+    $('fsrs-opt-status').textContent = 'Restored default FSRS-4.5 parameters.';
+  };
   $('st-cache-katex').onclick = function(){
     $('katex-cache-status').textContent = 'Caching…';
     ensureKatexAssets().then(function(){
