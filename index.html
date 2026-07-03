@@ -339,10 +339,17 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
     <h2>Bulk upload</h2>
     <p class="muted">Upload a structured JSON file of raw datablocks. Each is passed through AI formatting and auto-splitting, then held here for manual inspection, overflow resolution and approval. See <span style="font-family:var(--mono)">samples/bulk-upload-sample.json</span>.</p>
     <div class="row">
-      <input type="file" id="bulk-file" accept=".json">
+      <input type="file" id="bulk-file" accept="application/json,.json">
       <button id="bulk-run">Run AI pipeline</button>
       <span class="muted" id="bulk-status"></span>
     </div>
+    <details style="margin-top:8px">
+      <summary class="muted" style="cursor:pointer">File picker not working? Paste the JSON instead (some in-app webviews block file choosers)</summary>
+      <textarea id="bulk-paste" placeholder='{"items":[...]}' style="min-height:110px; margin-top:6px"></textarea>
+      <div class="row" style="margin-top:6px">
+        <button id="bulk-run-paste">Run AI pipeline from pasted JSON</button>
+      </div>
+    </details>
     <hr>
     <h2>Review queue</h2>
     <div id="queue-list"></div>
@@ -1539,11 +1546,24 @@ function aiFormatEditor(){
  *   {"items":[{"title":"...","raw":"...","cats":["Calculus"],"tags":[],"notes":""}]} */
 function runBulk(){
   var f = $('bulk-file').files[0];
-  if (!f){ toast('Choose a JSON file first'); return; }
+  if (!f){ toast('Choose a JSON file first (or use the paste option below)'); return; }
   var reader = new FileReader();
   reader.onload = function(){
     var spec;
     try { spec = JSON.parse(reader.result); } catch(e){ toast('Invalid JSON'); return; }
+    processBulk(spec);
+  };
+  reader.readAsText(f);
+}
+function runBulkPaste(){
+  var txt = $('bulk-paste').value.trim();
+  if (!txt){ toast('Paste the bulk JSON first'); return; }
+  var spec;
+  try { spec = JSON.parse(txt); } catch(e){ toast('Invalid JSON: ' + e.message); return; }
+  $('bulk-paste').value = '';
+  processBulk(spec);
+}
+function processBulk(spec){
     var items = spec.items || [];
     if (!items.length){ toast('No items in file'); return; }
     var d = db(), i = 0;
@@ -1603,8 +1623,6 @@ function runBulk(){
       });
     }
     next();
-  };
-  reader.readAsText(f);
 }
 
 function renderQueue(){
@@ -2175,6 +2193,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // queue
   $('bulk-run').onclick = runBulk;
+  $('bulk-run-paste').onclick = runBulkPaste;
 
   // databases
   $('db-create').onclick = function(){
