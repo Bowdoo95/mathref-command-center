@@ -1,142 +1,433 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#050506">
 <title>MathRef — Command Center</title>
+<script>
+/* Paint the saved theme before first paint (base CSS is dark). */
+try {
+  var _s = JSON.parse(localStorage.getItem('mcc_state'));
+  var _d = null;
+  if (_s && _s.databases && _s.databases.length) {
+    for (var _i = 0; _i < _s.databases.length; _i++)
+      if (_s.databases[_i].id === _s.activeDb) _d = _s.databases[_i];
+    if (!_d) _d = _s.databases[0];
+  }
+  if (_d && _d.settings && _d.settings.theme === 'light')
+    document.documentElement.setAttribute('data-theme', 'light');
+} catch (e) {}
+</script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" id="katex-css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathlive"></script>
 <style>
+
 /* ==========================================================================
-   MathRef Command Center — "instrument bench" identity.
-   Serif display for headings, system sans for controls, monospace for LaTeX.
-   The signature element is the wrist preview: a live 200px canvas seated in
-   a drawn Core Time 2 bezel with a pixel ruler and overflow flags.
+   MathRef Command Center — Linear / Modern identity.
+   Deep-space canvas (#050506) under layered ambient light, one indigo accent
+   (#5E6AD2), glass surfaces, mono micro-labels, 200ms expo-out interactions.
+   The signature element is unchanged in spirit and elevated in execution:
+   a live 200px wrist preview seated in a drawn Core Time 2, now resting in
+   a pool of indigo light. The 200px canvas itself stays render-accurate.
    ========================================================================== */
+
 :root {
-  --bg: #f4f1ea;            /* warm paper bench top */
-  --panel: #ffffff;
-  --panel-2: #faf8f3;
-  --ink: #1c1a17;
-  --ink-soft: #5c574e;
-  --line: #d8d2c4;
-  --line-strong: #b8b09e;
-  --accent: #0055ff;
+  /* surfaces */
+  --bg-deep: #020203;
+  --bg: #050506;
+  --bg-elev: #0a0a0c;
+  --panel: linear-gradient(to bottom, rgba(255,255,255,.065), rgba(255,255,255,.02));
+  --panel-solid: #0c0c0f;
+  --panel-2: rgba(255,255,255,.03);
+  --input-bg: #0f0f12;
+  --sel: rgba(255,255,255,.045);
+  /* ink */
+  --ink: #EDEDEF;
+  --ink-soft: #8A8F98;
+  --ink-faint: rgba(255,255,255,.55);
+  /* accent */
+  --accent: #5E6AD2;
+  --accent-hi: #6872D9;
   --accent-ink: #ffffff;
-  --danger: #d21f1f;
-  --ok: #00842c;
-  --warn: #b87400;
-  --sel: #e8e2d2;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --shadow: 0 1px 2px rgba(30,25,15,.08), 0 6px 18px rgba(30,25,15,.07);
+  --accent-glow: rgba(94,106,210,.30);
+  --accent-soft: rgba(94,106,210,.14);
+  /* lines */
+  --line: rgba(255,255,255,.06);
+  --line-strong: rgba(255,255,255,.11);
+  --line-accent: rgba(94,106,210,.32);
+  /* semantics */
+  --danger: #ec5a5a;
+  --danger-soft: rgba(236,90,90,.12);
+  --ok: #4cc38a;
+  --warn: #f2b441;
+  /* type */
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --sans: "Inter", "Geist Sans", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: Georgia, serif; /* content preview only */
+  /* depth */
+  --shadow-card: 0 0 0 1px var(--line), 0 2px 20px rgba(0,0,0,.40), 0 0 40px rgba(0,0,0,.20);
+  --shadow-card-hover: 0 0 0 1px var(--line-strong), 0 8px 40px rgba(0,0,0,.50), 0 0 80px rgba(94,106,210,.10);
+  --shadow-pop: 0 0 0 1px var(--line-strong), 0 12px 40px rgba(0,0,0,.55), 0 0 60px rgba(0,0,0,.35);
+  --glow-primary: 0 0 0 1px rgba(94,106,210,.55), 0 4px 14px rgba(94,106,210,.32), inset 0 1px 0 0 rgba(255,255,255,.18);
+  --inset-hi: inset 0 1px 0 0 rgba(255,255,255,.09), 0 0 0 1px rgba(255,255,255,.05);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --hdr-h: 56px;
 }
-html[data-theme="dark"] {
-  --bg: #17161a;
-  --panel: #201f24;
-  --panel-2: #2a292f;
-  --ink: #ece9e2;
-  --ink-soft: #a49e93;
-  --line: #3a383f;
-  --line-strong: #565360;
-  --sel: #33313a;
-  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.35);
-}
+
+/* ---------------------------------- base --------------------------------- */
 * { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 body {
-  margin: 0; background: var(--bg); color: var(--ink);
-  font-family: var(--sans); font-size: 14px; line-height: 1.45;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-h1,h2,h3 { font-family: var(--serif); font-weight: 600; letter-spacing: .01em; }
-h1 { font-size: 20px; margin: 0; }
-h2 { font-size: 16px; margin: 0 0 10px; }
-h3 { font-size: 14px; margin: 14px 0 6px; color: var(--ink-soft); }
-button, select, input, textarea {
-  font: inherit; color: var(--ink); background: var(--panel);
-  border: 1px solid var(--line-strong); border-radius: 6px; padding: 6px 10px;
+::selection { background: rgba(94,106,210,.35); color: #fff; }
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.14) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.20); }
+::-webkit-scrollbar-track { background: transparent; }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px rgba(94,106,210,.55);
+  border-radius: 8px;
 }
-textarea { font-family: var(--mono); font-size: 13px; width: 100%; resize: vertical; }
-button { cursor: pointer; background: var(--panel-2); }
-button:hover { border-color: var(--ink-soft); }
-button:disabled { opacity: .45; cursor: not-allowed; }
-button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 600; }
-button.danger { color: var(--danger); border-color: var(--danger); background: transparent; }
-button.small { padding: 2px 8px; font-size: 12px; border-radius: 5px; }
-label { display: block; margin: 8px 0 3px; font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
-input[type="text"], input[type="password"], input[type="number"], select { width: 100%; }
+
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.01em; }
+h1 { font-size: 15px; margin: 0; letter-spacing: -0.02em; }
+h2 { font-size: 15px; margin: 0 0 12px; color: var(--ink); }
+h3, .eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 18px 0 8px;
+}
+hr { border: 0; border-top: 1px solid var(--line); margin: 16px 0; }
+.muted { color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
 .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.grow { flex: 1; }
-.muted { color: var(--ink-soft); font-size: 12px; }
-hr { border: 0; border-top: 1px solid var(--line); margin: 14px 0; }
+.grow { flex: 1; min-width: 0; }
 
-/* ---- header ---- */
+/* ------------------------- ambient background ---------------------------- */
+/* Layer 1: radial base. Layer 2: two indigo light pools (pre-softened radial
+   gradients — no filter:blur, so old webviews stay smooth). Layer 3: 64px
+   grid. Layer 4: SVG noise. All fixed, all non-interactive. */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -3;
+  background: radial-gradient(ellipse 120% 70% at 50% -10%, #0a0a0f 0%, var(--bg) 52%, var(--bg-deep) 100%);
+}
+#ambient { position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+#ambient .blob { position: absolute; will-change: transform; }
+#ambient .blob.a {
+  width: 1100px; height: 780px; left: 50%; top: -420px; margin-left: -550px;
+  background: radial-gradient(closest-side, rgba(94,106,210,.20), rgba(94,106,210,.06) 55%, transparent 72%);
+  animation: floatA 9s ease-in-out infinite;
+}
+#ambient .blob.b {
+  width: 720px; height: 640px; left: -280px; bottom: -260px;
+  background: radial-gradient(closest-side, rgba(120,86,214,.10), rgba(94,106,210,.04) 55%, transparent 72%);
+  animation: floatB 11s ease-in-out infinite;
+}
+#ambient::after { /* 64px technical grid */
+  content: "";
+  position: absolute; inset: 0; opacity: .022;
+  background:
+    repeating-linear-gradient(to right, #fff 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(to bottom, #fff 0 1px, transparent 1px 64px);
+}
+#ambient .noise {
+  position: absolute; inset: 0; opacity: .015;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes floatA { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-22px) rotate(1deg); } }
+@keyframes floatB { 0%,100% { transform: translateY(0); } 50% { transform: translateY(18px); } }
+
+/* --------------------------------- header -------------------------------- */
+/* header + nav travel together in one sticky bar, so the layout can never
+   desync if the header wraps on a narrow phone */
+#topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(5,5,6,.78);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+}
 header {
-  display: flex; align-items: center; gap: 14px; padding: 10px 16px;
-  background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; row-gap: 6px;
+  min-height: var(--hdr-h);
+  padding: 8px 14px;
+  padding-left: max(14px, env(safe-area-inset-left));
+  padding-right: max(14px, env(safe-area-inset-right));
+  border-bottom: 1px solid var(--line);
 }
-header .brand small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
-#hdr-db { max-width: 180px; }
-#btn-sync { white-space: nowrap; }
-
-/* ---- tabs ---- */
-nav.tabs { display: flex; gap: 2px; padding: 0 12px; background: var(--panel); border-bottom: 1px solid var(--line); overflow-x: auto; }
-nav.tabs button {
-  border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none;
-  padding: 9px 12px; color: var(--ink-soft); font-weight: 600; white-space: nowrap;
-}
-nav.tabs button.active { color: var(--ink); border-bottom-color: var(--accent); }
-main { padding: 14px; max-width: 1360px; margin: 0 auto; }
-section.tab { display: none; }
-section.tab.active { display: block; }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; box-shadow: var(--shadow); }
-.cols { display: grid; grid-template-columns: minmax(420px, 1fr) 290px; gap: 14px; align-items: start; }
-@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
-
-/* ---- symbol toolbar ---- */
-.symbar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
-.symbar .grp { position: relative; }
-.symbar .grp > button { font-family: var(--serif); }
-.symbar .pop {
-  display: none; position: absolute; z-index: 20; top: 100%; left: 0; margin-top: 4px;
-  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 8px; padding: 6px;
-  box-shadow: var(--shadow); grid-template-columns: repeat(6, 1fr); gap: 4px; min-width: 230px;
-}
-.symbar .grp.open .pop { display: grid; }
-.symbar .pop button { padding: 4px 2px; font-family: var(--serif); font-size: 15px; }
-
-/* ---- block editor ---- */
-.block {
-  border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; background: var(--panel-2);
-}
-.block .row { margin-bottom: 6px; }
-.block textarea { min-height: 76px; font-size: 14px; }
-.block .inlabel { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-soft); margin: 6px 0 2px; }
-.block math-field { display: block; width: 100%; min-height: 52px; font-size: 18px; background: #fff; color: #000; border: 1px solid var(--line-strong); border-radius: 6px; padding: 6px 8px; }
-
-.swatches { display: flex; gap: 4px; }
-.swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); padding: 0; }
-.swatch.sel { border-color: var(--ink); box-shadow: 0 0 0 2px var(--accent); }
-
-/* ---- wrist preview (signature element) ---- */
-.wrist { position: sticky; top: 106px; }
-.bezel {
-  width: 248px; margin: 0 auto; background: #14161a; border-radius: 34px; padding: 22px 22px;
-  border: 1px solid #000; box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.35);
+header .brand { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+header .brand .mark {
+  width: 22px; height: 22px; border-radius: 7px; flex: none;
+  background:
+    radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,.35), transparent 42%),
+    linear-gradient(145deg, #6b76e0, #4a54b8);
+  box-shadow: 0 0 0 1px rgba(94,106,210,.55), 0 2px 10px rgba(94,106,210,.35), inset 0 1px 0 rgba(255,255,255,.25);
   position: relative;
 }
-.bezel::before, .bezel::after {
-  content: ""; position: absolute; right: -5px; width: 5px; height: 26px; background: #26292f;
+header .brand .mark::after { /* sigma-esque tick, drawn not typed */
+  content: ""; position: absolute; left: 6px; top: 6px; width: 10px; height: 10px;
+  border-left: 2px solid #fff; border-top: 2px solid #fff; border-bottom: 2px solid #fff;
+  opacity: .95;
+}
+header .brand small {
+  display: block; font-family: var(--mono); font-size: 9px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft);
+  margin-top: 1px;
+}
+#hdr-db { max-width: 190px; min-width: 90px; flex: 0 1 auto; }
+#btn-sync { white-space: nowrap; }
+#btn-cmdk { display: inline-flex; align-items: center; gap: 7px; }
+#btn-cmdk kbd {
+  font-family: var(--mono); font-size: 10px; color: var(--ink-soft);
+  border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 5px;
+  background: rgba(255,255,255,.04);
+}
+header svg, nav.tabs svg, button svg { flex: none; display: block; }
+
+/* ----------------------------- navigation -------------------------------- */
+/* One <nav class="tabs"> element, two personalities:
+   mobile / tablet — a sticky horizontal pill rail under the header;
+   >=1080px       — a fixed left sidebar with group labels.               */
+nav.tabs {
+  display: flex; gap: 4px; align-items: center;
+  padding: 8px 12px;
+  padding-left: max(12px, env(safe-area-inset-left));
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--line);
+}
+nav.tabs::-webkit-scrollbar { display: none; }
+nav.tabs .navlab { display: none; }
+nav.tabs button {
+  flex: none;
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 0; border-radius: 8px;
+  background: transparent;
+  padding: 7px 11px;
+  color: var(--ink-soft); font: inherit; font-size: 13px; font-weight: 500;
+  white-space: nowrap; cursor: pointer;
+  transition: color .2s var(--ease), background-color .2s var(--ease);
+}
+nav.tabs button:hover { color: var(--ink); background: rgba(255,255,255,.05); }
+nav.tabs button.active {
+  color: var(--ink);
+  background: rgba(255,255,255,.07);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 0 1px var(--line);
+}
+nav.tabs button.active svg { color: var(--accent-hi); }
+nav.tabs button svg { color: var(--ink-soft); transition: color .2s var(--ease); }
+
+/* ---------------------------------- main --------------------------------- */
+main {
+  padding: 16px 14px 96px;
+  padding-left: max(14px, env(safe-area-inset-left));
+  padding-right: max(14px, env(safe-area-inset-right));
+  max-width: 1280px; margin: 0 auto;
+}
+section.tab { display: none; }
+section.tab.active { display: block; animation: tabin .28s var(--ease); }
+@keyframes tabin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+.panel::before { /* 1px light seam along the top edge */
+  content: ""; position: absolute; left: 16px; right: 16px; top: 0; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,.14), transparent);
+  pointer-events: none;
+}
+.panel + .panel { margin-top: 14px; }
+
+/* ------------------------------- controls -------------------------------- */
+button, select, input, textarea {
+  font: inherit; color: var(--ink);
+  background: var(--input-bg);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 7px 10px;
+  transition: border-color .2s var(--ease), background-color .2s var(--ease),
+              box-shadow .2s var(--ease), color .2s var(--ease), transform .15s var(--ease);
+}
+input::placeholder, textarea::placeholder { color: rgba(255,255,255,.30); }
+input[type="text"], input[type="password"], input[type="number"], select { width: 100%; }
+input:focus, textarea:focus, select:focus {
+  border-color: rgba(94,106,210,.65);
+  box-shadow: 0 0 0 3px rgba(94,106,210,.18);
+}
+textarea {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.55;
+  width: 100%; resize: vertical;
+}
+select {
+  -webkit-appearance: none; appearance: none;
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238A8F98' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+select[multiple] { background-image: none; padding-right: 10px; }
+select[multiple] option { padding: 4px 6px; border-radius: 5px; }
+input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; }
+input[type="file"] { padding: 5px; background: transparent; border-style: dashed; }
+input[type="file"]::file-selector-button {
+  font: inherit; font-size: 12px; color: var(--ink);
+  background: rgba(255,255,255,.06); border: 0; border-radius: 6px;
+  padding: 5px 10px; margin-right: 10px; cursor: pointer;
+  box-shadow: var(--inset-hi);
+}
+input[readonly] { color: var(--ink-soft); background: rgba(255,255,255,.02); }
+
+button {
+  cursor: pointer;
+  background: rgba(255,255,255,.05);
+  border: 0;
+  box-shadow: var(--inset-hi);
+  font-weight: 500;
+}
+button:hover { background: rgba(255,255,255,.085); }
+button:active { transform: scale(.98); }
+button:disabled { opacity: .38; cursor: not-allowed; transform: none; }
+button.primary {
+  background: var(--accent); color: var(--accent-ink); font-weight: 600;
+  box-shadow: var(--glow-primary);
+}
+button.primary:hover { background: var(--accent-hi); box-shadow: 0 0 0 1px rgba(104,114,217,.65), 0 6px 20px rgba(94,106,210,.42), inset 0 1px 0 0 rgba(255,255,255,.22); }
+button.primary:active { box-shadow: 0 0 0 1px rgba(94,106,210,.5), 0 2px 8px rgba(94,106,210,.3); }
+button.danger {
+  color: var(--danger);
+  background: transparent;
+  box-shadow: 0 0 0 1px rgba(236,90,90,.35), inset 0 1px 0 rgba(255,255,255,.04);
+}
+button.danger:hover { background: var(--danger-soft); box-shadow: 0 0 0 1px rgba(236,90,90,.55); }
+button.small { padding: 3px 9px; font-size: 12px; border-radius: 6px; }
+
+label {
+  display: block; margin: 12px 0 5px;
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  color: var(--ink-soft); text-transform: uppercase; letter-spacing: .12em;
+}
+label:first-child { margin-top: 0; }
+
+/* checkbox-row labels opt out of the mono eyebrow treatment via inline style
+   in markup (JS never touches them) */
+.checkline {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--sans); font-size: 13px; font-weight: 400;
+  color: var(--ink); text-transform: none; letter-spacing: 0; margin: 10px 0 4px;
+}
+
+/* ---------------------------- symbol toolbar ------------------------------ */
+.symbar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+.symbar .grp { position: relative; }
+.symbar .grp > button { font-family: var(--serif); font-size: 14px; min-width: 34px; }
+.symbar .grp.open > button { background: var(--accent-soft); box-shadow: 0 0 0 1px var(--line-accent); color: var(--ink); }
+.symbar .pop {
+  display: none; position: absolute; z-index: 25; top: 100%; left: 0; margin-top: 6px;
+  background: var(--panel-solid);
+  border: 1px solid var(--line-strong); border-radius: 12px; padding: 6px;
+  box-shadow: var(--shadow-pop);
+  grid-template-columns: repeat(6, 1fr); gap: 4px; min-width: 236px;
+}
+.symbar .grp.open .pop { display: grid; animation: popin .16s var(--ease); }
+@keyframes popin { from { opacity: 0; transform: translateY(-4px) scale(.98); } to { opacity: 1; transform: none; } }
+.symbar .pop button { padding: 5px 2px; font-family: var(--serif); font-size: 15px; box-shadow: none; background: transparent; }
+.symbar .pop button:hover { background: rgba(255,255,255,.07); }
+
+/* ------------------------------ block editor ------------------------------ */
+.block {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: var(--panel-2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+.block .row { margin-bottom: 8px; }
+.block textarea { min-height: 76px; }
+.block .inlabel {
+  font-family: var(--mono); font-size: 9px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: var(--ink-soft); margin: 8px 0 4px;
+}
+.block math-field {
+  display: block; width: 100%; min-height: 52px; font-size: 18px;
+  background: #fff; color: #000;               /* paper: matches wrist output */
+  border: 1px solid var(--line-strong); border-radius: 8px; padding: 6px 8px;
+}
+.block math-field:focus-within { border-color: rgba(94,106,210,.65); box-shadow: 0 0 0 3px rgba(94,106,210,.18); }
+
+.swatches { display: flex; gap: 5px; align-items: center; }
+.swatch {
+  width: 18px; height: 18px; border-radius: 50%; padding: 0; flex: none;
+  border: 0; box-shadow: 0 0 0 1px rgba(255,255,255,.22), inset 0 1px 1px rgba(255,255,255,.25);
+}
+.swatch:active { transform: scale(.92); }
+.swatch.sel { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+
+/* ------------------- wrist preview (signature element) -------------------- */
+.wrist { position: relative; }
+.stage { position: relative; padding: 10px 0 4px; }
+.stage::before { /* pool of indigo light beneath the device */
+  content: ""; position: absolute; left: 50%; top: 48%; width: 340px; height: 300px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(94,106,210,.22), rgba(94,106,210,.05) 58%, transparent 74%);
+  pointer-events: none;
+}
+.bezel {
+  width: 248px; margin: 0 auto;
+  background: linear-gradient(160deg, #16181f 0%, #0b0d12 55%, #07080b 100%);
+  border-radius: 34px; padding: 22px 22px;
+  border: 1px solid rgba(0,0,0,.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 0 rgba(0,0,0,.6),
+    0 0 0 1px rgba(94,106,210,.22),
+    0 14px 34px rgba(0,0,0,.55),
+    0 0 60px rgba(94,106,210,.14);
+  position: relative;
+}
+.bezel::before, .bezel::after { /* side buttons */
+  content: ""; position: absolute; right: -5px; width: 5px; height: 26px;
+  background: linear-gradient(to right, #2a2d36, #1a1c22);
   border-radius: 0 3px 3px 0; border: 1px solid #000;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
 }
 .bezel::before { top: 52px; }
 .bezel::after { bottom: 52px; }
 .screenwrap { width: 200px; height: 228px; overflow: hidden; background: #fff; position: relative; outline: 1px solid #000; }
 #preview-scroll { position: absolute; left: 0; top: 0; width: 200px; }
-.pxruler { display: flex; justify-content: space-between; width: 244px; margin: 4px auto 0; font-family: var(--mono); font-size: 9px; color: var(--ink-soft); }
-.ovflags { margin-top: 8px; font-size: 12px; }
+.pxruler {
+  display: flex; justify-content: space-between; width: 244px; margin: 8px auto 0;
+  font-family: var(--mono); font-size: 9px; color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.pvbar { justify-content: center; margin-top: 8px; }
+.pvbar #pv-page { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+.ovflags { margin-top: 10px; font-size: 12px; line-height: 1.5; }
 .ovflags .bad { color: var(--danger); font-weight: 600; }
 .ovflags .good { color: var(--ok); font-weight: 600; }
 
@@ -152,67 +443,292 @@ section.tab.active { display: block; }
 .wcontent.scrollmode { width: max-content; min-width: 200px; max-width: 400px; text-align: left; }
 .wcontent.scrollmode .seg { margin: 0; }
 
-/* ---- lists / library ---- */
+/* ------------------------------ lists / rows ------------------------------ */
 .item-row {
-  display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 10px; margin: 0 -6px;
+  border-radius: 10px;
+  border-bottom: 1px solid var(--line);
+  transition: background-color .18s var(--ease);
 }
+.item-row:last-child { border-bottom: 0; }
 .item-row:hover { background: var(--sel); }
-.item-row .t { font-weight: 600; }
-.item-row .path { font-size: 11px; color: var(--ink-soft); }
-.pill { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; border: 1px solid var(--line-strong); color: var(--ink-soft); }
-.pill.fc { color: var(--accent); border-color: var(--accent); }
+.item-row .t { font-weight: 550; font-size: 13px; letter-spacing: -0.005em; }
+.item-row .path { font-size: 11px; color: var(--ink-soft); margin-top: 1px; }
+.pill {
+  display: inline-block; flex: none;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .06em;
+  padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--line-strong); color: var(--ink-soft);
+  background: rgba(255,255,255,.03);
+  white-space: nowrap;
+}
+.pill.fc { color: #98a1f2; border-color: var(--line-accent); background: var(--accent-soft); }
 
-/* ---- stats ---- */
+/* ---------------------------------- stats --------------------------------- */
 .statgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
-.stat b { display: block; font-family: var(--serif); font-size: 24px; }
+.stat {
+  background: var(--panel-2);
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+.stat b {
+  display: block; font-size: 24px; font-weight: 600; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; margin-bottom: 2px;
+}
 table.log { width: 100%; border-collapse: collapse; font-size: 12px; }
-table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+table.log th {
+  text-align: left; padding: 6px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft);
+  border-bottom: 1px solid var(--line-strong);
+  position: sticky; top: 0; background: var(--panel-solid);
+}
+table.log td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.scrollbox { max-height: 300px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
 
-/* ---- modal ---- */
-.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50; }
-.modal-bg.open { display: flex; align-items: center; justify-content: center; }
-.modal { background: var(--panel); border-radius: 10px; padding: 16px; max-width: 560px; width: calc(100% - 30px); max-height: 84vh; overflow: auto; box-shadow: var(--shadow); }
-.tokline { display: flex; flex-wrap: wrap; gap: 0; font-family: var(--mono); font-size: 14px; margin: 10px 0; }
+/* --------------------------------- modals --------------------------------- */
+.modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 60;
+  background: rgba(2,2,3,.62);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.modal-bg.open { display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modal {
+  background: var(--panel-solid);
+  border: 1px solid var(--line-strong);
+  border-radius: 16px; padding: 18px;
+  max-width: 560px; width: 100%; max-height: 84vh; overflow: auto;
+  box-shadow: var(--shadow-pop);
+  animation: popin .18s var(--ease);
+}
+.tokline { display: flex; flex-wrap: wrap; gap: 0; font-family: var(--mono); font-size: 14px; margin: 12px 0; }
 .tok { padding: 3px 1px; }
-.gap { width: 12px; text-align: center; cursor: pointer; color: var(--line-strong); border-radius: 3px; }
-.gap:hover { background: var(--sel); color: var(--ink); }
+.gap { width: 14px; text-align: center; cursor: pointer; color: var(--ink-soft); border-radius: 4px; }
+.gap:hover { background: var(--accent-soft); color: var(--ink); }
 .gap.split { color: var(--danger); font-weight: 700; }
 
-#toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 20px; z-index: 60; display: none; font-weight: 600; }
+/* ------------------------------ toast & misc ------------------------------ */
+#toast {
+  position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--panel-solid); color: var(--ink);
+  border: 1px solid var(--line-strong); border-left: 3px solid var(--accent);
+  padding: 9px 16px; border-radius: 10px; z-index: 70; display: none;
+  font-weight: 500; font-size: 13px; max-width: min(92vw, 480px);
+  box-shadow: var(--shadow-pop);
+}
 #measure { position: absolute; left: -9999px; top: 0; }
-.qa-tabs button { border-radius: 6px 6px 0 0; border-bottom: 0; }
-.qa-tabs button.active { background: var(--accent); color: #fff; }
-.queue-badge { background: var(--warn); color: #fff; border-radius: 9px; font-size: 10px; padding: 0 6px; margin-left: 4px; }
+.qa-tabs { background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.qa-tabs button { box-shadow: none; background: transparent; color: var(--ink-soft); border-radius: 7px; padding: 5px 12px; font-size: 12.5px; }
+.qa-tabs button.active { background: var(--accent); color: #fff; font-weight: 600; box-shadow: 0 1px 8px rgba(94,106,210,.4), inset 0 1px 0 rgba(255,255,255,.18); }
+.queue-badge {
+  background: var(--warn); color: #1a1204;
+  border-radius: 999px; font-size: 10px; font-weight: 700;
+  font-family: var(--mono); padding: 0 6px; margin-left: 6px; line-height: 16px;
+}
+details > summary { cursor: pointer; }
+details > summary::marker { color: var(--accent); }
+
+/* ------------------------------ layout grids ------------------------------ */
+.edgrid { display: grid; gap: 14px; grid-template-areas: "content" "wrist" "meta"; }
+.ed-content { grid-area: content; }
+.ed-meta { grid-area: meta; }
+#ed-heading { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wrist { grid-area: wrist; }
+.setgrid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+.setgrid .panel + .panel { margin-top: 0; }
+.libgrid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+.libgrid .panel + .panel { margin-top: 0; }
+.duo { display: grid; gap: 14px; grid-template-columns: 1fr; }
+.duo .panel + .panel { margin-top: 0; }
+
+/* ----------------------------- command palette ---------------------------- */
+#cmdk {
+  display: none; position: fixed; inset: 0; z-index: 80;
+  background: rgba(2,2,3,.62);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+#cmdk.open { display: flex; align-items: flex-start; justify-content: center; padding: min(14vh, 110px) 14px 14px; }
+.cmdk-box {
+  width: 100%; max-width: 600px;
+  background: var(--panel-solid);
+  border: 1px solid var(--line-strong);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: var(--shadow-pop), 0 0 90px rgba(94,106,210,.12);
+  animation: popin .18s var(--ease);
+}
+#cmdk-in {
+  width: 100%; border: 0; border-radius: 0; background: transparent;
+  padding: 15px 16px; font-size: 15px;
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
+}
+#cmdk-in:focus { box-shadow: none; border-color: var(--line); }
+#cmdk-list { max-height: min(52vh, 420px); overflow: auto; padding: 6px; }
+.cmdk-h {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .14em; color: var(--ink-soft);
+  padding: 10px 10px 4px;
+}
+.cmdk-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 9px; cursor: pointer;
+}
+.cmdk-row .ct { font-size: 13.5px; font-weight: 500; }
+.cmdk-row .cd { font-size: 11.5px; color: var(--ink-soft); margin-left: auto; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52%; }
+.cmdk-row.cp-sel { background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--line-accent); }
+.cmdk-row.cp-sel .ct { color: #fff; }
+.cmdk-empty { padding: 22px 12px; text-align: center; color: var(--ink-soft); font-size: 13px; }
+.cmdk-foot {
+  display: flex; gap: 14px; padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; color: var(--ink-soft);
+}
+.cmdk-foot kbd { border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; background: rgba(255,255,255,.04); }
+
+/* ------------------------------- responsive ------------------------------- */
+@media (min-width: 760px) {
+  .setgrid { grid-template-columns: 1fr 1fr; }
+  .libgrid { grid-template-columns: 1.6fr 1fr; align-items: start; }
+  .duo { grid-template-columns: 1fr 1fr; align-items: start; }
+  .edgrid { grid-template-columns: minmax(0, 1fr) 312px; grid-template-areas: "content wrist" "meta wrist"; align-items: start; }
+  .wrist { position: sticky; top: calc(var(--hdr-h) + 58px); }
+}
+@media (min-width: 1080px) {
+  /* backdrop-filter on #topbar would establish a containing block and trap
+     the fixed sidebar inside it — at desktop widths the blur moves to the
+     header element (a sibling of the nav, so the sidebar escapes cleanly) */
+  #topbar { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  header {
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    backdrop-filter: blur(14px) saturate(1.1);
+  }
+  nav.tabs {
+    position: fixed; top: var(--hdr-h); left: 0; bottom: 0; z-index: 30;
+    width: 216px; flex-direction: column; align-items: stretch; gap: 2px;
+    padding: 14px 10px; overflow-y: auto; overflow-x: hidden;
+    background: rgba(4,4,5,.55); border-bottom: 0; border-right: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  nav.tabs .navlab {
+    display: block; font-family: var(--mono); font-size: 9px; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft);
+    padding: 12px 10px 4px; opacity: .8;
+  }
+  nav.tabs .navlab:first-child { padding-top: 2px; }
+  nav.tabs button { justify-content: flex-start; padding: 8px 10px; }
+  main { margin-left: 216px; max-width: none; padding-left: 26px; padding-right: 26px; }
+  main > div, main > section { max-width: 1180px; }
+  .wrist { position: sticky; top: calc(var(--hdr-h) + 16px); }
+}
+@media (max-width: 420px) {
+  header { gap: 6px; }
+  #hdr-db { max-width: 96px; }
+  header .brand small { display: none; }
+  #btn-cmdk kbd { display: none; }
+  #btn-cmdk { padding: 6px 8px; }
+  #btn-sync { padding: 7px 10px; font-size: 12.5px; }
+}
+
+/* ------------------------------- light theme ------------------------------ */
+html[data-theme="light"] {
+  --bg-deep: #ececef;
+  --bg: #f6f6f8;
+  --bg-elev: #ffffff;
+  --panel: #ffffff;
+  --panel-solid: #ffffff;
+  --panel-2: #f7f7fa;
+  --input-bg: #ffffff;
+  --sel: rgba(94,106,210,.06);
+  --ink: #191A20;
+  --ink-soft: #6d7078;
+  --ink-faint: rgba(20,21,26,.5);
+  --line: rgba(18,19,26,.09);
+  --line-strong: rgba(18,19,26,.16);
+  --shadow-card: 0 0 0 1px rgba(18,19,26,.05), 0 2px 12px rgba(18,19,26,.06), 0 8px 32px rgba(18,19,26,.05);
+  --shadow-card-hover: 0 0 0 1px rgba(18,19,26,.08), 0 8px 28px rgba(18,19,26,.10);
+  --shadow-pop: 0 0 0 1px rgba(18,19,26,.08), 0 14px 44px rgba(18,19,26,.16);
+  --inset-hi: inset 0 1px 0 0 rgba(255,255,255,.9), 0 0 0 1px rgba(18,19,26,.10), 0 1px 2px rgba(18,19,26,.06);
+  --danger: #d43a3a;
+  --ok: #148451;
+  --warn: #a06a00;
+}
+html[data-theme="light"] body::before {
+  background: radial-gradient(ellipse 120% 70% at 50% -10%, #ffffff 0%, var(--bg) 55%, var(--bg-deep) 100%);
+}
+html[data-theme="light"] #ambient .blob.a { background: radial-gradient(closest-side, rgba(94,106,210,.10), transparent 70%); }
+html[data-theme="light"] #ambient .blob.b { display: none; }
+html[data-theme="light"] #ambient::after { opacity: .05; background:
+  repeating-linear-gradient(to right, #14151a 0 1px, transparent 1px 64px),
+  repeating-linear-gradient(to bottom, #14151a 0 1px, transparent 1px 64px); }
+html[data-theme="light"] #ambient .noise { opacity: .02; }
+html[data-theme="light"] #topbar { background: rgba(252,252,253,.85); }
+@media (min-width: 1080px) {
+  html[data-theme="light"] nav.tabs { background: rgba(250,250,252,.75); }
+}
+html[data-theme="light"] nav.tabs button:hover { background: rgba(18,19,26,.05); }
+html[data-theme="light"] nav.tabs button.active { background: #fff; box-shadow: 0 0 0 1px rgba(18,19,26,.09), 0 1px 4px rgba(18,19,26,.07); }
+html[data-theme="light"] button { background: #fff; }
+html[data-theme="light"] button:hover { background: #f3f3f6; }
+html[data-theme="light"] .panel::before { background: none; }
+html[data-theme="light"] input::placeholder, html[data-theme="light"] textarea::placeholder { color: rgba(20,21,26,.35); }
+html[data-theme="light"] .pill { background: rgba(18,19,26,.03); }
+html[data-theme="light"] .pill.fc { color: #4a55c0; }
+html[data-theme="light"] .qa-tabs { background: rgba(18,19,26,.04); }
+html[data-theme="light"] #btn-cmdk kbd, html[data-theme="light"] .cmdk-foot kbd { background: rgba(18,19,26,.04); }
+html[data-theme="light"] .cmdk-row.cp-sel .ct { color: var(--ink); }
+html[data-theme="light"] ::selection { background: rgba(94,106,210,.25); color: inherit; }
+html[data-theme="light"] * { scrollbar-color: rgba(18,19,26,.22) transparent; }
+html[data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(18,19,26,.18); }
+html[data-theme="light"] .stage::before { background: radial-gradient(closest-side, rgba(94,106,210,.16), transparent 72%); }
+
+/* ------------------------------ reduced motion ---------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  #ambient .blob { animation: none; }
+}
 </style>
 </head>
 <body>
 
+<div id="ambient" aria-hidden="true"><div class="blob a"></div><div class="blob b"></div><div class="noise"></div></div>
+
+<div id="topbar">
 <header>
-  <div class="brand"><h1>MathRef</h1><small>Command Center</small></div>
+  <div class="brand">
+    <span class="mark" aria-hidden="true"></span>
+    <div><h1>MathRef</h1><small>Command Center</small></div>
+  </div>
   <select id="hdr-db" title="Active database"></select>
   <span class="grow"></span>
-  <button id="btn-theme" class="small" title="Light / Dark">◐</button>
+  <button id="btn-cmdk" class="small" title="Search items, sections and actions (Ctrl K)"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.2"/><path d="M10.4 10.4 13.5 13.5"/></svg><kbd>Ctrl K</kbd></button>
+  <button id="btn-theme" class="small" title="Light / Dark">&#9680;</button>
   <button id="btn-sync" class="primary">Sync to Watch</button>
 </header>
 
-<nav class="tabs">
-  <button data-tab="editor" class="active">Editor</button>
-  <button data-tab="library">Library</button>
-  <button data-tab="queue">Review Queue<span id="queue-n" class="queue-badge" style="display:none">0</span></button>
-  <button data-tab="databases">Databases</button>
-  <button data-tab="stats">Stats</button>
-  <button data-tab="settings">Settings</button>
+<nav class="tabs" aria-label="Sections">
+  <span class="navlab">Author</span>
+  <button data-tab="editor" class="active"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.3 2.7a1.6 1.6 0 0 1 2.3 2.3L5.4 13.2l-3 .7.7-3z"/></svg>Editor</button>
+  <button data-tab="library"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.2 8 2.6l5 2.6-5 2.6z"/><path d="M3 8.2l5 2.6 5-2.6"/><path d="M3 11.2l5 2.6 5-2.6"/></svg>Library</button>
+  <button data-tab="queue"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.6v5.2M5.9 6l2.1 2.1L10.1 6"/><path d="M2.5 9.6h2.6l1 1.9h3.8l1-1.9h2.6"/><path d="M2.5 9.6v2.3c0 .9.7 1.6 1.6 1.6h7.8c.9 0 1.6-.7 1.6-1.6V9.6"/></svg>Review Queue<span id="queue-n" class="queue-badge" style="display:none">0</span></button>
+  <span class="navlab">Data</span>
+  <button data-tab="databases"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><ellipse cx="8" cy="3.9" rx="5.3" ry="1.9"/><path d="M2.7 3.9v8.2c0 1 2.4 1.9 5.3 1.9s5.3-.9 5.3-1.9V3.9"/><path d="M2.7 8c0 1 2.4 1.9 5.3 1.9S13.3 9 13.3 8"/></svg>Databases</button>
+  <button data-tab="stats"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3.5 13.2V9.4"/><path d="M8 13.2V4.4"/><path d="M12.5 13.2V7"/></svg>Stats</button>
+  <span class="navlab">System</span>
+  <button data-tab="settings"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 4.6h11"/><circle cx="10.3" cy="4.6" r="1.7" fill="currentColor" stroke="none"/><path d="M2.5 8.3h11"/><circle cx="5.4" cy="8.3" r="1.7" fill="currentColor" stroke="none"/><path d="M2.5 12h11"/><circle cx="11" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>Settings</button>
 </nav>
+</div>
 
 <main>
 
 <!-- ============================ EDITOR ============================ -->
 <section class="tab active" id="tab-editor">
-  <div class="cols">
-    <div class="panel">
+  <div class="edgrid">
+
+    <div class="panel ed-content">
       <div class="row">
-        <h2 class="grow" id="ed-heading">New Datablock</h2>
+        <h2 class="grow" id="ed-heading" style="margin:0">New Datablock</h2>
         <select id="ed-type" style="width:auto">
           <option value="db">Datablock</option>
           <option value="fc">Flashcard</option>
@@ -220,21 +736,21 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
         <button id="ed-new" class="small">New</button>
       </div>
 
-      <div class="row" id="ed-vars" style="display:none; margin-top:6px">
+      <div class="row" id="ed-vars" style="display:none; margin-top:10px">
         <span class="muted">Variant</span>
-        <button id="var-prev" class="small">◀</button>
-        <span class="muted" id="var-label">1 / 1</span>
-        <button id="var-next" class="small">▶</button>
+        <button id="var-prev" class="small">&#9664;</button>
+        <span class="muted" id="var-label" style="font-family:var(--mono); font-variant-numeric:tabular-nums">1 / 1</span>
+        <button id="var-next" class="small">&#9654;</button>
         <button id="var-add" class="small" title="Add a new variant, starting as a copy of this one">+ Add variant</button>
-        <button id="var-del" class="small danger">✕</button>
+        <button id="var-del" class="small danger">&#10005;</button>
         <span class="muted grow" style="text-align:right">rotates each showing, loops</span>
       </div>
-      <div class="row qa-tabs" id="ed-qa" style="display:none; margin-top:6px">
+      <div class="row qa-tabs" id="ed-qa" style="display:none; margin-top:10px">
         <button id="qa-q" class="active">Question page</button>
         <button id="qa-a">Answer page</button>
         <span class="grow"></span>
-        <button id="qa-dup" class="small" title="Duplicate this page to replace the other">Duplicate → other page</button>
-        <button id="qa-import" class="small" title="Import an independent copy of a datablock">Import datablock…</button>
+        <button id="qa-dup" class="small" title="Duplicate this page to replace the other">Duplicate &#8594; other page</button>
+        <button id="qa-import" class="small" title="Import an independent copy of a datablock">Import datablock&#8230;</button>
       </div>
 
       <h3>Symbol toolbar</h3>
@@ -247,12 +763,33 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
         <button id="add-math" class="small">+ Math</button>
         <button id="add-svg" class="small">+ SVG</button>
         <span class="grow"></span>
-        <button id="btn-ai">✦ Format with AI</button>
+        <button id="btn-ai">&#10022; Format with AI</button>
       </div>
+    </div>
 
-      <h3>Metadata</h3>
+    <div class="wrist">
+      <div class="panel">
+        <div class="stage"><div class="bezel"><div class="screenwrap"><div id="preview-scroll"></div></div></div></div>
+        <div class="pxruler"><span>0</span><span>50</span><span>100</span><span>150</span><span>200px</span></div>
+        <div class="row pvbar">
+          <button id="pv-up" class="small">&#9650;</button>
+          <span class="muted" id="pv-page">page 1/1</span>
+          <button id="pv-down" class="small">&#9660;</button>
+          <button id="pv-left" class="small" style="display:none">&#9664;</button>
+          <button id="pv-right" class="small" style="display:none">&#9654;</button>
+          <button id="pv-mode" class="small" title="Toggle live preview / compiled bitmap">Live</button>
+        </div>
+        <div class="ovflags" id="ovflags"></div>
+        <hr>
+        <button id="btn-save" class="primary" style="width:100%">Save to database</button>
+        <div class="muted" id="save-hint" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <div class="panel ed-meta">
+      <h3 style="margin-top:0">Metadata</h3>
       <label>Title</label>
-      <input type="text" id="md-title" placeholder="e.g. Heat equation — separation of variables">
+      <input type="text" id="md-title" placeholder="e.g. Heat equation &#8212; separation of variables">
       <div class="row">
         <div class="grow">
           <label>Created</label>
@@ -268,18 +805,18 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
       <label>Tags (comma separated)</label>
       <input type="text" id="md-tags" placeholder="pde, fourier">
       <label>Notes / source reference</label>
-      <input type="text" id="md-notes" placeholder="Kreyszig §12.5">
+      <input type="text" id="md-notes" placeholder="Kreyszig &#167;12.5">
       <div id="md-kind-wrap" style="display:none">
         <label>Card kind (independent queues &amp; budgets)</label>
         <select id="md-kind">
-          <option value="recall">Instant Recall — quick fact/formula (~10–15s)</option>
-          <option value="question">Question — multi-step problem (~1–5min)</option>
+          <option value="recall">Instant Recall &#8212; quick fact/formula (~10&#8211;15s)</option>
+          <option value="question">Question &#8212; multi-step problem (~1&#8211;5min)</option>
         </select>
       </div>
       <label>Watch rendering</label>
       <div class="row" style="margin:2px 0 4px">
-        <label style="margin:0; text-transform:none; letter-spacing:0; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink)">
-          <input type="checkbox" id="md-scroll" style="width:auto"> Scroll mode (pan on watch, up to 400×512px)
+        <label class="checkline">
+          <input type="checkbox" id="md-scroll" style="width:auto"> Scroll mode (pan on watch, up to 400&#215;512px)
         </label>
       </div>
       <label>Content font size</label>
@@ -292,43 +829,29 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
       <div id="md-srs" style="display:none"></div>
     </div>
 
-    <div class="wrist">
-      <div class="panel">
-        <div class="bezel"><div class="screenwrap"><div id="preview-scroll"></div></div></div>
-        <div class="pxruler"><span>0</span><span>50</span><span>100</span><span>150</span><span>200px</span></div>
-        <div class="row" style="justify-content:center; margin-top:6px">
-          <button id="pv-up" class="small">▲</button>
-          <span class="muted" id="pv-page">page 1/1</span>
-          <button id="pv-down" class="small">▼</button>
-          <button id="pv-left" class="small" style="display:none">◀</button>
-          <button id="pv-right" class="small" style="display:none">▶</button>
-          <button id="pv-mode" class="small" title="Toggle live preview / compiled bitmap">Live</button>
-        </div>
-        <div class="ovflags" id="ovflags"></div>
-        <hr>
-        <button id="btn-save" class="primary" style="width:100%">Save to database</button>
-        <div class="muted" id="save-hint" style="margin-top:6px"></div>
-      </div>
-    </div>
   </div>
 </section>
 
 <!-- ============================ LIBRARY ============================ -->
 <section class="tab" id="tab-library">
-  <div class="panel">
-    <div class="row">
-      <input type="text" id="lib-search" class="grow" placeholder="Search titles, tags, categories, notes…">
-      <button id="lib-import-item" class="small">Import item JSON…</button>
-      <button id="lib-org-export" class="small" title="Compact summary of categories, tags and existing titles — paste into an LLM extraction prompt">⧉ Export organisation for LLM</button>
+  <div class="libgrid">
+    <div class="panel">
+      <h3 style="margin-top:0">Items</h3>
+      <div class="row">
+        <input type="text" id="lib-search" class="grow" placeholder="Search titles, tags, categories, notes&#8230;">
+        <button id="lib-import-item" class="small">Import item JSON&#8230;</button>
+        <button id="lib-org-export" class="small" title="Compact summary of categories, tags and existing titles &#8212; paste into an LLM extraction prompt">&#10697; Export organisation for LLM</button>
+      </div>
+      <div id="lib-list"></div>
     </div>
-    <div id="lib-list"></div>
-    <hr>
-    <h2>Categories</h2>
-    <div id="cat-list"></div>
-    <div class="row" style="margin-top:8px">
-      <input type="text" id="cat-name" placeholder="New category name" class="grow">
-      <select id="cat-parent" style="width:auto"><option value="">(top level)</option></select>
-      <button id="cat-add" class="small">Add</button>
+    <div class="panel">
+      <h3 style="margin-top:0">Categories</h3>
+      <div id="cat-list"></div>
+      <div class="row" style="margin-top:10px">
+        <input type="text" id="cat-name" placeholder="New category name" class="grow">
+        <select id="cat-parent" style="width:auto; min-width:130px"><option value="">(top level)</option></select>
+        <button id="cat-add" class="small">Add</button>
+      </div>
     </div>
   </div>
 </section>
@@ -336,22 +859,23 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
 <!-- ============================ QUEUE ============================ -->
 <section class="tab" id="tab-queue">
   <div class="panel">
-    <h2>Bulk upload</h2>
-    <p class="muted">Upload a structured JSON file of raw datablocks. Each is passed through AI formatting and auto-splitting, then held here for manual inspection, overflow resolution and approval. See <span style="font-family:var(--mono)">samples/bulk-upload-sample.json</span>.</p>
+    <h3 style="margin-top:0">Bulk upload</h3>
+    <p class="muted" style="margin-top:0">Upload a structured JSON file of raw datablocks and flashcards. Each item runs through AI formatting and auto-splitting, then waits here for inspection, overflow resolution and approval. See <span style="font-family:var(--mono)">samples/bulk-upload-sample.json</span>.</p>
     <div class="row">
-      <input type="file" id="bulk-file" accept="application/json,.json">
+      <input type="file" id="bulk-file" accept="application/json,.json" class="grow">
       <button id="bulk-run">Run AI pipeline</button>
       <span class="muted" id="bulk-status"></span>
     </div>
-    <details style="margin-top:8px">
-      <summary class="muted" style="cursor:pointer">File picker not working? Paste the JSON instead (some in-app webviews block file choosers)</summary>
-      <textarea id="bulk-paste" placeholder='{"items":[...]}' style="min-height:110px; margin-top:6px"></textarea>
-      <div class="row" style="margin-top:6px">
+    <details style="margin-top:10px">
+      <summary class="muted">File picker not working? Paste the JSON instead (some in-app webviews block file choosers)</summary>
+      <textarea id="bulk-paste" placeholder='{"items":[...]}' style="min-height:110px; margin-top:8px"></textarea>
+      <div class="row" style="margin-top:8px">
         <button id="bulk-run-paste">Run AI pipeline from pasted JSON</button>
       </div>
     </details>
-    <hr>
-    <h2>Review queue</h2>
+  </div>
+  <div class="panel">
+    <h3 style="margin-top:0">Review queue</h3>
     <div id="queue-list"></div>
   </div>
 </section>
@@ -359,13 +883,13 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
 <!-- ============================ DATABASES ============================ -->
 <section class="tab" id="tab-databases">
   <div class="panel">
-    <h2>Databases</h2>
-    <p class="muted">Multiple databases can be loaded; exactly one is active. The active database syncs automatically to the watch on the next Bluetooth connection after you press “Sync to Watch”.</p>
+    <h3 style="margin-top:0">Databases</h3>
+    <p class="muted" style="margin-top:0">Multiple databases can be loaded; exactly one is active. The active database reaches the watch on the next Bluetooth connection after you press &#8220;Sync to Watch&#8221;.</p>
     <div id="db-list"></div>
     <div class="row" style="margin-top:10px">
       <input type="text" id="db-new-name" placeholder="New database name" class="grow">
       <button id="db-create" class="small">Create</button>
-      <button id="db-import" class="small">Import full JSON…</button>
+      <button id="db-import" class="small">Import full JSON&#8230;</button>
     </div>
   </div>
 </section>
@@ -373,52 +897,70 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
 <!-- ============================ STATS ============================ -->
 <section class="tab" id="tab-stats">
   <div class="panel">
-    <h2>Statistics dashboard</h2>
+    <h3 style="margin-top:0">Overview</h3>
     <div class="statgrid" id="stat-cards"></div>
     <h3>Due per category</h3>
     <div id="stat-cats"></div>
-    <h3>Per-card performance</h3>
-    <select id="stat-card-sel"></select>
-    <div id="stat-card-hist"></div>
-    <h3>Session log (latest 100)</h3>
-    <div style="max-height:300px; overflow:auto"><table class="log" id="stat-log"></table></div>
+  </div>
+  <div class="duo" style="margin-top:14px">
+    <div class="panel">
+      <h3 style="margin-top:0">Per-card performance</h3>
+      <select id="stat-card-sel"></select>
+      <div id="stat-card-hist" style="margin-top:10px"></div>
+    </div>
+    <div class="panel">
+      <h3 style="margin-top:0">Session log (latest 100)</h3>
+      <div class="scrollbox"><table class="log" id="stat-log"></table></div>
+    </div>
   </div>
 </section>
 
 <!-- ============================ SETTINGS ============================ -->
 <section class="tab" id="tab-settings">
-  <div class="cols">
+  <div class="panel" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap">
+    <div class="grow" style="min-width:220px">
+      <h2 style="margin:0 0 2px">Settings</h2>
+      <div class="muted">Wrist-facing options apply after <b>Save settings</b> &#8212; no full re-sync needed.</div>
+    </div>
+    <button id="st-save" class="primary">Save settings (send to watch)</button>
+  </div>
+
+  <div class="setgrid" style="margin-top:14px">
+
     <div class="panel">
-      <h2>Appearance</h2>
+      <h3 style="margin-top:0">Appearance</h3>
       <label>System theme (phone chrome + watch menus)</label>
       <select id="st-theme"><option value="light">Light</option><option value="dark">Dark</option></select>
       <label>Watch accent colour</label>
       <div class="swatches" id="st-accent"></div>
       <label>Watch menu font size</label>
       <select id="st-menufont"><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select>
+    </div>
 
-      <h2 style="margin-top:18px">Daily review budgets</h2>
+    <div class="panel">
+      <h3 style="margin-top:0">Daily review budgets</h3>
       <div class="row">
         <div class="grow"><label>Instant Recall / day</label><input type="number" id="tg-recall" min="1"></div>
         <div class="grow"><label>Questions / day</label><input type="number" id="tg-question" min="1"></div>
       </div>
       <p class="muted">Independent queues: filling one budget never blocks due cards from the other. New bulk-uploaded cards are introduced adaptively within spare budget.</p>
-
-      <h2 style="margin-top:18px">Hourly micro-review</h2>
-      <label style="text-transform:none; letter-spacing:0; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink)">
+      <h3>Hourly micro-review</h3>
+      <label class="checkline">
         <input type="checkbox" id="mi-en" style="width:auto"> Enable wrist micro-reviews (Instant Recall only)
       </label>
       <div class="row">
-        <div class="grow"><label>Mon–Fri from (hour)</label><input type="number" id="mi-wds" min="0" max="23"></div>
+        <div class="grow"><label>Mon&#8211;Fri from (hour)</label><input type="number" id="mi-wds" min="0" max="23"></div>
         <div class="grow"><label>until</label><input type="number" id="mi-wde" min="1" max="24"></div>
       </div>
       <div class="row">
-        <div class="grow"><label>Sat–Sun from (hour)</label><input type="number" id="mi-wes" min="0" max="23"></div>
+        <div class="grow"><label>Sat&#8211;Sun from (hour)</label><input type="number" id="mi-wes" min="0" max="23"></div>
         <div class="grow"><label>until</label><input type="number" id="mi-wee" min="1" max="24"></div>
       </div>
-      <p class="muted">At most one buzz per hour inside these windows, and only when a recall card is actually due — otherwise the watch never wakes.</p>
+      <p class="muted">At most one buzz per hour inside these windows, and only when a recall card is actually due &#8212; otherwise the watch never wakes.</p>
+    </div>
 
-      <h2 style="margin-top:18px">Scheduling algorithm</h2>
+    <div class="panel">
+      <h3 style="margin-top:0">Scheduling algorithm</h3>
       <label>Scheduler</label>
       <select id="st-sched">
         <option value="fsrs">FSRS-4.5 (recommended)</option>
@@ -428,14 +970,16 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
         <div class="grow"><label>Recall retention target</label><input type="number" id="rt-recall" step="0.01" min="0.7" max="0.97"></div>
         <div class="grow"><label>Question retention target</label><input type="number" id="rt-question" step="0.01" min="0.7" max="0.97"></div>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button id="fsrs-opt" class="small">⚙ Optimize FSRS parameters from my review history</button>
+      <div class="row" style="margin-top:12px">
+        <button id="fsrs-opt" class="small">&#9881; Optimize FSRS parameters from my review history</button>
         <button id="fsrs-reset" class="small">Reset to defaults</button>
       </div>
-      <div class="muted" id="fsrs-opt-status"></div>
-      <p class="muted">FSRS schedules each card from a fitted memory model (difficulty · stability · retrievability) so intervals target these retention probabilities directly. Lower retention = fewer, longer reviews. Existing SM-2 state migrates automatically on the next rating. The SM-2 block below only applies when the legacy scheduler is selected.</p>
+      <div class="muted" id="fsrs-opt-status" style="margin-top:6px"></div>
+      <p class="muted">FSRS schedules each card from a fitted memory model (difficulty &#183; stability &#183; retrievability) so intervals target these retention probabilities directly. Lower retention = fewer, longer reviews. Existing SM-2 state migrates automatically on the next rating. The SM-2 card applies only when the legacy scheduler is selected.</p>
+    </div>
 
-      <h2 style="margin-top:18px">SM-2 configuration</h2>
+    <div class="panel">
+      <h3 style="margin-top:0">SM-2 configuration</h3>
       <div class="row">
         <div class="grow"><label>Starting easiness</label><input type="number" id="sm-startEF" step="0.05" min="1.3"></div>
         <div class="grow"><label>Minimum easiness</label><input type="number" id="sm-minEF" step="0.05" min="1.0"></div>
@@ -444,30 +988,33 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
         <div class="grow"><label>First interval (days)</label><input type="number" id="sm-firstIvl" min="1"></div>
         <div class="grow"><label>Second interval (days)</label><input type="number" id="sm-secondIvl" min="1"></div>
       </div>
-      <button id="st-save" class="primary" style="margin-top:10px">Save settings (send to watch)</button>
-
-      <h2 style="margin-top:18px">SM-2 resets</h2>
+      <h3>SM-2 resets</h3>
       <p class="muted">Per-card resets live on each card in the Library. These act across the active database.</p>
-      <div class="row"><button id="rs-all" class="danger small">All cards · all profiles</button></div>
-      <div class="row" style="margin-top:6px"><button id="rs-global" class="danger small">All cards · global profile only</button></div>
+      <div class="row"><button id="rs-all" class="danger small">All cards &#183; all profiles</button></div>
+      <div class="row" style="margin-top:6px"><button id="rs-global" class="danger small">All cards &#183; global profile only</button></div>
       <div class="row" style="margin-top:6px">
-        <select id="rs-cat-sel" style="width:auto"></select>
-        <button id="rs-cat" class="danger small">All cards · this category profile</button>
+        <select id="rs-cat-sel" style="width:auto; min-width:140px"></select>
+        <button id="rs-cat" class="danger small">All cards &#183; this category profile</button>
       </div>
     </div>
+
     <div class="panel">
-      <h2>AI formatting</h2>
+      <h3 style="margin-top:0">AI formatting</h3>
       <label>Anthropic API key</label>
-      <input type="password" id="st-apikey" placeholder="sk-ant-…">
+      <input type="password" id="st-apikey" placeholder="sk-ant-&#8230;">
       <label>Model</label>
       <input type="text" id="st-model" value="claude-sonnet-4-6">
-      <p class="muted">Used only by “Format with AI” and the bulk pipeline. Everything else runs offline.</p>
-      <h2 style="margin-top:18px">Companion</h2>
+      <p class="muted">Used only by &#8220;Format with AI&#8221; and the bulk pipeline. Everything else runs offline.</p>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0">Companion</h3>
       <label>Config page URL (stored on phone)</label>
       <input type="text" id="st-cfgurl" placeholder="https://you.github.io/mathref-command-center/index.html">
-      <button id="st-cache-katex" class="small" style="margin-top:10px">Cache KaTeX assets for offline use</button>
-      <div class="muted" id="katex-cache-status" style="margin-top:4px"></div>
+      <button id="st-cache-katex" class="small" style="margin-top:12px">Cache KaTeX assets for offline use</button>
+      <div class="muted" id="katex-cache-status" style="margin-top:6px"></div>
     </div>
+
   </div>
 </section>
 
@@ -492,7 +1039,16 @@ table.log th, table.log td { text-align: left; padding: 4px 6px; border-bottom: 
     <h2>Import a datablock copy</h2>
     <p class="muted">Creates a fully independent copy on this page; the original datablock is never modified.</p>
     <div id="pick-list"></div>
-    <div class="row" style="justify-content:flex-end; margin-top:8px"><button id="pick-cancel" class="small">Cancel</button></div>
+    <div class="row" style="justify-content:flex-end; margin-top:10px"><button id="pick-cancel" class="small">Cancel</button></div>
+  </div>
+</div>
+
+<!-- command palette -->
+<div id="cmdk">
+  <div class="cmdk-box">
+    <input id="cmdk-in" type="text" placeholder="Search items, jump to a section, run an action&#8230;" autocomplete="off" spellcheck="false">
+    <div id="cmdk-list"></div>
+    <div class="cmdk-foot"><span><kbd>&#8593;&#8595;</kbd> navigate</span><span><kbd>&#8629;</kbd> open</span><span><kbd>esc</kbd> close</span></div>
   </div>
 </div>
 
@@ -541,7 +1097,12 @@ var PALETTE = [
   { n:'p-cyan',   rgb:[170,255,255], argb8:0xEF }
 ];
 var CONTENT_COLORS = ['black','blue','green','amber','red','purple','cyan'];
-var ACCENTS = ['blue','green','amber','red','purple','cyan'];
+var ACCENTS = ['blue','green','amber','red','purple','cyan','indigo'];
+/* Indigo is a menu accent only (not a content colour), so it lives outside
+ * the 16-colour content PALETTE. #5E6AD2 quantises to GColorLiberty on the
+ * watch; the swatch shows the true design-system value. */
+var ACCENT_RGB = { indigo: [94, 106, 210] };
+function accentCss(n){ return ACCENT_RGB[n] ? 'rgb(' + ACCENT_RGB[n].join(',') + ')' : cssRgb(palByName(n)); }
 function palByName(n){ for (var i=0;i<PALETTE.length;i++) if (PALETTE[i].n===n) return PALETTE[i]; return PALETTE[1]; }
 function cssRgb(p){ return 'rgb('+p.rgb[0]+','+p.rgb[1]+','+p.rgb[2]+')'; }
 
@@ -555,7 +1116,7 @@ var STATE_KEY = 'mcc_state';
 var S = null;
 
 function defaultSettings(){
-  return { theme:'light', accent:'blue', menuFont:'M',
+  return { theme:'dark', accent:'indigo', menuFont:'M',
            sm2:{ startEF:2.5, minEF:1.3, firstIvl:1, secondIvl:6 },
            scheduler:'fsrs',
            retention:{ recall:0.90, question:0.85 },
@@ -571,10 +1132,10 @@ function loadState(){
   try { S = JSON.parse(localStorage.getItem(STATE_KEY)); } catch(e){ S = null; }
   if (!S || !S.databases || !S.databases.length) {
     S = { databases:[newDb('My Mathematics')], activeDb:null,
-          ui:{theme:'light', apiKey:'', model:'claude-sonnet-4-6', configUrl:''} };
+          ui:{theme:'dark', apiKey:'', model:'claude-sonnet-4-6', configUrl:''} };
     S.activeDb = S.databases[0].id;
   }
-  if (!S.ui) S.ui = {theme:'light', apiKey:'', model:'claude-sonnet-4-6', configUrl:''};
+  if (!S.ui) S.ui = {theme:'dark', apiKey:'', model:'claude-sonnet-4-6', configUrl:''};
 }
 function saveState(){
   try { localStorage.setItem(STATE_KEY, JSON.stringify(S)); }
@@ -1836,7 +2397,7 @@ function renderSettings(){
   ACCENTS.forEach(function(a){
     var s = document.createElement('button');
     s.className = 'swatch' + (st.accent===a?' sel':'');
-    s.style.background = cssRgb(palByName(a)); s.title = a;
+    s.style.background = accentCss(a); s.title = a;
     s.onclick = function(){ st.accent = a; saveState(); renderSettings(); };
     host.appendChild(s);
   });
@@ -2049,6 +2610,119 @@ function optimizeFsrs(){
     '%). Sync to Watch to apply.';
 }
 
+/* ====================== command palette (Ctrl/Cmd-K) ======================
+ * Additive discoverability layer: jump to any section, run any global action
+ * by delegating to its real button, or open any item in the editor via the
+ * same code path as the Library's Edit button. Holds no state of its own. */
+var cmdkSel = 0, cmdkRows = [];
+
+function cmdkOpenItem(it){
+  ED = deepCopy(it);
+  if (ED.type==='fc' && !ED.variants)
+    ED.variants = [{ qblocks: ED.qblocks||[], ablocks: ED.ablocks||[],
+                     qImg: ED.q, aImg: ED.a }];
+  ED._curVar = 0; edPage='q'; pvPage=0; showTab('editor'); renderEditor();
+}
+function cmdkTabs(){
+  return [
+    { t:'Editor',       d:'Compose blocks & cards',  tab:'editor' },
+    { t:'Library',      d:'Browse & manage items',   tab:'library' },
+    { t:'Review Queue', d:'Bulk upload & approval',  tab:'queue' },
+    { t:'Databases',    d:'Switch, import, export',  tab:'databases' },
+    { t:'Stats',        d:'Streak, retention, log',  tab:'stats' },
+    { t:'Settings',     d:'Watch, scheduler, AI',    tab:'settings' }
+  ];
+}
+function cmdkActions(){
+  function press(id){ return function(){ var b = $(id); if (b) b.click(); }; }
+  return [
+    { t:'New datablock',  d:'Editor', run:function(){ $('ed-type').value='db'; ED=newEditBuffer('db'); edPage='q'; pvPage=0; showTab('editor'); renderEditor(); } },
+    { t:'New flashcard',  d:'Editor', run:function(){ $('ed-type').value='fc'; ED=newEditBuffer('fc'); edPage='q'; pvPage=0; showTab('editor'); renderEditor(); } },
+    { t:'Save current item to database', d:'Editor', run:function(){ showTab('editor'); $('btn-save').click(); } },
+    { t:'Format with AI', d:'Editor', run:function(){ showTab('editor'); $('btn-ai').click(); } },
+    { t:'Sync to Watch',  d:'Compile & hand off', run:press('btn-sync') },
+    { t:'Send settings to watch', d:'No full sync', run:press('st-save') },
+    { t:'Toggle light / dark theme', d:'Appearance', run:press('btn-theme') },
+    { t:'Export organisation for LLM', d:'Library', run:press('lib-org-export') },
+    { t:'Import item JSON', d:'Library', run:press('lib-import-item') },
+    { t:'Import database JSON', d:'Databases', run:press('db-import') },
+    { t:'Create a database', d:'Databases', run:function(){ showTab('databases'); $('db-new-name').focus(); } },
+    { t:'Optimize FSRS from my history', d:'Settings', run:function(){ showTab('settings'); $('fsrs-opt').click(); } },
+    { t:'Cache KaTeX assets for offline', d:'Settings', run:press('st-cache-katex') }
+  ];
+}
+function cmdkMatch(hay, q){
+  var toks = q.split(/\s+/);
+  for (var i = 0; i < toks.length; i++)
+    if (toks[i] && hay.indexOf(toks[i]) < 0) return false;
+  return true;
+}
+function cmdkRender(){
+  var q = ($('cmdk-in').value || '').toLowerCase().trim();
+  var host = $('cmdk-list'); host.innerHTML = '';
+  cmdkRows = []; cmdkSel = 0;
+  function section(title, list){
+    if (!list.length) return;
+    var h = document.createElement('div'); h.className = 'cmdk-h'; h.textContent = title;
+    host.appendChild(h);
+    list.forEach(function(e){
+      var r = document.createElement('div'); r.className = 'cmdk-row';
+      var pill = e.pill ? '<span class="pill' + (e.pillFc ? ' fc' : '') + '">' + esc(e.pill) + '</span>' : '';
+      r.innerHTML = pill + '<span class="ct">' + esc(e.t) + '</span><span class="cd">' + esc(e.d || '') + '</span>';
+      r.onmousedown = function(ev){ ev.preventDefault(); cmdkRun(e); };
+      host.appendChild(r);
+      cmdkRows.push({ el: r, e: e });
+    });
+  }
+  var tabs = cmdkTabs().filter(function(e){ return !q || cmdkMatch((e.t + ' ' + e.d).toLowerCase(), q); });
+  var acts = cmdkActions().filter(function(e){ return !q || cmdkMatch((e.t + ' ' + e.d).toLowerCase(), q); });
+  var items = [];
+  if (q) {
+    var all = db().items;
+    for (var i = 0; i < all.length && items.length < 14; i++) {
+      var it = all[i];
+      var hay = (it.title + ' ' + (it.tags || []).join(' ') + ' ' +
+                 (it.cats || []).map(catPath).join(' ') + ' ' + it.type).toLowerCase();
+      if (cmdkMatch(hay, q))
+        items.push({ t: it.title, d: itemPaths(it),
+                     pill: it.type === 'fc' ? 'card' : 'block',
+                     pillFc: it.type === 'fc', item: it });
+    }
+  }
+  section('Go to', tabs);
+  section('Actions', q ? acts : acts.slice(0, 5));
+  section('Items', items);
+  if (!cmdkRows.length)
+    host.innerHTML = '<div class="cmdk-empty">Nothing matches - try an item title, a tag, or an action.</div>';
+  cmdkPaint();
+}
+function cmdkPaint(){
+  for (var i = 0; i < cmdkRows.length; i++)
+    cmdkRows[i].el.className = 'cmdk-row' + (i === cmdkSel ? ' cp-sel' : '');
+  if (cmdkRows[cmdkSel] && cmdkRows[cmdkSel].el.scrollIntoView)
+    try { cmdkRows[cmdkSel].el.scrollIntoView({ block: 'nearest' }); } catch (e) { }
+}
+function cmdkRun(e){
+  cmdkClose();
+  if (e.tab) showTab(e.tab);
+  else if (e.item) cmdkOpenItem(e.item);
+  else if (e.run) e.run();
+}
+function cmdkOpen(){
+  $('cmdk').className = 'open';
+  $('cmdk-in').value = '';
+  cmdkRender();
+  setTimeout(function(){ $('cmdk-in').focus(); }, 20);
+}
+function cmdkClose(){ $('cmdk').className = ''; }
+function cmdkKey(e){
+  var k = e.key || '';
+  if (k === 'ArrowDown') { e.preventDefault(); if (cmdkRows.length) { cmdkSel = (cmdkSel + 1) % cmdkRows.length; cmdkPaint(); } }
+  else if (k === 'ArrowUp') { e.preventDefault(); if (cmdkRows.length) { cmdkSel = (cmdkSel - 1 + cmdkRows.length) % cmdkRows.length; cmdkPaint(); } }
+  else if (k === 'Enter') { e.preventDefault(); if (cmdkRows[cmdkSel]) cmdkRun(cmdkRows[cmdkSel].e); }
+  else if (k === 'Escape') { cmdkClose(); }
+}
+
 /* ================================ shell ==================================== */
 function applyTheme(t){ document.documentElement.setAttribute('data-theme', t==='dark'?'dark':'light'); }
 function showTab(name){
@@ -2227,7 +2901,24 @@ document.addEventListener('DOMContentLoaded', function(){
         Math.round((localStorage.getItem(KATEX_CSS_KEY)||'').length/1024) + ' KB).';
     }).catch(function(){ $('katex-cache-status').textContent = 'Caching failed — check connection.'; });
   };
+
+  // ---- command palette + nav polish (additive) ----
+  $('btn-cmdk').onclick = cmdkOpen;
+  $('cmdk').onclick = function(e){ if (e.target === $('cmdk')) cmdkClose(); };
+  $('cmdk-in').oninput = cmdkRender;
+  $('cmdk-in').onkeydown = cmdkKey;
+  document.addEventListener('keydown', function(e){
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); cmdkOpen(); }
+    else if (e.key === 'Escape' && $('cmdk').className === 'open') cmdkClose();
+  });
+  var _showTab = showTab;
+  showTab = function(name){
+    _showTab(name);
+    var b = document.querySelector('nav.tabs button.active');
+    if (b && b.scrollIntoView) try { b.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (err) { }
+  };
 });
+
 </script>
 </body>
 </html>
