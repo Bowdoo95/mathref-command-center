@@ -142,12 +142,12 @@ body::before {
   background: radial-gradient(closest-side, rgba(120,86,214,.10), rgba(94,106,210,.04) 55%, transparent 72%);
   animation: floatB 11s ease-in-out infinite;
 }
-#ambient::after { /* 64px technical grid */
+#ambient::after { /* faint technical dot grid */
   content: "";
-  position: absolute; inset: 0; opacity: .022;
-  background:
-    repeating-linear-gradient(to right, #fff 0 1px, transparent 1px 64px),
-    repeating-linear-gradient(to bottom, #fff 0 1px, transparent 1px 64px);
+  position: absolute; inset: 0; opacity: .055;
+  background-image: radial-gradient(circle, #fff 1px, transparent 1.5px);
+  background-size: 26px 26px;
+  background-position: 13px 13px;
 }
 #ambient .noise {
   position: absolute; inset: 0; opacity: .015;
@@ -341,21 +341,36 @@ label:first-child { margin-top: 0; }
 }
 
 /* ---------------------------- symbol toolbar ------------------------------ */
+.symwrap { margin: 12px 0 2px; }
+.symwrap > summary {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-soft); cursor: pointer; padding: 4px 2px;
+  list-style-position: inside;
+}
+.symwrap > summary:hover, .symwrap[open] > summary { color: var(--ink); }
+.symwrap .symbar { margin: 8px 0 2px; }
 .symbar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
-.symbar .grp { position: relative; }
+.grp { position: relative; }
 .symbar .grp > button { font-family: var(--serif); font-size: 14px; min-width: 34px; }
-.symbar .grp.open > button { background: var(--accent-soft); box-shadow: 0 0 0 1px var(--line-accent); color: var(--ink); }
-.symbar .pop {
+.grp.open > button { background: var(--accent-soft); box-shadow: 0 0 0 1px var(--line-accent); color: var(--ink); }
+.pop {
   display: none; position: absolute; z-index: 25; top: 100%; left: 0; margin-top: 6px;
   background: var(--panel-solid);
   border: 1px solid var(--line-strong); border-radius: 12px; padding: 6px;
   box-shadow: var(--shadow-pop);
   grid-template-columns: repeat(6, 1fr); gap: 4px; min-width: 236px;
 }
-.symbar .grp.open .pop { display: grid; animation: popin .16s var(--ease); }
+.grp.open .pop { display: grid; animation: popin .16s var(--ease); }
 @keyframes popin { from { opacity: 0; transform: translateY(-4px) scale(.98); } to { opacity: 1; transform: none; } }
 .symbar .pop button { padding: 5px 2px; font-family: var(--serif); font-size: 15px; box-shadow: none; background: transparent; }
 .symbar .pop button:hover { background: rgba(255,255,255,.07); }
+.pop.poplist { grid-template-columns: 1fr; left: auto; right: 0; min-width: 224px; gap: 2px; }
+.pop.poplist button {
+  box-shadow: none; background: transparent; text-align: left;
+  font-size: 12.5px; padding: 8px 10px; border-radius: 8px;
+}
+.pop.poplist button:hover { background: rgba(255,255,255,.07); }
 
 /* ------------------------------ block editor ------------------------------ */
 .block {
@@ -519,9 +534,31 @@ table.log td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(
   box-shadow: var(--shadow-pop);
 }
 #measure { position: absolute; left: -9999px; top: 0; }
-.qa-tabs { background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
-.qa-tabs button { box-shadow: none; background: transparent; color: var(--ink-soft); border-radius: 7px; padding: 5px 12px; font-size: 12.5px; }
-.qa-tabs button.active { background: var(--accent); color: #fff; font-weight: 600; box-shadow: 0 1px 8px rgba(94,106,210,.4), inset 0 1px 0 rgba(255,255,255,.18); }
+.seg, .qa-tabs {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.04); border: 1px solid var(--line);
+  border-radius: 10px; padding: 3px; gap: 3px;
+}
+.seg button, .qa-tabs button {
+  box-shadow: none; background: transparent; color: var(--ink-soft);
+  border-radius: 7px; padding: 5px 12px; font-size: 12.5px; white-space: nowrap;
+}
+.seg button.active, .qa-tabs button.active {
+  background: var(--accent); color: #fff; font-weight: 600;
+  box-shadow: 0 1px 8px rgba(94,106,210,.4), inset 0 1px 0 rgba(255,255,255,.18);
+}
+#lib-filter { display: inline-flex; max-width: 100%; overflow-x: auto; }
+.fcbar { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.fcbar .seg button { flex: 1; }
+.varbar {
+  margin-top: 8px; padding: 5px 8px; gap: 6px;
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+}
+.varlab {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft);
+}
+.blocktools { margin-top: 10px; }
 .queue-badge {
   background: var(--warn); color: #1a1204;
   border-radius: 999px; font-size: 10px; font-weight: 700;
@@ -659,9 +696,9 @@ html[data-theme="light"] body::before {
 }
 html[data-theme="light"] #ambient .blob.a { background: radial-gradient(closest-side, rgba(94,106,210,.10), transparent 70%); }
 html[data-theme="light"] #ambient .blob.b { display: none; }
-html[data-theme="light"] #ambient::after { opacity: .05; background:
-  repeating-linear-gradient(to right, #14151a 0 1px, transparent 1px 64px),
-  repeating-linear-gradient(to bottom, #14151a 0 1px, transparent 1px 64px); }
+html[data-theme="light"] #ambient::after { opacity: .10;
+  background-image: radial-gradient(circle, #14151a 1px, transparent 1.5px);
+  background-size: 26px 26px; background-position: 13px 13px; }
 html[data-theme="light"] #ambient .noise { opacity: .02; }
 html[data-theme="light"] #topbar { background: rgba(252,252,253,.85); }
 @media (min-width: 1080px) {
@@ -675,7 +712,9 @@ html[data-theme="light"] .panel::before { background: none; }
 html[data-theme="light"] input::placeholder, html[data-theme="light"] textarea::placeholder { color: rgba(20,21,26,.35); }
 html[data-theme="light"] .pill { background: rgba(18,19,26,.03); }
 html[data-theme="light"] .pill.fc { color: #4a55c0; }
-html[data-theme="light"] .qa-tabs { background: rgba(18,19,26,.04); }
+html[data-theme="light"] .seg, html[data-theme="light"] .qa-tabs { background: rgba(18,19,26,.04); }
+html[data-theme="light"] .pop.poplist button:hover { background: rgba(18,19,26,.05); }
+html[data-theme="light"] .symbar .pop button:hover { background: rgba(18,19,26,.05); }
 html[data-theme="light"] #btn-cmdk kbd, html[data-theme="light"] .cmdk-foot kbd { background: rgba(18,19,26,.04); }
 html[data-theme="light"] .cmdk-row.cp-sel .ct { color: var(--ink); }
 html[data-theme="light"] ::selection { background: rgba(94,106,210,.25); color: inherit; }
@@ -727,7 +766,7 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
   <div class="edgrid">
 
     <div class="panel ed-content">
-      <div class="row">
+      <div class="row itembar">
         <h2 class="grow" id="ed-heading" style="margin:0">New Datablock</h2>
         <select id="ed-type" style="width:auto">
           <option value="db">Datablock</option>
@@ -736,34 +775,41 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
         <button id="ed-new" class="small">New</button>
       </div>
 
-      <div class="row" id="ed-vars" style="display:none; margin-top:10px">
-        <span class="muted">Variant</span>
+      <div class="fcbar" id="ed-qa" style="display:none">
+        <div class="seg qa-tabs grow">
+          <button id="qa-q" class="active">Question</button>
+          <button id="qa-a">Answer</button>
+        </div>
+        <span class="grp pagemenu">
+          <button class="small" id="pgmenu-btn" title="Page actions">&#8943;</button>
+          <div class="pop poplist">
+            <button id="qa-dup" title="Duplicate this page to replace the other">Duplicate to other page</button>
+            <button id="qa-import" title="Import an independent copy of a datablock">Import a datablock copy&#8230;</button>
+          </div>
+        </span>
+      </div>
+      <div class="row varbar" id="ed-vars" style="display:none">
+        <span class="varlab">Variant</span>
         <button id="var-prev" class="small">&#9664;</button>
         <span class="muted" id="var-label" style="font-family:var(--mono); font-variant-numeric:tabular-nums">1 / 1</span>
         <button id="var-next" class="small">&#9654;</button>
-        <button id="var-add" class="small" title="Add a new variant, starting as a copy of this one">+ Add variant</button>
-        <button id="var-del" class="small danger">&#10005;</button>
-        <span class="muted grow" style="text-align:right">rotates each showing, loops</span>
-      </div>
-      <div class="row qa-tabs" id="ed-qa" style="display:none; margin-top:10px">
-        <button id="qa-q" class="active">Question page</button>
-        <button id="qa-a">Answer page</button>
         <span class="grow"></span>
-        <button id="qa-dup" class="small" title="Duplicate this page to replace the other">Duplicate &#8594; other page</button>
-        <button id="qa-import" class="small" title="Import an independent copy of a datablock">Import datablock&#8230;</button>
+        <button id="var-add" class="small" title="Add a new variant, starting as a copy of this one. Variants rotate on each showing.">+ Add</button>
+        <button id="var-del" class="small danger" title="Delete this variant">&#10005;</button>
       </div>
 
-      <h3>Symbol toolbar</h3>
-      <div class="symbar" id="symbar"></div>
+      <details class="symwrap">
+        <summary>&#8721; Symbol palette</summary>
+        <div class="symbar" id="symbar"></div>
+      </details>
 
-      <h3>Content blocks</h3>
       <div id="blocks"></div>
-      <div class="row">
+      <div class="row blocktools">
         <button id="add-text" class="small">+ Text</button>
         <button id="add-math" class="small">+ Math</button>
         <button id="add-svg" class="small">+ SVG</button>
         <span class="grow"></span>
-        <button id="btn-ai">&#10022; Format with AI</button>
+        <button id="btn-ai" class="small">&#10022; Format with AI</button>
       </div>
     </div>
 
@@ -837,6 +883,11 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
   <div class="libgrid">
     <div class="panel">
       <h3 style="margin-top:0">Items</h3>
+      <div class="seg" id="lib-filter" style="margin-bottom:10px">
+        <button id="libf-all" class="active">All</button>
+        <button id="libf-db">Datablocks</button>
+        <button id="libf-fc">Flashcards</button>
+      </div>
       <div class="row">
         <input type="text" id="lib-search" class="grow" placeholder="Search titles, tags, categories, notes&#8230;">
         <button id="lib-import-item" class="small">Import item JSON&#8230;</button>
@@ -860,19 +911,23 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
 <section class="tab" id="tab-queue">
   <div class="panel">
     <h3 style="margin-top:0">Bulk upload</h3>
-    <p class="muted" style="margin-top:0">Upload a structured JSON file of raw datablocks and flashcards. Each item runs through AI formatting and auto-splitting, then waits here for inspection, overflow resolution and approval. See <span style="font-family:var(--mono)">samples/bulk-upload-sample.json</span>.</p>
-    <div class="row">
-      <input type="file" id="bulk-file" accept="application/json,.json" class="grow">
-      <button id="bulk-run">Run AI pipeline</button>
+    <p class="muted" style="margin-top:0">Upload a JSON file of datablocks and flashcards. <b>Run AI pipeline</b> formats each item for the 200px screen; <b>Add as-is</b> trusts your JSON exactly (items that already carry <span style="font-family:var(--mono)">blocks</span> / <span style="font-family:var(--mono)">qblocks</span> skip AI automatically either way). Everything lands below for inspection and approval. See <span style="font-family:var(--mono)">samples/bulk-upload-sample.json</span>.</p>
+    <label>From a file</label>
+    <input type="file" id="bulk-file" accept="*/*">
+    <div class="row" style="margin-top:8px">
+      <button id="bulk-run">&#10022; Run AI pipeline</button>
+      <button id="bulk-run-raw">Add as-is (no AI)</button>
       <span class="muted" id="bulk-status"></span>
     </div>
-    <details style="margin-top:10px">
-      <summary class="muted">File picker not working? Paste the JSON instead (some in-app webviews block file choosers)</summary>
-      <textarea id="bulk-paste" placeholder='{"items":[...]}' style="min-height:110px; margin-top:8px"></textarea>
-      <div class="row" style="margin-top:8px">
-        <button id="bulk-run-paste">Run AI pipeline from pasted JSON</button>
-      </div>
-    </details>
+    <label>Or paste the JSON</label>
+    <p class="muted" style="margin:0 0 6px">Some in-app webviews block file choosers &#8212; pasting always works.</p>
+    <textarea id="bulk-paste" placeholder='{"items":[...]}' style="min-height:110px"></textarea>
+    <div class="row" style="margin-top:8px">
+      <button id="bulk-clip" class="small">Paste from clipboard</button>
+      <span class="grow"></span>
+      <button id="bulk-run-paste">&#10022; Run AI pipeline</button>
+      <button id="bulk-run-paste-raw">Add as-is (no AI)</button>
+    </div>
   </div>
   <div class="panel">
     <h3 style="margin-top:0">Review queue</h3>
@@ -1043,6 +1098,24 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
   </div>
 </div>
 
+<!-- universal import modal: file picker + paste, works in any webview -->
+<div class="modal-bg" id="imp-modal">
+  <div class="modal">
+    <h2 id="imp-title">Import JSON</h2>
+    <p class="muted" id="imp-desc"></p>
+    <label>Choose a file</label>
+    <input type="file" id="imp-file" accept="*/*">
+    <label>Or paste the JSON</label>
+    <textarea id="imp-paste" style="min-height:120px" placeholder='{ &#8230; }'></textarea>
+    <div class="row" style="margin-top:10px">
+      <button id="imp-clip" class="small">Paste from clipboard</button>
+      <span class="grow"></span>
+      <button id="imp-cancel" class="small">Cancel</button>
+      <button id="imp-go" class="primary small">Import</button>
+    </div>
+  </div>
+</div>
+
 <!-- command palette -->
 <div id="cmdk">
   <div class="cmdk-box">
@@ -1054,8 +1127,8 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
 
 <div id="toast"></div>
 <div id="measure"></div>
-<input type="file" id="file-db-import" accept=".json" style="display:none">
-<input type="file" id="file-item-import" accept=".json" style="display:none">
+<input type="file" id="file-db-import" accept="*/*" style="display:none">
+<input type="file" id="file-item-import" accept="*/*" style="display:none">
 
 <script>
 'use strict';
@@ -1931,6 +2004,8 @@ function renderLibrary(){
   var d = db(), q = ($('lib-search').value||'').toLowerCase().trim();
   var host = $('lib-list'); host.innerHTML = '';
   var shown = d.items.filter(function(it){
+    if (libFilter === 'db' && it.type !== 'db') return false;
+    if (libFilter === 'fc' && it.type !== 'fc') return false;
     if (!q) return true;
     var hay = [it.title, (it.tags||[]).join(' '), it.notes||'',
                (it.cats||[]).map(catPath).join(' ')].join(' ').toLowerCase();
@@ -1965,6 +2040,11 @@ function renderLibrary(){
     r.appendChild(edb); r.appendChild(exb); r.appendChild(dlb);
     host.appendChild(r);
   });
+  var nDb = 0, nFc = 0;
+  d.items.forEach(function(it){ if (it.type === 'fc') nFc++; else nDb++; });
+  $('libf-all').textContent = 'All · ' + d.items.length;
+  $('libf-db').textContent = 'Datablocks · ' + nDb;
+  $('libf-fc').textContent = 'Flashcards · ' + nFc;
 }
 
 function renderCats(){
@@ -2105,26 +2185,27 @@ function aiFormatEditor(){
 /* Upload JSON -> AI iterates each raw item -> review queue -> manual approve.
  * File format (samples/bulk-upload-sample.json):
  *   {"items":[{"title":"...","raw":"...","cats":["Calculus"],"tags":[],"notes":""}]} */
-function runBulk(){
+function runBulk(useAi){
   var f = $('bulk-file').files[0];
   if (!f){ toast('Choose a JSON file first (or use the paste option below)'); return; }
   var reader = new FileReader();
   reader.onload = function(){
     var spec;
     try { spec = JSON.parse(reader.result); } catch(e){ toast('Invalid JSON'); return; }
-    processBulk(spec);
+    processBulk(spec, useAi);
   };
   reader.readAsText(f);
 }
-function runBulkPaste(){
+function runBulkPaste(useAi){
   var txt = $('bulk-paste').value.trim();
   if (!txt){ toast('Paste the bulk JSON first'); return; }
   var spec;
   try { spec = JSON.parse(txt); } catch(e){ toast('Invalid JSON: ' + e.message); return; }
   $('bulk-paste').value = '';
-  processBulk(spec);
+  processBulk(spec, useAi);
 }
-function processBulk(spec){
+function processBulk(spec, useAi){
+    if (useAi === undefined) useAi = true;
     var items = spec.items || [];
     if (!items.length){ toast('No items in file'); return; }
     var d = db(), i = 0;
@@ -2135,14 +2216,44 @@ function processBulk(spec){
         saveState(); renderQueue(); return;
       }
       var raw = items[i];
-      var isCard = raw.q !== undefined && raw.a !== undefined;
+      var isCard = (raw.q !== undefined && raw.a !== undefined) ||
+                   (raw.qblocks !== undefined && raw.ablocks !== undefined) ||
+                   (Array.isArray(raw.variants) && raw.variants[0] &&
+                    raw.variants[0].qblocks !== undefined);
       var base = {
         id: uid('q'), title: raw.title || ('Imported ' + (i+1)),
         catNames: raw.cats || [], tags: raw.tags || [], notes: raw.notes || '',
         error: null
       };
+      var preformatted = raw.blocks !== undefined || raw.qblocks !== undefined ||
+        (Array.isArray(raw.variants) && raw.variants[0] &&
+         raw.variants[0].qblocks !== undefined);
+      if (raw.fontsz === 'S' || raw.fontsz === 'M' || raw.fontsz === 'L') base.fontsz = raw.fontsz;
       var work;
-      if (isCard){
+      if (!useAi || preformatted){
+        // As-is path: trust the JSON exactly; loose strings become single
+        // text blocks. Used by the 'Add as-is' buttons, and automatically
+        // whenever an item already carries block arrays.
+        if (isCard){
+          base.fc = true;
+          base.kind = raw.kind === 'question' ? 'question' : 'recall';
+          var pairs = [];
+          if (raw.q !== undefined || raw.qblocks !== undefined)
+            pairs.push({ q: raw.q, a: raw.a, qblocks: raw.qblocks, ablocks: raw.ablocks });
+          (Array.isArray(raw.variants) ? raw.variants : []).forEach(function(v){
+            if (v && (v.q !== undefined || v.qblocks !== undefined)) pairs.push(v);
+          });
+          if (!pairs.length) pairs.push({ q: raw.title, a: '' });
+          base.variants = pairs.map(function(p){
+            return { qblocks: asBlocks(p.qblocks, p.q), ablocks: asBlocks(p.ablocks, p.a) };
+          });
+          base.qblocks = base.variants[0].qblocks;
+          base.ablocks = base.variants[0].ablocks;
+        } else {
+          base.blocks = asBlocks(raw.blocks, raw.raw || raw.title || '');
+        }
+        work = Promise.resolve();
+      } else if (isCard){
         base.fc = true;
         base.kind = raw.kind === 'question' ? 'question' : 'recall';
         // Primary q/a plus any "variants": [{q,a}, ...] — each pair runs
@@ -2180,7 +2291,7 @@ function processBulk(spec){
         i++;
         $('bulk-status').textContent = 'Processing ' + i + '/' + items.length + '…';
         saveState(); renderQueue();
-        setTimeout(next, 300); // gentle rate limit
+        setTimeout(next, useAi ? 300 : 0); // AI path rate-limits; as-is streams
       });
     }
     next();
@@ -2195,12 +2306,14 @@ function renderQueue(){
   d.queue.forEach(function(q){
     var r = document.createElement('div'); r.className='item-row';
     r.innerHTML = '<div class="grow"><div class="t">' + esc(q.title) + '</div>' +
-      '<div class="path">' + q.blocks.length + ' block(s)' +
+      '<div class="path">' + (q.fc ? (((q.variants || []).length || 1) + ' variant(s)')
+                                   : (((q.blocks || []).length) + ' block(s)')) +
       (q.error ? ' · <span style="color:var(--danger)">' + esc(q.error) + '</span>' : '') + '</div></div>';
     var op = document.createElement('button'); op.className='small'; op.textContent='Open in editor';
     op.onclick = function(){
       ED = newEditBuffer(q.fc ? 'fc' : 'db');
       ED.title = q.title; ED.tags = q.tags; ED.notes = q.notes;
+      if (q.fontsz) ED.fontsz = q.fontsz;
       if (q.fc){
         ED.kind = q.kind || 'recall';
         ED.variants = q.variants ? deepCopy(q.variants)
@@ -2265,39 +2378,43 @@ function renderDbs(){
   });
   hdr.onchange = function(){ S.activeDb = hdr.value; saveState(); refreshAll(); };
 }
+function importDbText(text){
+  try {
+    var j = JSON.parse(text);
+    var d = j.database || j;               // accept raw or wrapped
+    if (!d.items) throw new Error('no items');
+    d.id = uid('db');
+    if (!d.settings) d.settings = defaultSettings();
+    if (!d.srs) d.srs = {};
+    if (!d.stats) d.stats = {log:[]};
+    if (!d.queue) d.queue = [];
+    if (!d.name) d.name = 'Imported ' + fmtDate(nowSec());
+    S.databases.push(d);
+    saveState(); renderDbs();
+    toast('Imported “' + d.name + '”');
+    return true;
+  } catch(e){ toast('Import failed: ' + e.message); return false; }
+}
 function importDbFile(file){
   var reader = new FileReader();
-  reader.onload = function(){
-    try {
-      var j = JSON.parse(reader.result);
-      var d = j.database || j;               // accept raw or wrapped
-      if (!d.items) throw new Error('no items');
-      d.id = uid('db');
-      if (!d.settings) d.settings = defaultSettings();
-      if (!d.srs) d.srs = {};
-      if (!d.stats) d.stats = {log:[]};
-      if (!d.queue) d.queue = [];
-      if (!d.name) d.name = 'Imported ' + fmtDate(nowSec());
-      S.databases.push(d);
-      saveState(); renderDbs();
-      toast('Imported “' + d.name + '”');
-    } catch(e){ toast('Import failed: ' + e.message); }
-  };
+  reader.onload = function(){ importDbText(reader.result); };
   reader.readAsText(file);
+}
+function importItemText(text){
+  try {
+    var j = JSON.parse(text);
+    var it = j.item || j;
+    if (!it.type || !it.title) throw new Error('not an item export');
+    it.id = uid(it.type);                  // fresh id, independent copy
+    db().items.push(it);
+    saveState(); renderLibrary();
+    toast('Imported item “' + it.title + '”');
+    return true;
+  } catch(e){ toast('Import failed: ' + e.message); return false; }
 }
 function importItemFile(file){
   var reader = new FileReader();
-  reader.onload = function(){
-    try {
-      var j = JSON.parse(reader.result);
-      var it = j.item || j;
-      if (!it.type || !it.title) throw new Error('not an item export');
-      it.id = uid(it.type);                  // fresh id, independent copy
-      db().items.push(it);
-      saveState(); renderLibrary();
-      toast('Imported item “' + it.title + '”');
-    } catch(e){ toast('Import failed: ' + e.message); }
-  };
+  reader.onload = function(){ importItemText(reader.result); };
   reader.readAsText(file);
 }
 
@@ -2723,6 +2840,49 @@ function cmdkKey(e){
   else if (k === 'Escape') { cmdkClose(); }
 }
 
+/* ===================== import + bulk helpers (additive) ===================
+ * Text-first import paths: every entry point that used to require the native
+ * file chooser (which some in-app webviews never open) also accepts pasted
+ * JSON. asBlocks() lets pre-formatted bulk JSON bypass the AI formatter. */
+var libFilter = 'all';
+
+function asBlocks(blocks, fallback){
+  if (Array.isArray(blocks) && blocks.length){
+    return blocks.map(function(b){
+      return { type: (b && (b.type === 'math' || b.type === 'svg')) ? b.type : 'text',
+               src: String(b && b.src != null ? b.src : ''),
+               color: (b && CONTENT_COLORS.indexOf(b.color) >= 0) ? b.color : 'black' };
+    });
+  }
+  return [{ type: 'text', src: String(fallback == null ? '' : fallback), color: 'black' }];
+}
+
+var impMode = 'item';
+function impOpen(mode){
+  impMode = mode;
+  $('imp-title').textContent = mode === 'db' ? 'Import a database' : 'Import an item';
+  $('imp-desc').textContent = mode === 'db'
+    ? 'A full database export (.mathref.json). It loads alongside your existing databases.'
+    : 'A single item export (.item.json). The copy gets a fresh id, fully independent of the original.';
+  $('imp-paste').value = '';
+  try { $('imp-file').value = ''; } catch (e) { }
+  $('imp-modal').classList.add('open');
+}
+function impClose(){ $('imp-modal').classList.remove('open'); }
+function impRun(text){
+  if (!text || !String(text).trim()){ toast('Choose a file or paste the JSON first'); return; }
+  var ok = impMode === 'db' ? importDbText(text) : importItemText(text);
+  if (ok) impClose();
+}
+function pasteClipboardInto(id){
+  if (navigator.clipboard && navigator.clipboard.readText){
+    navigator.clipboard.readText().then(function(t){
+      if (t){ $(id).value = t; toast('Pasted from clipboard'); }
+      else toast('Clipboard is empty');
+    }, function(){ toast('Clipboard blocked here — long-press the box and paste'); });
+  } else toast('Clipboard blocked here — long-press the box and paste');
+}
+
 /* ================================ shell ==================================== */
 function applyTheme(t){ document.documentElement.setAttribute('data-theme', t==='dark'?'dark':'light'); }
 function showTab(name){
@@ -2829,7 +2989,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // library
   $('lib-search').oninput = renderLibrary;
-  $('lib-import-item').onclick = function(){ $('file-item-import').click(); };
+  $('lib-import-item').onclick = function(){ impOpen('item'); };
   $('lib-org-export').onclick = function(){
     var d = db();
     var tags = {};
@@ -2866,8 +3026,11 @@ document.addEventListener('DOMContentLoaded', function(){
   };
 
   // queue
-  $('bulk-run').onclick = runBulk;
-  $('bulk-run-paste').onclick = runBulkPaste;
+  $('bulk-run').onclick = function(){ runBulk(true); };
+  $('bulk-run-raw').onclick = function(){ runBulk(false); };
+  $('bulk-run-paste').onclick = function(){ runBulkPaste(true); };
+  $('bulk-run-paste-raw').onclick = function(){ runBulkPaste(false); };
+  $('bulk-clip').onclick = function(){ pasteClipboardInto('bulk-paste'); };
 
   // databases
   $('db-create').onclick = function(){
@@ -2876,7 +3039,7 @@ document.addEventListener('DOMContentLoaded', function(){
     S.databases.push(newDb(n)); $('db-new-name').value='';
     saveState(); renderDbs();
   };
-  $('db-import').onclick = function(){ $('file-db-import').click(); };
+  $('db-import').onclick = function(){ impOpen('db'); };
   $('file-db-import').onchange = function(){ if (this.files[0]) importDbFile(this.files[0]); this.value=''; };
 
   // settings
@@ -2911,6 +3074,38 @@ document.addEventListener('DOMContentLoaded', function(){
     if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) { e.preventDefault(); cmdkOpen(); }
     else if (e.key === 'Escape' && $('cmdk').className === 'open') cmdkClose();
   });
+  // ---- library type filter ----
+  ['all', 'db', 'fc'].forEach(function(k){
+    $('libf-' + k).onclick = function(){
+      libFilter = k;
+      ['all', 'db', 'fc'].forEach(function(x){
+        $('libf-' + x).className = (x === k) ? 'active' : '';
+      });
+      renderLibrary();
+    };
+  });
+
+  // ---- universal import modal ----
+  $('imp-cancel').onclick = impClose;
+  $('imp-modal').onclick = function(e){ if (e.target === $('imp-modal')) impClose(); };
+  $('imp-clip').onclick = function(){ pasteClipboardInto('imp-paste'); };
+  $('imp-go').onclick = function(){ impRun($('imp-paste').value); };
+  $('imp-file').onchange = function(){
+    if (!this.files[0]) return;
+    var reader = new FileReader(), self = this;
+    reader.onload = function(){ impRun(reader.result); self.value = ''; };
+    reader.readAsText(this.files[0]);
+  };
+
+  // ---- flashcard page-actions popover (outside clicks close it, like symbols) ----
+  $('pgmenu-btn').onclick = function(e){
+    e.stopPropagation();
+    var g = this.parentNode;
+    var was = g.classList.contains('open');
+    document.querySelectorAll('.grp.open').forEach(function(x){ x.classList.remove('open'); });
+    if (!was) g.classList.add('open');
+  };
+
   var _showTab = showTab;
   showTab = function(name){
     _showTab(name);
