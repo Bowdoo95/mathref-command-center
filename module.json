@@ -1,0 +1,2743 @@
+{
+"items": [
+{
+"title": "Integers",
+"cats": ["MST124", "Numbers", "Integers"],
+"tags": ["MST124-U1", "integers", "numbers"],
+"notes": "MST124 Unit 1, page 13",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What are the integers?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The natural numbers,","color":"blue"},
+{"type":"text","src":"together with their","color":"blue"},
+{"type":"text","src":"negatives and zero.","color":"blue"},
+{"type":"math","src":"\dots, -2, -1, 0, 1, 2, \dots","color":"black"}
+]
+},
+{
+"title": "Rational numbers",
+"cats": ["MST124", "Numbers", "Rational Numbers"],
+"tags": ["MST124-U1", "rational-numbers", "numbers"],
+"notes": "MST124 Unit 1, page 14",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Define rational","color":"black"},
+{"type":"text","src":"numbers.","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Numbers that can be","color":"blue"},
+{"type":"text","src":"written as an integer","color":"blue"},
+{"type":"text","src":"divided by an integer.","color":"blue"},
+{"type":"math","src":"\frac{p}{q} \quad (q \neq 0)","color":"black"}
+]
+},
+{
+"title": "Irrational numbers",
+"cats": ["MST124", "Numbers", "Irrational Numbers"],
+"tags": ["MST124-U1", "irrational-numbers", "numbers"],
+"notes": "MST124 Unit 1, page 14",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Define irrational","color":"black"},
+{"type":"text","src":"numbers in terms","color":"black"},
+{"type":"text","src":"of decimals.","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Decimal numbers with","color":"blue"},
+{"type":"text","src":"an infinite number","color":"blue"},
+{"type":"text","src":"of digits that","color":"blue"},
+{"type":"text","src":"never repeat.","color":"blue"}
+]
+},
+{
+"title": "Decimals of rationals",
+"cats": ["MST124", "Numbers", "Decimals"],
+"tags": ["MST124-U1", "decimals", "rational-numbers"],
+"notes": "MST124 Unit 1, page 17",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is always true","color":"black"},
+{"type":"text","src":"about the decimal form","color":"black"},
+{"type":"text","src":"of a rational number?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"It is always either","color":"blue"},
+{"type":"text","src":"terminating or","color":"blue"},
+{"type":"text","src":"recurring.","color":"blue"}
+]
+},
+{
+"title": "BIDMAS rule order",
+"cats": ["MST124", "Numbers", "Arithmetic"],
+"tags": ["MST124-U1", "bidmas", "order-of-operations"],
+"notes": "MST124 Unit 1, page 22",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What does the order","color":"black"},
+{"type":"text","src":"of operations BIDMAS","color":"black"},
+{"type":"text","src":"stand for?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Brackets,","color":"blue"},
+{"type":"text","src":"Indices,","color":"blue"},
+{"type":"text","src":"Divisions /","color":"blue"},
+{"type":"text","src":"Multiplications,","color":"blue"},
+{"type":"text","src":"Additions /","color":"blue"},
+{"type":"text","src":"Subtractions.","color":"blue"}
+]
+},
+{
+"title": "BIDMAS same precedence",
+"cats": ["MST124", "Numbers", "Arithmetic"],
+"tags": ["MST124-U1", "bidmas", "order-of-operations"],
+"notes": "MST124 Unit 1, page 23",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you evaluate","color":"black"},
+{"type":"text","src":"operations with same","color":"black"},
+{"type":"text","src":"precedence in BIDMAS?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Work from left","color":"blue"},
+{"type":"text","src":"to right.","color":"blue"}
+]
+},
+{
+"title": "Rounding up condition",
+"cats": ["MST124", "Numbers", "Rounding"],
+"tags": ["MST124-U1", "rounding", "decimals"],
+"notes": "MST124 Unit 1, page 29",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"When rounding a","color":"black"},
+{"type":"text","src":"number, what is the","color":"black"},
+{"type":"text","src":"condition to round up?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Round up if the digit","color":"blue"},
+{"type":"text","src":"immediately after","color":"blue"},
+{"type":"text","src":"where you want to","color":"blue"},
+{"type":"text","src":"round is 5 or more.","color":"blue"}
+]
+},
+{
+"title": "First significant figure",
+"cats": ["MST124", "Numbers", "Rounding"],
+"tags": ["MST124-U1", "rounding", "significant-figures"],
+"notes": "MST124 Unit 1, page 28",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How is the first","color":"black"},
+{"type":"text","src":"significant figure","color":"black"},
+{"type":"text","src":"of a number defined?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The first non-zero","color":"blue"},
+{"type":"text","src":"digit from the left.","color":"blue"}
+]
+},
+{
+"title": "Avoiding rounding errors",
+"cats": ["MST124", "Numbers", "Rounding"],
+"tags": ["MST124-U1", "rounding", "calculation-errors"],
+"notes": "MST124 Unit 1, page 37",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you avoid","color":"black"},
+{"type":"text","src":"rounding errors in","color":"black"},
+{"type":"text","src":"multi-stage sums?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Use full-precision","color":"red"},
+{"type":"text","src":"intermediate values","color":"red"},
+{"type":"text","src":"on your calculator","color":"red"},
+{"type":"text","src":"at every stage.","color":"red"}
+]
+},
+{
+"title": "Adding a negative",
+"cats": ["MST124", "Numbers", "Negative Numbers"],
+"tags": ["MST124-U1", "negative-numbers", "arithmetic"],
+"notes": "MST124 Unit 1, page 40",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is adding a","color":"black"},
+{"type":"text","src":"negative number","color":"black"},
+{"type":"text","src":"equivalent to?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Subtracting the","color":"blue"},
+{"type":"text","src":"corresponding positive","color":"blue"},
+{"type":"text","src":"number.","color":"blue"},
+{"type":"math","src":"a + (-b) = a - b","color":"black"}
+]
+},
+{
+"title": "Subtracting a negative",
+"cats": ["MST124", "Numbers", "Negative Numbers"],
+"tags": ["MST124-U1", "negative-numbers", "arithmetic"],
+"notes": "MST124 Unit 1, page 40",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is subtracting a","color":"black"},
+{"type":"text","src":"negative number","color":"black"},
+{"type":"text","src":"equivalent to?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Adding the","color":"blue"},
+{"type":"text","src":"corresponding positive","color":"blue"},
+{"type":"text","src":"number.","color":"blue"},
+{"type":"math","src":"a - (-b) = a + b","color":"black"}
+]
+},
+{
+"title": "Product of two negatives",
+"cats": ["MST124", "Numbers", "Negative Numbers"],
+"tags": ["MST124-U1", "negative-numbers", "multiplication"],
+"notes": "MST124 Unit 1, page 41",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What sign is the","color":"black"},
+{"type":"text","src":"result when multiplying","color":"black"},
+{"type":"text","src":"two negative numbers?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The answer is","color":"blue"},
+{"type":"text","src":"positive.","color":"blue"},
+{"type":"math","src":"(-a) \times (-b) = ab","color":"black"}
+]
+},
+{
+"title": "Product of different signs",
+"cats": ["MST124", "Numbers", "Negative Numbers"],
+"tags": ["MST124-U1", "negative-numbers", "multiplication"],
+"notes": "MST124 Unit 1, page 41",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What sign is the","color":"black"},
+{"type":"text","src":"result when multiplying","color":"black"},
+{"type":"text","src":"numbers of different signs?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The answer is","color":"blue"},
+{"type":"text","src":"negative.","color":"blue"},
+{"type":"math","src":"a \times (-b) = -ab","color":"black"}
+]
+},
+{
+"title": "The negative of a number",
+"cats": ["MST124", "Numbers", "Negative Numbers"],
+"tags": ["MST124-U1", "negative-numbers", "notation"],
+"notes": "MST124 Unit 1, page 43",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you write","color":"black"},
+{"type":"text","src":"the negative of a","color":"black"},
+{"type":"text","src":"number x?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Put a minus sign","color":"blue"},
+{"type":"text","src":"in front of the","color":"blue"},
+{"type":"text","src":"number to change","color":"blue"},
+{"type":"text","src":"its sign.","color":"blue"},
+{"type":"math","src":"-x","color":"black"}
+]
+},
+{
+"title": "Multiple of an integer",
+"cats": ["MST124", "Integers", "Factors and Multiples"],
+"tags": ["MST124-U1", "multiples", "divisibility"],
+"notes": "MST124 Unit 1, page 50",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"When is an integer b","color":"black"},
+{"type":"text","src":"a multiple of an","color":"black"},
+{"type":"text","src":"integer a?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"When a divides","color":"blue"},
+{"type":"text","src":"exactly into b","color":"blue"},
+{"type":"text","src":"with no remainder.","color":"blue"}
+]
+},
+{
+"title": "Prime number definition",
+"cats": ["MST124", "Integers", "Prime Numbers"],
+"tags": ["MST124-U1", "prime-numbers", "definition"],
+"notes": "MST124 Unit 1, page 54",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Define a prime","color":"black"},
+{"type":"text","src":"number.","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"An integer greater","color":"blue"},
+{"type":"text","src":"than 1 whose only","color":"blue"},
+{"type":"text","src":"factors are 1","color":"blue"},
+{"type":"text","src":"and itself.","color":"blue"}
+]
+},
+{
+"title": "Fundamental theorem of arithmetic",
+"cats": ["MST124", "Integers", "Prime Numbers"],
+"tags": ["MST124-U1", "prime-factorisation", "theorem"],
+"notes": "MST124 Unit 1, page 56",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"State the Fundamental","color":"black"},
+{"type":"text","src":"Theorem of Arithmetic.","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Every integer > 1","color":"blue"},
+{"type":"text","src":"can be written as a","color":"blue"},
+{"type":"text","src":"product of prime factors","color":"blue"},
+{"type":"text","src":"in just one way","color":"blue"},
+{"type":"text","src":"(ignoring order).","color":"blue"}
+]
+},
+{
+"title": "Lowest common multiple (LCM)",
+"cats": ["MST124", "Integers", "Factors and Multiples"],
+"tags": ["MST124-U1", "lcm", "multiples"],
+"notes": "MST124 Unit 1, page 60",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Define the lowest","color":"black"},
+{"type":"text","src":"common multiple (LCM)","color":"black"},
+{"type":"text","src":"of given integers.","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The smallest positive","color":"blue"},
+{"type":"text","src":"integer that is a","color":"blue"},
+{"type":"text","src":"multiple of all the","color":"blue"},
+{"type":"text","src":"given integers.","color":"blue"}
+]
+},
+{
+"title": "Highest common factor (HCF)",
+"cats": ["MST124", "Integers", "Factors and Multiples"],
+"tags": ["MST124-U1", "hcf", "factors"],
+"notes": "MST124 Unit 1, page 60",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Define the highest","color":"black"},
+{"type":"text","src":"common factor (HCF)","color":"black"},
+{"type":"text","src":"of given integers.","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The largest positive","color":"blue"},
+{"type":"text","src":"integer that is a","color":"blue"},
+{"type":"text","src":"factor of all the","color":"blue"},
+{"type":"text","src":"given integers.","color":"blue"}
+]
+},
+{
+"title": "Definition of an expression",
+"cats": ["MST124", "Algebraic Expressions", "Terminology"],
+"tags": ["MST124-U1", "algebra", "expressions"],
+"notes": "MST124 Unit 1, page 65",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is an algebraic","color":"black"},
+{"type":"text","src":"expression?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"An arrangement of","color":"blue"},
+{"type":"text","src":"letters, numbers and","color":"blue"},
+{"type":"text","src":"symbols containing","color":"blue"},
+{"type":"text","src":"no equals sign.","color":"blue"}
+]
+},
+{
+"title": "Definition of an equation",
+"cats": ["MST124", "Algebraic Expressions", "Terminology"],
+"tags": ["MST124-U1", "algebra", "equations"],
+"notes": "MST124 Unit 1, page 69",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is an algebraic","color":"black"},
+{"type":"text","src":"equation?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Made up of two","color":"blue"},
+{"type":"text","src":"expressions with an","color":"blue"},
+{"type":"text","src":"equals sign","color":"blue"},
+{"type":"text","src":"between them.","color":"blue"}
+]
+},
+{
+"title": "Simplifying an expression",
+"cats": ["MST124", "Algebraic Expressions", "Manipulation"],
+"tags": ["MST124-U1", "simplification", "like-terms"],
+"notes": "MST124 Unit 1, page 73",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What does simplifying","color":"black"},
+{"type":"text","src":"an expression mean?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Rewriting it as a","color":"blue"},
+{"type":"text","src":"simpler expression,","color":"blue"},
+{"type":"text","src":"often by collecting","color":"blue"},
+{"type":"text","src":"like terms.","color":"blue"}
+]
+},
+{
+"title": "Multiplying out brackets",
+"cats": ["MST124", "Algebraic Expressions", "Manipulation"],
+"tags": ["MST124-U1", "expansion", "brackets"],
+"notes": "MST124 Unit 1, page 84",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you multiply","color":"black"},
+{"type":"text","src":"out brackets?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Multiply each term","color":"blue"},
+{"type":"text","src":"inside the brackets","color":"blue"},
+{"type":"text","src":"by the multiplier.","color":"blue"},
+{"type":"math","src":"a(x + y) = ax + ay","color":"black"}
+]
+},
+{
+"title": "Minus sign before brackets",
+"cats": ["MST124", "Algebraic Expressions", "Manipulation"],
+"tags": ["MST124-U1", "brackets", "negative-signs"],
+"notes": "MST124 Unit 1, page 86",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What happens when you","color":"black"},
+{"type":"text","src":"remove brackets with a","color":"black"},
+{"type":"text","src":"minus sign in front?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Change the sign of","color":"red"},
+{"type":"text","src":"each term inside the","color":"red"},
+{"type":"text","src":"brackets when","color":"red"},
+{"type":"text","src":"removing them.","color":"red"},
+{"type":"math","src":"-(x - y) = -x + y","color":"black"}
+]
+},
+{
+"title": "Difference of two squares",
+"cats": ["MST124", "Algebraic Expressions", "Identities"],
+"tags": ["MST124-U1", "identities", "difference-of-squares"],
+"notes": "MST124 Unit 1, page 98",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"State the identity for","color":"black"},
+{"type":"text","src":"the difference of","color":"black"},
+{"type":"text","src":"two squares.","color":"black"}
+],
+"ablocks": [
+{"type":"math","src":"(A+B)(A-B)","color":"green"},
+{"type":"math","src":"= A^2 - B^2","color":"green"}
+]
+},
+{
+"title": "Squaring brackets (sum)",
+"cats": ["MST124", "Algebraic Expressions", "Identities"],
+"tags": ["MST124-U1", "identities", "perfect-square"],
+"notes": "MST124 Unit 1, page 100",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Expand the square","color":"black"},
+{"type":"text","src":"of a sum:","color":"black"},
+{"type":"math","src":"(A + B)^2","color":"black"}
+]
+},
+"ablocks": [
+{"type":"math","src":"A^2 + 2AB + B^2","color":"green"}
+]
+},
+{
+"title": "Squaring brackets (diff)",
+"cats": ["MST124", "Algebraic Expressions", "Identities"],
+"tags": ["MST124-U1", "identities", "perfect-square"],
+"notes": "MST124 Unit 1, page 100",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Expand the square","color":"black"},
+{"type":"text","src":"of a difference:","color":"black"},
+{"type":"math","src":"(A - B)^2","color":"black"}
+]
+},
+"ablocks": [
+{"type":"math","src":"A^2 - 2AB + B^2","color":"green"}
+]
+},
+{
+"title": "Factorising an expression",
+"cats": ["MST124", "Algebraic Expressions", "Manipulation"],
+"tags": ["MST124-U1", "factorising", "algebra"],
+"notes": "MST124 Unit 1, page 111",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What does factorising","color":"black"},
+{"type":"text","src":"an expression mean?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Writing it as the","color":"blue"},
+{"type":"text","src":"product of two or","color":"blue"},
+{"type":"text","src":"more expressions.","color":"blue"}
+]
+},
+{
+"title": "Equivalent algebraic fractions",
+"cats": ["MST124", "Algebraic Fractions", "Manipulation"],
+"tags": ["MST124-U1", "algebraic-fractions", "equivalence"],
+"notes": "MST124 Unit 1, page 122",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you obtain an","color":"black"},
+{"type":"text","src":"equivalent algebraic","color":"black"},
+{"type":"text","src":"fraction?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Multiply or divide","color":"blue"},
+{"type":"text","src":"both numerator and","color":"blue"},
+{"type":"text","src":"denominator by the","color":"blue"},
+{"type":"text","src":"same non-zero expression.","color":"blue"}
+]
+},
+{
+"title": "Dividing multi-term expression",
+"cats": ["MST124", "Algebraic Fractions", "Division"],
+"tags": ["MST124-U1", "algebraic-fractions", "division"],
+"notes": "MST124 Unit 1, page 89",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you divide an","color":"black"},
+{"type":"text","src":"expression with several","color":"black"},
+{"type":"text","src":"terms by a single term?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Divide each term","color":"blue"},
+{"type":"text","src":"of the expression","color":"blue"},
+{"type":"text","src":"by the divisor.","color":"blue"},
+{"type":"math","src":"\frac{a+b}{c} = \frac{a}{c} + \frac{b}{c}","color":"black"}
+]
+},
+{
+"title": "Dividing by a fraction",
+"cats": ["MST124", "Algebraic Fractions", "Division"],
+"tags": ["MST124-U1", "algebraic-fractions", "reciprocal"],
+"notes": "MST124 Unit 1, page 139",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you divide by","color":"black"},
+{"type":"text","src":"an algebraic fraction?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Multiply by its","color":"blue"},
+{"type":"text","src":"reciprocal (turn","color":"blue"},
+{"type":"text","src":"upside down and multiply).","color":"blue"},
+{"type":"math","src":"\div \frac{a}{b} = \times \frac{b}{a}","color":"black"}
+]
+},
+{
+"title": "Real square roots count",
+"cats": ["MST124", "Roots and Powers", "Roots"],
+"tags": ["MST124-U1", "roots", "real-numbers"],
+"notes": "MST124 Unit 1, page 145",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How many real square","color":"black"},
+{"type":"text","src":"roots does a positive","color":"black"},
+{"type":"text","src":"number have?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Two: a positive one","color":"blue"},
+{"type":"text","src":"and a negative one.","color":"blue"}
+]
+},
+{
+"title": "Square root symbol meaning",
+"cats": ["MST124", "Roots and Powers", "Roots"],
+"tags": ["MST124-U1", "roots", "notation"],
+"notes": "MST124 Unit 1, page 147",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What does the symbol","color":"black"},
+{"type":"math","src":"\sqrt{x}","color":"black"},
+{"type":"text","src":"strictly denote?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"The positive square","color":"blue"},
+{"type":"text","src":"root of a positive","color":"blue"},
+{"type":"text","src":"real number (or zero).","color":"blue"}
+]
+},
+{
+"title": "Definition of a surd",
+"cats": ["MST124", "Roots and Powers", "Surds"],
+"tags": ["MST124-U1", "surds", "irrational-numbers"],
+"notes": "MST124 Unit 1, page 150",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is a surd?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"A numerical expression","color":"blue"},
+{"type":"text","src":"containing one or more","color":"blue"},
+{"type":"text","src":"irrational roots","color":"blue"},
+{"type":"text","src":"of numbers.","color":"blue"},
+{"type":"math","src":"\text{e.g. } \sqrt{2}, \quad 3+\sqrt{5}","color":"black"}
+]
+},
+{
+"title": "Square root of a product",
+"cats": ["MST124", "Roots and Powers", "Surds"],
+"tags": ["MST124-U1", "roots", "surd-laws"],
+"notes": "MST124 Unit 1, page 154",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"Simplify the square","color":"black"},
+{"type":"text","src":"root of a product:","color":"black"},
+{"type":"math","src":"\sqrt{ab}","color":"black"}
+]
+},
+"ablocks": [
+{"type":"math","src":"\sqrt{a} \sqrt{b}","color":"green"},
+{"type":"text","src":"(for positive a, b)","color":"amber"}
+]
+},
+{
+"title": "Rationalising a denominator",
+"cats": ["MST124", "Roots and Powers", "Surds"],
+"tags": ["MST124-U1", "rationalising", "surds"],
+"notes": "MST124 Unit 1, page 159",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What does rationalising","color":"black"},
+{"type":"text","src":"a denominator mean?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Multiplying top and","color":"blue"},
+{"type":"text","src":"bottom of a fraction","color":"blue"},
+{"type":"text","src":"to remove irrational","color":"blue"},
+{"type":"text","src":"roots from denominator.","color":"blue"}
+]
+},
+{
+"title": "Rationalise surd sum",
+"cats": ["MST124", "Roots and Powers", "Surds"],
+"tags": ["MST124-U1", "rationalising", "conjugate"],
+"notes": "MST124 Unit 1, page 160",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"How do you rationalise","color":"black"},
+{"type":"text","src":"a denominator with a","color":"black"},
+{"type":"text","src":"sum of surd terms?","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"Multiply top and","color":"blue"},
+{"type":"text","src":"bottom by the conjugate","color":"blue"},
+{"type":"text","src":"of the expression in","color":"blue"},
+{"type":"text","src":"the denominator.","color":"blue"}
+]
+},
+{
+"title": "Multiplying same base powers",
+"cats": ["MST124", "Roots and Powers", "Indices"],
+"tags": ["MST124-U1", "indices", "power-laws"],
+"notes": "MST124 Unit 1, page 168",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"State the index law","color":"black"},
+{"type":"text","src":"for multiplying powers","color":"black"},
+{"type":"text","src":"with the same base.","color":"black"}
+],
+"ablocks": [
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"green"}
+]
+},
+{
+"title": "Negative index law",
+"cats": ["MST124", "Roots and Powers", "Indices"],
+"tags": ["MST124-U1", "indices", "negative-powers"],
+"notes": "MST124 Unit 1, page 172",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"State the index law","color":"black"},
+{"type":"text","src":"for a negative power:","color":"black"},
+{"type":"math","src":"a^{-n}","color":"black"}
+]
+},
+"ablocks": [
+{"type":"math","src":"\frac{1}{a^n}","color":"green"},
+{"type":"text","src":"(where a is non-zero)","color":"amber"}
+]
+},
+{
+"title": "Zero index law",
+"cats": ["MST124", "Roots and Powers", "Indices"],
+"tags": ["MST124-U1", "indices", "zero-power"],
+"notes": "MST124 Unit 1, page 172",
+"kind": "recall",
+"fontsz": "L",
+"qblocks": [
+{"type":"text","src":"What is the value of","color":"black"},
+{"type":"text","src":"any non-zero number","color":"black"},
+{"type":"text","src":"raised to power 0?","color":"black"}
+],
+"ablocks": [
+{"type":"math","src":"a^0 = 1","color":"green"},
+{"type":"text","src":"(where a is non-zero)","color":"amber"}
+]
+},
+{
+"title": "Rounding in calculation",
+"cats": ["MST124", "Numbers", "Rounding"],
+"tags": ["MST124-U1", "rounding", "significant-figures", "circles"],
+"notes": "MST124 Unit 1, page 36",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 77.2 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 2 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 77.2","color":"black"},
+{"type":"math","src":"77.2 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{77.2}{2\pi} = 12.2867\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 12.3 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"in area formula:","color":"purple"},
+{"type":"math","src":"A = \pi (12.2867\dots)^2","color":"black"},
+{"type":"math","src":"A = 474.268\dots","color":"black"},
+{"type":"text","src":"5) Round A to 2 s.f.:","color":"black"},
+{"type":"math","src":"r = 12.3 \text{ cm}, \quad A = 470 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 45.8 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 2 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 45.8","color":"black"},
+{"type":"math","src":"45.8 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{45.8}{2\pi} = 7.28929\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 7.29 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (7.28929\dots)^2","color":"black"},
+{"type":"math","src":"A = 166.924\dots","color":"black"},
+{"type":"text","src":"5) Round A to 2 s.f.:","color":"black"},
+{"type":"math","src":"r = 7.29 \text{ cm}, \quad A = 170 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 112.5 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 3 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 112.5","color":"black"},
+{"type":"math","src":"112.5 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{112.5}{2\pi} = 17.9049\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 17.9 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (17.9049\dots)^2","color":"black"},
+{"type":"math","src":"A = 1007.13\dots","color":"black"},
+{"type":"text","src":"5) Round A to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 17.9 \text{ cm}, \quad A = 1010 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 31.4 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 2 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 31.4","color":"black"},
+{"type":"math","src":"31.4 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{31.4}{2\pi} = 4.99746\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 5.00 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (4.99746\dots)^2","color":"black"},
+{"type":"math","src":"A = 78.460\dots","color":"black"},
+{"type":"text","src":"5) Round A to 2 s.f.:","color":"black"},
+{"type":"math","src":"r = 5.00 \text{ cm}, \quad A = 78 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 94.0 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 3 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 94.0","color":"black"},
+{"type":"math","src":"94.0 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{94.0}{2\pi} = 14.9605\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 15.0 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (14.9605\dots)^2","color":"black"},
+{"type":"math","src":"A = 703.146\dots","color":"black"},
+{"type":"text","src":"5) Round A to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 15.0 \text{ cm}, \quad A = 703 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 58.6 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 2 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 58.6","color":"black"},
+{"type":"math","src":"58.6 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{58.6}{2\pi} = 9.32647\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 9.33 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (9.32647\dots)^2","color":"black"},
+{"type":"math","src":"A = 273.284\dots","color":"black"},
+{"type":"text","src":"5) Round A to 2 s.f.:","color":"black"},
+{"type":"math","src":"r = 9.33 \text{ cm}, \quad A = 270 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 150.0 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 4 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 3 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 150.0","color":"black"},
+{"type":"math","src":"150.0 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{150.0}{2\pi} = 23.8732\dots","color":"black"},
+{"type":"text","src":"3) Round r to 4 s.f.:","color":"black"},
+{"type":"math","src":"r = 23.87 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (23.8732\dots)^2","color":"black"},
+{"type":"math","src":"A = 1790.49\dots","color":"black"},
+{"type":"text","src":"5) Round A to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 23.87 \text{ cm}, \quad A = 1790 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 62.8 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 2 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 62.8","color":"black"},
+{"type":"math","src":"62.8 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{62.8}{2\pi} = 9.99493\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 9.99 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (9.99493\dots)^2","color":"black"},
+{"type":"math","src":"A = 313.840\dots","color":"black"},
+{"type":"text","src":"5) Round A to 2 s.f.:","color":"black"},
+{"type":"math","src":"r = 9.99 \text{ cm}, \quad A = 310 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 85.0 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 3 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 85.0","color":"black"},
+{"type":"math","src":"85.0 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{85.0}{2\pi} = 13.5281\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 13.5 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (13.5281\dots)^2","color":"black"},
+{"type":"math","src":"A = 574.954\dots","color":"black"},
+{"type":"text","src":"5) Round A to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 13.5 \text{ cm}, \quad A = 575 \text{ cm}^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"A circle's circumference","color":"black"},
+{"type":"text","src":"is 19.5 cm. Find its","color":"black"},
+{"type":"text","src":"radius r to 3 s.f.,","color":"black"},
+{"type":"text","src":"then use unrounded r","color":"black"},
+{"type":"text","src":"to find area A to 2 s.f.","color":"black"},
+{"type":"math","src":"c = 2\pi r, \quad A = \pi r^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Substitute c = 19.5","color":"black"},
+{"type":"math","src":"19.5 = 2\pi r","color":"black"},
+{"type":"text","src":"2) Solve for r:","color":"black"},
+{"type":"math","src":"r = \frac{19.5}{2\pi} = 3.10352\dots","color":"black"},
+{"type":"text","src":"3) Round r to 3 s.f.:","color":"black"},
+{"type":"math","src":"r = 3.10 \text{ cm}","color":"green"},
+{"type":"text","src":"4) Use unrounded r","color":"purple"},
+{"type":"text","src":"to calculate area:","color":"purple"},
+{"type":"math","src":"A = \pi (3.10352\dots)^2","color":"black"},
+{"type":"math","src":"A = 30.259\dots","color":"black"},
+{"type":"text","src":"5) Round A to 2 s.f.:","color":"black"},
+{"type":"math","src":"r = 3.10 \text{ cm}, \quad A = 30 \text{ cm}^2","color":"green"}
+]
+}
+]
+},
+{
+"title": "HCF and LCM from primes",
+"cats": ["MST124", "Integers", "Factors and Multiples"],
+"tags": ["MST124-U1", "lcm", "hcf", "prime-factorisation"],
+"notes": "MST124 Unit 1, page 62",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 594 and 693 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"594 = 2 \times 3^3 \times 11","color":"black"},
+{"type":"math","src":"693 = 3^2 \times 7 \times 11","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2 \times 3^3 \times 7 \times 11","color":"black"},
+{"type":"math","src":"= 4158","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"3^2 \times 11 = 99","color":"black"},
+{"type":"math","src":"\text{LCM} = 4158, \quad \text{HCF} = 99","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 504 and 700 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"504 = 2^3 \times 3^2 \times 7","color":"black"},
+{"type":"math","src":"700 = 2^2 \times 5^2 \times 7","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2^3 \times 3^2 \times 5^2 \times 7","color":"black"},
+{"type":"math","src":"= 12600","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2^2 \times 7 = 28","color":"black"},
+{"type":"math","src":"\text{LCM} = 12600, \quad \text{HCF} = 28","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 360 and 450 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"360 = 2^3 \times 3^2 \times 5","color":"black"},
+{"type":"math","src":"450 = 2 \times 3^2 \times 5^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2^3 \times 3^2 \times 5^2","color":"black"},
+{"type":"math","src":"= 1800","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2 \times 3^2 \times 5 = 90","color":"black"},
+{"type":"math","src":"\text{LCM} = 1800, \quad \text{HCF} = 90","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 270 and 378 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"270 = 2 \times 3^3 \times 5","color":"black"},
+{"type":"math","src":"378 = 2 \times 3^3 \times 7","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2 \times 3^3 \times 5 \times 7","color":"black"},
+{"type":"math","src":"= 1890","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2 \times 3^3 = 54","color":"black"},
+{"type":"math","src":"\text{LCM} = 1890, \quad \text{HCF} = 54","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 198 and 242 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"198 = 2 \times 3^2 \times 11","color":"black"},
+{"type":"math","src":"242 = 2 \times 11^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2 \times 3^2 \times 11^2","color":"black"},
+{"type":"math","src":"= 2178","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2 \times 11 = 22","color":"black"},
+{"type":"math","src":"\text{LCM} = 2178, \quad \text{HCF} = 22","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 300 and 180 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"300 = 2^2 \times 3 \times 5^2","color":"black"},
+{"type":"math","src":"180 = 2^2 \times 3^2 \times 5","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2^2 \times 3^2 \times 5^2","color":"black"},
+{"type":"math","src":"= 900","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2^2 \times 3 \times 5 = 60","color":"black"},
+{"type":"math","src":"\text{LCM} = 900, \quad \text{HCF} = 60","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 168 and 180 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"168 = 2^3 \times 3 \times 7","color":"black"},
+{"type":"math","src":"180 = 2^2 \times 3^2 \times 5","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2^3 \times 3^2 \times 5 \times 7","color":"black"},
+{"type":"math","src":"= 2520","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2^2 \times 3 = 12","color":"black"},
+{"type":"math","src":"\text{LCM} = 2520, \quad \text{HCF} = 12","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 150 and 350 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"150 = 2 \times 3 \times 5^2","color":"black"},
+{"type":"math","src":"350 = 2 \times 5^2 \times 7","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2 \times 3 \times 5^2 \times 7","color":"black"},
+{"type":"math","src":"= 1050","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2 \times 5^2 = 50","color":"black"},
+{"type":"math","src":"\text{LCM} = 1050, \quad \text{HCF} = 50","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 495 and 585 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"495 = 3^2 \times 5 \times 11","color":"black"},
+{"type":"math","src":"585 = 3^2 \times 5 \times 13","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"3^2 \times 5 \times 11 \times 13","color":"black"},
+{"type":"math","src":"= 6435","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"3^2 \times 5 = 45","color":"black"},
+{"type":"math","src":"\text{LCM} = 6435, \quad \text{HCF} = 45","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Find the LCM and HCF","color":"black"},
+{"type":"text","src":"of 210 and 462 using","color":"black"},
+{"type":"text","src":"their prime forms:","color":"black"},
+{"type":"math","src":"210 = 2 \times 3 \times 5 \times 7","color":"black"},
+{"type":"math","src":"462 = 2 \times 3 \times 7 \times 11","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) For LCM, take the","color":"black"},
+{"type":"text","src":"highest power of each","color":"black"},
+{"type":"text","src":"prime present:","color":"black"},
+{"type":"math","src":"2 \times 3 \times 5 \times 7 \times 11","color":"black"},
+{"type":"math","src":"= 2310","color":"black"},
+{"type":"text","src":"2) For HCF, take the","color":"black"},
+{"type":"text","src":"lowest power of each","color":"black"},
+{"type":"text","src":"common prime:","color":"black"},
+{"type":"math","src":"2 \times 3 \times 7 = 42","color":"black"},
+{"type":"math","src":"\text{LCM} = 2310, \quad \text{HCF} = 42","color":"green"}
+]
+}
+]
+},
+{
+"title": "Multiplying bracket pairs",
+"cats": ["MST124", "Algebraic Expressions", "Manipulation"],
+"tags": ["MST124-U1", "brackets", "expansion", "simplification"],
+"notes": "MST124 Unit 1, page 93",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(x - xy + 3y)(x - 2y)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"x(x - 2y) - xy(x - 2y) %%SPLIT%% + 3y(x - 2y)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"x^2 - 2xy - x^2y + 2xy^2 %%SPLIT%% + 3xy - 6y^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(-2xy and +3xy):","color":"purple"},
+{"type":"math","src":"x^2 + xy - x^2y %%SPLIT%% + 2xy^2 - 6y^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(2a + ab - b)(a + 3b)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"2a(a + 3b) + ab(a + 3b) %%SPLIT%% - b(a + 3b)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"2a^2 + 6ab + a^2b + 3ab^2 %%SPLIT%% - ab - 3b^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(+6ab and -ab):","color":"purple"},
+{"type":"math","src":"2a^2 + 5ab + a^2b %%SPLIT%% + 3ab^2 - 3b^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(p + 2pq - 3q)(2p - q)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"p(2p - q) + 2pq(2p - q) %%SPLIT%% - 3q(2p - q)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"2p^2 - pq + 4p^2q - 2pq^2 %%SPLIT%% - 6pq + 3q^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(-pq and -6pq):","color":"purple"},
+{"type":"math","src":"2p^2 - 7pq + 4p^2q %%SPLIT%% - 2pq^2 + 3q^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(3u - uv - 2v)(u + 4v)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"3u(u + 4v) - uv(u + 4v) %%SPLIT%% - 2v(u + 4v)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"3u^2 + 12uv - u^2v - 4uv^2 %%SPLIT%% - 2uv - 8v^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(+12uv and -2uv):","color":"purple"},
+{"type":"math","src":"3u^2 + 10uv - u^2v %%SPLIT%% - 4uv^2 - 8v^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(m - 2mn + 4n)(2m + n)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"m(2m + n) - 2mn(2m + n) %%SPLIT%% + 4n(2m + n)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"2m^2 + mn - 4m^2n - 2mn^2 %%SPLIT%% + 8mn + 4n^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(+mn and +8mn):","color":"purple"},
+{"type":"math","src":"2m^2 + 9mn - 4m^2n %%SPLIT%% - 2mn^2 + 4n^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(x + 3xy - y)(3x - 2y)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"x(3x - 2y) + 3xy(3x - 2y) %%SPLIT%% - y(3x - 2y)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"3x^2 - 2xy + 9x^2y - 6xy^2 %%SPLIT%% - 3xy + 2y^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(-2xy and -3xy):","color":"purple"},
+{"type":"math","src":"3x^2 - 5xy + 9x^2y %%SPLIT%% - 6xy^2 + 2y^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(2r - st + 3s)(r - 3s)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"2r(r - 3s) - st(r - 3s) %%SPLIT%% + 3s(r - 3s)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"2r^2 - 6rs - rst + 3s^2t %%SPLIT%% + 3rs - 9s^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(-6rs and +3rs):","color":"purple"},
+{"type":"math","src":"2r^2 - 3rs - rst %%SPLIT%% + 3s^2t - 9s^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(a - 3ab - 2b)(2a + b)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"a(2a + b) - 3ab(2a + b) %%SPLIT%% - 2b(2a + b)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"2a^2 + ab - 6a^2b - 3ab^2 %%SPLIT%% - 4ab - 2b^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(+ab and -4ab):","color":"purple"},
+{"type":"math","src":"2a^2 - 3ab - 6a^2b %%SPLIT%% - 3ab^2 - 2b^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(4c + cd - 2d)(c - 2d)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"4c(c - 2d) + cd(c - 2d) %%SPLIT%% - 2d(c - 2d)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"4c^2 - 8cd + c^2d - 2cd^2 %%SPLIT%% - 2cd + 4d^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(-8cd and -2cd):","color":"purple"},
+{"type":"math","src":"4c^2 - 10cd + c^2d %%SPLIT%% - 2cd^2 + 4d^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(3x - 2xy + y)(2x + 3y)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply each term","color":"black"},
+{"type":"text","src":"by the second bracket:","color":"black"},
+{"type":"math","src":"3x(2x + 3y) - 2xy(2x + 3y) %%SPLIT%% + y(2x + 3y)","color":"black"},
+{"type":"text","src":"2) Expand each term:","color":"black"},
+{"type":"math","src":"6x^2 + 9xy - 4x^2y - 6xy^2 %%SPLIT%% + 2xy + 3y^2","color":"black"},
+{"type":"text","src":"3) Collect like terms","color":"purple"},
+{"type":"text","src":"(+9xy and +2xy):","color":"purple"},
+{"type":"math","src":"6x^2 + 11xy - 4x^2y %%SPLIT%% - 6xy^2 + 3y^2","color":"green"}
+]
+}
+]
+},
+{
+"title": "Multiplying squared brackets",
+"cats": ["MST124", "Algebraic Expressions", "Identities"],
+"tags": ["MST124-U1", "perfect-square", "expansion", "brackets"],
+"notes": "MST124 Unit 1, page 100",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(4h - 1)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A-B)^2 = A^2 - 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 4h and B = 1.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(4h)^2 = 16h^2","color":"black"},
+{"type":"text","src":"3) Minus twice product:","color":"black"},
+{"type":"math","src":"-2(4h)(1) = -8h","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"1^2 = 1","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"16h^2 - 8h + 1","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(3x + 5)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A+B)^2 = A^2 + 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 3x and B = 5.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(3x)^2 = 9x^2","color":"black"},
+{"type":"text","src":"3) Plus twice product:","color":"black"},
+{"type":"math","src":"+2(3x)(5) = +30x","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"5^2 = 25","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"9x^2 + 30x + 25","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(5y - 2)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A-B)^2 = A^2 - 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 5y and B = 2.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(5y)^2 = 25y^2","color":"black"},
+{"type":"text","src":"3) Minus twice product:","color":"black"},
+{"type":"math","src":"-2(5y)(2) = -20y","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"2^2 = 4","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"25y^2 - 20y + 4","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(2k + 7)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A+B)^2 = A^2 + 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 2k and B = 7.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(2k)^2 = 4k^2","color":"black"},
+{"type":"text","src":"3) Plus twice product:","color":"black"},
+{"type":"math","src":"+2(2k)(7) = +28k","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"7^2 = 49","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"4k^2 + 28k + 49","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(6m - 3)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A-B)^2 = A^2 - 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 6m and B = 3.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(6m)^2 = 36m^2","color":"black"},
+{"type":"text","src":"3) Minus twice product:","color":"black"},
+{"type":"math","src":"-2(6m)(3) = -36m","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"3^2 = 9","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"36m^2 - 36m + 9","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(7p + 2)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A+B)^2 = A^2 + 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 7p and B = 2.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(7p)^2 = 49p^2","color":"black"},
+{"type":"text","src":"3) Plus twice product:","color":"black"},
+{"type":"math","src":"+2(7p)(2) = +28p","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"2^2 = 4","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"49p^2 + 28p + 4","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(3a - 4b)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A-B)^2 = A^2 - 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 3a and B = 4b.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(3a)^2 = 9a^2","color":"black"},
+{"type":"text","src":"3) Minus twice product:","color":"black"},
+{"type":"math","src":"-2(3a)(4b) = -24ab","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"(4b)^2 = 16b^2","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"9a^2 - 24ab + 16b^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(5u + 3v)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A+B)^2 = A^2 + 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 5u and B = 3v.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(5u)^2 = 25u^2","color":"black"},
+{"type":"text","src":"3) Plus twice product:","color":"black"},
+{"type":"math","src":"+2(5u)(3v) = +30uv","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"(3v)^2 = 9v^2","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"25u^2 + 30uv + 9v^2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(8r - 1)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A-B)^2 = A^2 - 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 8r and B = 1.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(8r)^2 = 64r^2","color":"black"},
+{"type":"text","src":"3) Minus twice product:","color":"black"},
+{"type":"math","src":"-2(8r)(1) = -16r","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"1^2 = 1","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"64r^2 - 16r + 1","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Multiply out brackets","color":"black"},
+{"type":"text","src":"and simplify:","color":"black"},
+{"type":"math","src":"(4n + 5)^2","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Use the identity:","color":"black"},
+{"type":"math","src":"(A+B)^2 = A^2 + 2AB + B^2","color":"blue"},
+{"type":"text","src":"with A = 4n and B = 5.","color":"black"},
+{"type":"text","src":"2) Square first term:","color":"black"},
+{"type":"math","src":"(4n)^2 = 16n^2","color":"black"},
+{"type":"text","src":"3) Plus twice product:","color":"black"},
+{"type":"math","src":"+2(4n)(5) = +40n","color":"black"},
+{"type":"text","src":"4) Square second term:","color":"black"},
+{"type":"math","src":"5^2 = 25","color":"black"},
+{"type":"text","src":"5) Sum the terms:","color":"black"},
+{"type":"math","src":"16n^2 + 40n + 25","color":"green"}
+]
+}
+]
+},
+{
+"title": "Simplifying algebraic fractions",
+"cats": ["MST124", "Algebraic Fractions", "Manipulation"],
+"tags": ["MST124-U1", "algebraic-fractions", "cancelling", "factorising"],
+"notes": "MST124 Unit 1, page 129",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{x^2 + 2x}{5x^3 - 3x}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"x(x + 2)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"x(5x^2 - 3)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor x:","color":"purple"},
+{"type":"math","src":"\frac{x + 2}{5x^2 - 3}","color":"green"},
+{"type":"text","src":"(valid for x != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{3y^3 - 6y^2}{2y^2 + 4y}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"3y^2(y - 2)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"2y(y + 2)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor y:","color":"purple"},
+{"type":"math","src":"\frac{3y(y - 2)}{2(y + 2)}","color":"green"},
+{"type":"text","src":"(valid for y != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{4a^3 + 8a}{6a^4 - 2a^2}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"4a(a^2 + 2)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"2a^2(3a^2 - 1)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor 2a:","color":"purple"},
+{"type":"math","src":"\frac{2(a^2 + 2)}{a(3a^2 - 1)}","color":"green"},
+{"type":"text","src":"(valid for a != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{5t^2 - 10t}{3t^3 + t}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"5t(t - 2)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"t(3t^2 + 1)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor t:","color":"purple"},
+{"type":"math","src":"\frac{5(t - 2)}{3t^2 + 1}","color":"green"},
+{"type":"text","src":"(valid for t != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{6m^4 + 3m^2}{9m^3 - 3m}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"3m^2(2m^2 + 1)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"3m(3m^2 - 1)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor 3m:","color":"purple"},
+{"type":"math","src":"\frac{m(2m^2 + 1)}{3m^2 - 1}","color":"green"},
+{"type":"text","src":"(valid for m != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{u^3 - 4u^2}{2u^4 + 3u^2}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"u^2(u - 4)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"u^2(2u^2 + 3)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor u^2:","color":"purple"},
+{"type":"math","src":"\frac{u - 4}{2u^2 + 3}","color":"green"},
+{"type":"text","src":"(valid for u != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{8p^2 + 4p}{12p^3 - 8p}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"4p(2p + 1)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"4p(3p^2 - 2)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor 4p:","color":"purple"},
+{"type":"math","src":"\frac{2p + 1}{3p^2 - 2}","color":"green"},
+{"type":"text","src":"(valid for p != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{7k^3 - 14k^2}{21k^2 + 7k}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"7k^2(k - 2)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"7k(3k + 1)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor 7k:","color":"purple"},
+{"type":"math","src":"\frac{k(k - 2)}{3k + 1}","color":"green"},
+{"type":"text","src":"(valid for k != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{9n^2 + 3n}{6n^3 - 15n}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"3n(3n + 1)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"3n(2n^2 - 5)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor 3n:","color":"purple"},
+{"type":"math","src":"\frac{3n + 1}{2n^2 - 5}","color":"green"},
+{"type":"text","src":"(valid for n != 0)","color":"amber"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify the algebraic","color":"black"},
+{"type":"text","src":"fraction:","color":"black"},
+{"type":"math","src":"\frac{10w^3 + 5w^2}{15w^4 - 20w^2}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Factorise numerator:","color":"black"},
+{"type":"math","src":"5w^2(2w + 1)","color":"black"},
+{"type":"text","src":"2) Factorise denominator:","color":"black"},
+{"type":"math","src":"5w^2(3w^2 - 4)","color":"black"},
+{"type":"text","src":"3) Cancel the common","color":"purple"},
+{"type":"text","src":"factor 5w^2:","color":"purple"},
+{"type":"math","src":"\frac{2w + 1}{3w^2 - 4}","color":"green"},
+{"type":"text","src":"(valid for w != 0)","color":"amber"}
+]
+}
+]
+},
+{
+"title": "Adding algebraic fractions",
+"cats": ["MST124", "Algebraic Fractions", "Addition and Subtraction"],
+"tags": ["MST124-U1", "algebraic-fractions", "common-denominator"],
+"notes": "MST124 Unit 1, page 135",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{1}{ab} + \frac{2}{a} - \frac{3}{b}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for ab, a, b is ab.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{2}{a} = \frac{2b}{ab}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{3}{b} = \frac{3a}{ab}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{1 + 2b - 3a}{ab}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{3}{xy} - \frac{1}{x} + \frac{4}{y}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for xy, x, y is xy.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{1}{x} = \frac{y}{xy}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{4}{y} = \frac{4x}{xy}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{3 - y + 4x}{xy}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{5}{pq} + \frac{2}{p} + \frac{1}{q}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for pq, p, q is pq.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{2}{p} = \frac{2q}{pq}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{1}{q} = \frac{p}{pq}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{5 + 2q + p}{pq}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{2}{mn} - \frac{3}{m} - \frac{4}{n}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for mn, m, n is mn.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{3}{m} = \frac{3n}{mn}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{4}{n} = \frac{4m}{mn}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{2 - 3n - 4m}{mn}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{4}{uv} + \frac{3}{u} - \frac{2}{v}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for uv, u, v is uv.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{3}{u} = \frac{3v}{uv}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{2}{v} = \frac{2u}{uv}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{4 + 3v - 2u}{uv}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{7}{st} - \frac{2}{s} + \frac{5}{t}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for st, s, t is st.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{2}{s} = \frac{2t}{st}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{5}{t} = \frac{5s}{st}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{7 - 2t + 5s}{st}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{3}{ab} + \frac{5}{a} + \frac{2}{b}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for ab, a, b is ab.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{5}{a} = \frac{5b}{ab}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{2}{b} = \frac{2a}{ab}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{3 + 5b + 2a}{ab}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{6}{xy} - \frac{4}{x} - \frac{1}{y}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for xy, x, y is xy.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{4}{x} = \frac{4y}{xy}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{1}{y} = \frac{x}{xy}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{6 - 4y - x}{xy}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{2}{cd} + \frac{1}{c} - \frac{5}{d}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for cd, c, d is cd.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{1}{c} = \frac{d}{cd}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{5}{d} = \frac{5c}{cd}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{2 + d - 5c}{cd}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Write as a single","color":"black"},
+{"type":"text","src":"algebraic fraction:","color":"black"},
+{"type":"math","src":"\frac{5}{qr} - \frac{3}{q} + \frac{2}{r}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Common denominator","color":"black"},
+{"type":"text","src":"for qr, q, r is qr.","color":"black"},
+{"type":"text","src":"2) Scale second term:","color":"black"},
+{"type":"math","src":"\frac{3}{q} = \frac{3r}{qr}","color":"black"},
+{"type":"text","src":"3) Scale third term:","color":"black"},
+{"type":"math","src":"\frac{2}{r} = \frac{2q}{qr}","color":"black"},
+{"type":"text","src":"4) Combine numerators:","color":"black"},
+{"type":"math","src":"\frac{5 - 3r + 2q}{qr}","color":"green"}
+]
+}
+]
+},
+{
+"title": "Rationalising denominator",
+"cats": ["MST124", "Roots and Powers", "Surds"],
+"tags": ["MST124-U1", "rationalising", "surds", "conjugate"],
+"notes": "MST124 Unit 1, page 162",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{2}}{5 - 2\sqrt{3}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"5 + 2\sqrt{3}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{2}(5 + 2\sqrt{3}) %%SPLIT%% = 5\sqrt{2} + 2\sqrt{6}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"5^2 - (2\sqrt{3})^2 %%SPLIT%% = 25 - 12 = 13","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{5\sqrt{2} + 2\sqrt{6}}{13}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{3}}{4 + \sqrt{5}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"4 - \sqrt{5}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{3}(4 - \sqrt{5}) %%SPLIT%% = 4\sqrt{3} - \sqrt{15}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"4^2 - (\sqrt{5})^2 %%SPLIT%% = 16 - 5 = 11","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{4\sqrt{3} - \sqrt{15}}{11}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{5}}{3 - \sqrt{2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"3 + \sqrt{2}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{5}(3 + \sqrt{2}) %%SPLIT%% = 3\sqrt{5} + \sqrt{10}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"3^2 - (\sqrt{2})^2 %%SPLIT%% = 9 - 2 = 7","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{3\sqrt{5} + \sqrt{10}}{7}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{2}}{6 + \sqrt{3}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"6 - \sqrt{3}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{2}(6 - \sqrt{3}) %%SPLIT%% = 6\sqrt{2} - \sqrt{6}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"6^2 - (\sqrt{3})^2 %%SPLIT%% = 36 - 3 = 33","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{6\sqrt{2} - \sqrt{6}}{33}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{3}}{7 - 2\sqrt{2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"7 + 2\sqrt{2}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{3}(7 + 2\sqrt{2}) %%SPLIT%% = 7\sqrt{3} + 2\sqrt{6}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"7^2 - (2\sqrt{2})^2 %%SPLIT%% = 49 - 8 = 41","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{7\sqrt{3} + 2\sqrt{6}}{41}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{5}}{4 - 3\sqrt{2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"4 + 3\sqrt{2}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{5}(4 + 3\sqrt{2}) %%SPLIT%% = 4\sqrt{5} + 3\sqrt{10}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"4^2 - (3\sqrt{2})^2 %%SPLIT%% = 16 - 18 = -2","color":"black"},
+{"type":"text","src":"4) Adjust sign & write:","color":"black"},
+{"type":"math","src":"-\frac{4\sqrt{5} + 3\sqrt{10}}{2}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{7}}{5 + \sqrt{3}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"5 - \sqrt{3}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{7}(5 - \sqrt{3}) %%SPLIT%% = 5\sqrt{7} - \sqrt{21}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"5^2 - (\sqrt{3})^2 %%SPLIT%% = 25 - 3 = 22","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{5\sqrt{7} - \sqrt{21}}{22}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{2}}{3 + 2\sqrt{5}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"3 - 2\sqrt{5}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{2}(3 - 2\sqrt{5}) %%SPLIT%% = 3\sqrt{2} - 2\sqrt{10}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"3^2 - (2\sqrt{5})^2 %%SPLIT%% = 9 - 20 = -11","color":"black"},
+{"type":"text","src":"4) Adjust sign & write:","color":"black"},
+{"type":"math","src":"\frac{2\sqrt{10} - 3\sqrt{2}}{11}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{3}}{5 - 3\sqrt{2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"5 + 3\sqrt{2}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{3}(5 + 3\sqrt{2}) %%SPLIT%% = 5\sqrt{3} + 3\sqrt{6}","color":"black"},
+{"type":"text","src":"3) Expand denominator:","color":"black"},
+{"type":"math","src":"5^2 - (3\sqrt{2})^2 %%SPLIT%% = 25 - 18 = 7","color":"black"},
+{"type":"text","src":"4) Write full fraction:","color":"black"},
+{"type":"math","src":"\frac{5\sqrt{3} + 3\sqrt{6}}{7}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rationalise denominator","color":"black"},
+{"type":"text","src":"of the surd:","color":"black"},
+{"type":"math","src":"\frac{\sqrt{6}}{4 + \sqrt{2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply top/bottom","color":"black"},
+{"type":"text","src":"by conjugate:","color":"black"},
+{"type":"math","src":"4 - \sqrt{2}","color":"blue"},
+{"type":"text","src":"2) Expand numerator:","color":"black"},
+{"type":"math","src":"\sqrt{6}(4 - \sqrt{2}) %%SPLIT%% = 4\sqrt{6} - \sqrt{12}","color":"black"},
+{"type":"text","src":"3) Simplify surds:","color":"black"},
+{"type":"math","src":"4\sqrt{6} - 2\sqrt{3}","color":"black"},
+{"type":"text","src":"4) Expand denominator:","color":"black"},
+{"type":"math","src":"4^2 - (\sqrt{2})^2 = 14","color":"black"},
+{"type":"text","src":"5) Cancel factor of 2:","color":"black"},
+{"type":"math","src":"\frac{2\sqrt{6} - \sqrt{3}}{7}","color":"green"}
+]
+}
+]
+},
+{
+"title": "Simplifying indices expressions",
+"cats": ["MST124", "Roots and Powers", "Indices"],
+"tags": ["MST124-U1", "indices", "negative-powers", "simplification"],
+"notes": "MST124 Unit 1, page 176",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{b^{-3}}{b^2 c^{-4}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{c^4}{b^2 b^3}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of b:","color":"black"},
+{"type":"math","src":"b^2 b^3 = b^{2+3} = b^5","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{c^4}{b^5}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{x^{-5}}{x^3 y^{-2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{y^2}{x^3 x^5}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of x:","color":"black"},
+{"type":"math","src":"x^3 x^5 = x^{3+5} = x^8","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{y^2}{x^8}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{p^{-2}}{p^4 q^{-3}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{q^3}{p^4 p^2}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of p:","color":"black"},
+{"type":"math","src":"p^4 p^2 = p^{4+2} = p^6","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{q^3}{p^6}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{m^{-4}}{m^5 n^{-1}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{n^1}{m^5 m^4}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of m:","color":"black"},
+{"type":"math","src":"m^5 m^4 = m^{5+4} = m^9","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{n}{m^9}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{a^{-6}}{a^2 b^{-5}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{b^5}{a^2 a^6}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of a:","color":"black"},
+{"type":"math","src":"a^2 a^6 = a^{2+6} = a^8","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{b^5}{a^8}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{u^{-1}}{u^3 v^{-6}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{v^6}{u^3 u^1}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of u:","color":"black"},
+{"type":"math","src":"u^3 u^1 = u^{3+1} = u^4","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{v^6}{u^4}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{r^{-3}}{r^6 s^{-2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{s^2}{r^6 r^3}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of r:","color":"black"},
+{"type":"math","src":"r^6 r^3 = r^{6+3} = r^9","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{s^2}{r^9}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{c^{-4}}{c^3 d^{-3}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{d^3}{c^3 c^4}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of c:","color":"black"},
+{"type":"math","src":"c^3 c^4 = c^{3+4} = c^7","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{d^3}{c^7}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{t^{-2}}{t^5 w^{-4}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{w^4}{t^5 t^2}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of t:","color":"black"},
+{"type":"math","src":"t^5 t^2 = t^{5+2} = t^7","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{w^4}{t^7}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Simplify with positive","color":"black"},
+{"type":"text","src":"indices only:","color":"black"},
+{"type":"math","src":"\frac{k^{-7}}{k^1 m^{-2}}","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Move negative powers","color":"black"},
+{"type":"text","src":"across fraction line:","color":"black"},
+{"type":"math","src":"\frac{m^2}{k^1 k^7}","color":"black"},
+{"type":"text","src":"2) Use product rule:","color":"black"},
+{"type":"math","src":"a^m a^n = a^{m+n}","color":"blue"},
+{"type":"text","src":"3) Combine powers of k:","color":"black"},
+{"type":"math","src":"k^1 k^7 = k^{1+7} = k^8","color":"black"},
+{"type":"text","src":"4) Final simplified form:","color":"black"},
+{"type":"math","src":"\frac{m^2}{k^8}","color":"green"}
+]
+}
+]
+},
+{
+"title": "Linear equations with fractions",
+"cats": ["MST124", "Equations", "Linear Equations"],
+"tags": ["MST124-U1", "linear-equations", "fractions", "algebra"],
+"notes": "MST124 Unit 1, page 218",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{x}{5} - 4 = 3(4 - x)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 5 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"x - 20 = 15(4 - x)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"x - 20 = 60 - 15x","color":"black"},
+{"type":"text","src":"3) Add 15x to both sides:","color":"black"},
+{"type":"math","src":"16x - 20 = 60","color":"black"},
+{"type":"text","src":"4) Add 20 to both sides:","color":"black"},
+{"type":"math","src":"16x = 80","color":"black"},
+{"type":"text","src":"5) Divide by 16:","color":"black"},
+{"type":"math","src":"x = 5","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{x}{3} - 2 = 2(5 - x)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 3 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"x - 6 = 6(5 - x)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"x - 6 = 30 - 6x","color":"black"},
+{"type":"text","src":"3) Add 6x to both sides:","color":"black"},
+{"type":"math","src":"7x - 6 = 30","color":"black"},
+{"type":"text","src":"4) Add 6 to both sides:","color":"black"},
+{"type":"math","src":"7x = 36","color":"black"},
+{"type":"text","src":"5) Divide by 7:","color":"black"},
+{"type":"math","src":"x = \frac{36}{7}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{y}{4} - 1 = 2(3 - y)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 4 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"y - 4 = 8(3 - y)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"y - 4 = 24 - 8y","color":"black"},
+{"type":"text","src":"3) Add 8y to both sides:","color":"black"},
+{"type":"math","src":"9y - 4 = 24","color":"black"},
+{"type":"text","src":"4) Add 4 to both sides:","color":"black"},
+{"type":"math","src":"9y = 28","color":"black"},
+{"type":"text","src":"5) Divide by 9:","color":"black"},
+{"type":"math","src":"y = \frac{28}{9}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{z}{2} - 3 = 4(2 - z)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 2 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"z - 6 = 8(2 - z)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"z - 6 = 16 - 8z","color":"black"},
+{"type":"text","src":"3) Add 8z to both sides:","color":"black"},
+{"type":"math","src":"9z - 6 = 16","color":"black"},
+{"type":"text","src":"4) Add 6 to both sides:","color":"black"},
+{"type":"math","src":"9z = 22","color":"black"},
+{"type":"text","src":"5) Divide by 9:","color":"black"},
+{"type":"math","src":"z = \frac{22}{9}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{t}{6} - 2 = 3(1 - t)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 6 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"t - 12 = 18(1 - t)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"t - 12 = 18 - 18t","color":"black"},
+{"type":"text","src":"3) Add 18t to both sides:","color":"black"},
+{"type":"math","src":"19t - 12 = 18","color":"black"},
+{"type":"text","src":"4) Add 12 to both sides:","color":"black"},
+{"type":"math","src":"19t = 30","color":"black"},
+{"type":"text","src":"5) Divide by 19:","color":"black"},
+{"type":"math","src":"t = \frac{30}{19}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{u}{5} + 1 = 2(6 - u)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 5 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"u + 5 = 10(6 - u)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"u + 5 = 60 - 10u","color":"black"},
+{"type":"text","src":"3) Add 10u to both sides:","color":"black"},
+{"type":"math","src":"11u + 5 = 60","color":"black"},
+{"type":"text","src":"4) Subtract 5 from both:","color":"black"},
+{"type":"math","src":"11u = 55","color":"black"},
+{"type":"text","src":"5) Divide by 11:","color":"black"},
+{"type":"math","src":"u = 5","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{w}{3} + 4 = 4(3 - w)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 3 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"w + 12 = 12(3 - w)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"w + 12 = 36 - 12w","color":"black"},
+{"type":"text","src":"3) Add 12w to both sides:","color":"black"},
+{"type":"math","src":"13w + 12 = 36","color":"black"},
+{"type":"text","src":"4) Subtract 12 from both:","color":"black"},
+{"type":"math","src":"13w = 24","color":"black"},
+{"type":"text","src":"5) Divide by 13:","color":"black"},
+{"type":"math","src":"w = \frac{24}{13}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{a}{4} - 3 = 3(5 - a)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 4 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"a - 12 = 12(5 - a)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"a - 12 = 60 - 12a","color":"black"},
+{"type":"text","src":"3) Add 12a to both sides:","color":"black"},
+{"type":"math","src":"13a - 12 = 60","color":"black"},
+{"type":"text","src":"4) Add 12 to both sides:","color":"black"},
+{"type":"math","src":"13a = 72","color":"black"},
+{"type":"text","src":"5) Divide by 13:","color":"black"},
+{"type":"math","src":"a = \frac{72}{13}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{b}{2} + 5 = 3(4 - b)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 2 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"b + 10 = 6(4 - b)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"b + 10 = 24 - 6b","color":"black"},
+{"type":"text","src":"3) Add 6b to both sides:","color":"black"},
+{"type":"math","src":"7b + 10 = 24","color":"black"},
+{"type":"text","src":"4) Subtract 10 from both:","color":"black"},
+{"type":"math","src":"7b = 14","color":"black"},
+{"type":"text","src":"5) Divide by 7:","color":"black"},
+{"type":"math","src":"b = 2","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Solve linear equation:","color":"black"},
+{"type":"math","src":"\frac{c}{5} - 1 = 4(2 - c)","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Multiply by 5 to","color":"black"},
+{"type":"text","src":"clear the fraction:","color":"black"},
+{"type":"math","src":"c - 5 = 20(2 - c)","color":"black"},
+{"type":"text","src":"2) Expand brackets:","color":"black"},
+{"type":"math","src":"c - 5 = 40 - 20c","color":"black"},
+{"type":"text","src":"3) Add 20c to both sides:","color":"black"},
+{"type":"math","src":"21c - 5 = 40","color":"black"},
+{"type":"text","src":"4) Add 5 to both sides:","color":"black"},
+{"type":"math","src":"21c = 45","color":"black"},
+{"type":"text","src":"5) Divide & simplify:","color":"black"},
+{"type":"math","src":"c = \frac{15}{7}","color":"green"}
+]
+}
+]
+},
+{
+"title": "Making a variable the subject",
+"cats": ["MST124", "Equations", "Rearranging Equations"],
+"tags": ["MST124-U1", "rearranging-formulas", "subject-of-formula"],
+"notes": "MST124 Unit 1, page 233",
+"kind": "question",
+"fontsz": "L",
+"variants": [
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"h the subject:","color":"black"},
+{"type":"math","src":"t(h - 1) = 2t + hr","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"th - t = 2t + hr","color":"black"},
+{"type":"text","src":"2) Collect h terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"th - hr = 2t + t","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"th - hr = 3t","color":"black"},
+{"type":"text","src":"4) Factor out subject h:","color":"black"},
+{"type":"math","src":"h(t - r) = 3t","color":"purple"},
+{"type":"text","src":"5) Divide by (t - r):","color":"black"},
+{"type":"math","src":"h = \frac{3t}{t - r}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"x the subject:","color":"black"},
+{"type":"math","src":"p(x + 2) = 3p - xq","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"px + 2p = 3p - xq","color":"black"},
+{"type":"text","src":"2) Collect x terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"px + xq = 3p - 2p","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"px + xq = p","color":"black"},
+{"type":"text","src":"4) Factor out subject x:","color":"black"},
+{"type":"math","src":"x(p + q) = p","color":"purple"},
+{"type":"text","src":"5) Divide by (p + q):","color":"black"},
+{"type":"math","src":"x = \frac{p}{p + q}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"y the subject:","color":"black"},
+{"type":"math","src":"a(y - 3) = 4a + by","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"ay - 3a = 4a + by","color":"black"},
+{"type":"text","src":"2) Collect y terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"ay - by = 4a + 3a","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"ay - by = 7a","color":"black"},
+{"type":"text","src":"4) Factor out subject y:","color":"black"},
+{"type":"math","src":"y(a - b) = 7a","color":"purple"},
+{"type":"text","src":"5) Divide by (a - b):","color":"black"},
+{"type":"math","src":"y = \frac{7a}{a - b}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"m the subject:","color":"black"},
+{"type":"math","src":"k(2 - m) = 3k + mn","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"2k - km = 3k + mn","color":"black"},
+{"type":"text","src":"2) Collect m terms on","color":"black"},
+{"type":"text","src":"right, others on left:","color":"black"},
+{"type":"math","src":"2k - 3k = mn + km","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"-k = mn + km","color":"black"},
+{"type":"text","src":"4) Factor out subject m:","color":"black"},
+{"type":"math","src":"-k = m(n + k)","color":"purple"},
+{"type":"text","src":"5) Divide by (n + k):","color":"black"},
+{"type":"math","src":"m = -\frac{k}{n + k}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"u the subject:","color":"black"},
+{"type":"math","src":"v(u + 4) = 5v - uw","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"vu + 4v = 5v - uw","color":"black"},
+{"type":"text","src":"2) Collect u terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"vu + uw = 5v - 4v","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"vu + uw = v","color":"black"},
+{"type":"text","src":"4) Factor out subject u:","color":"black"},
+{"type":"math","src":"u(v + w) = v","color":"purple"},
+{"type":"text","src":"5) Divide by (v + w):","color":"black"},
+{"type":"math","src":"u = \frac{v}{v + w}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"w the subject:","color":"black"},
+{"type":"math","src":"c(w - 5) = 2c + dw","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"cw - 5c = 2c + dw","color":"black"},
+{"type":"text","src":"2) Collect w terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"cw - dw = 2c + 5c","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"cw - dw = 7c","color":"black"},
+{"type":"text","src":"4) Factor out subject w:","color":"black"},
+{"type":"math","src":"w(c - d) = 7c","color":"purple"},
+{"type":"text","src":"5) Divide by (c - d):","color":"black"},
+{"type":"math","src":"w = \frac{7c}{c - d}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"z the subject:","color":"black"},
+{"type":"math","src":"b(3 + z) = 6b - az","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"3b + bz = 6b - az","color":"black"},
+{"type":"text","src":"2) Collect z terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"bz + az = 6b - 3b","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"bz + az = 3b","color":"black"},
+{"type":"text","src":"4) Factor out subject z:","color":"black"},
+{"type":"math","src":"z(b + a) = 3b","color":"purple"},
+{"type":"text","src":"5) Divide by (b + a):","color":"black"},
+{"type":"math","src":"z = \frac{3b}{b + a}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"q the subject:","color":"black"},
+{"type":"math","src":"n(q - 2) = 5n + mq","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"nq - 2n = 5n + mq","color":"black"},
+{"type":"text","src":"2) Collect q terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"nq - mq = 5n + 2n","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"nq - mq = 7n","color":"black"},
+{"type":"text","src":"4) Factor out subject q:","color":"black"},
+{"type":"math","src":"q(n - m) = 7n","color":"purple"},
+{"type":"text","src":"5) Divide by (n - m):","color":"black"},
+{"type":"math","src":"q = \frac{7n}{n - m}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"r the subject:","color":"black"},
+{"type":"math","src":"x(r + 1) = 4x - ry","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"xr + x = 4x - ry","color":"black"},
+{"type":"text","src":"2) Collect r terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"xr + ry = 4x - x","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"xr + ry = 3x","color":"black"},
+{"type":"text","src":"4) Factor out subject r:","color":"black"},
+{"type":"math","src":"r(x + y) = 3x","color":"purple"},
+{"type":"text","src":"5) Divide by (x + y):","color":"black"},
+{"type":"math","src":"r = \frac{3x}{x + y}","color":"green"}
+]
+},
+{
+"qblocks": [
+{"type":"text","src":"Rearrange to make","color":"black"},
+{"type":"text","src":"s the subject:","color":"black"},
+{"type":"math","src":"d(s - 4) = 3d + es","color":"black"}
+],
+"ablocks": [
+{"type":"text","src":"1) Expand brackets:","color":"black"},
+{"type":"math","src":"ds - 4d = 3d + es","color":"black"},
+{"type":"text","src":"2) Collect s terms on","color":"black"},
+{"type":"text","src":"left, others on right:","color":"black"},
+{"type":"math","src":"ds - es = 3d + 4d","color":"black"},
+{"type":"text","src":"3) Combine like terms:","color":"black"},
+{"type":"math","src":"ds - es = 7d","color":"black"},
+{"type":"text","src":"4) Factor out subject s:","color":"black"},
+{"type":"math","src":"s(d - e) = 7d","color":"purple"},
+{"type":"text","src":"5) Divide by (d - e):","color":"black"},
+{"type":"math","src":"s = \frac{7d}{d - e}","color":"green"}
+]
+}
+]
+}
+]
+}
