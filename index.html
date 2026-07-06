@@ -2910,7 +2910,12 @@ function fetchJsonInto(urlId, targetId){
     $(targetId).value = t;
     toast('Fetched ' + Math.max(1, Math.round(t.length / 1024)) + ' KB — review below, then import');
   }).catch(function(e){
-    toast('Fetch failed: ' + (e.message || e) + ' — cross-origin URLs need CORS');
+    var msg = (e && e.message) || String(e);
+    var hint = msg === 'HTTP 404'
+      ? ' — not found: check branch (main vs master), path and filename case; private repos also give 404'
+      : /^HTTP \d/.test(msg) ? ''
+      : ' — network error or missing CORS on a cross-origin URL';
+    toast('Fetch failed: ' + msg + hint);
   });
 }
 
