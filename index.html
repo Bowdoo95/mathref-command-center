@@ -454,7 +454,7 @@ label:first-child { margin-top: 0; }
 .wcontent .cont-end::after { content: " ↴"; color: #aaa; font-weight: 400; font-size: .8em; }
 .wcontent .cont-start::before { content: "↳ "; color: #aaa; font-weight: 400; font-size: .8em; }
 .wcontent svg { display: block; margin: 0 auto; }
-.fs-S { font-size: 13px; } .fs-M { font-size: 16px; } .fs-L { font-size: 20px; }
+.fs-S { font-size: 13px; } .fs-M { font-size: 16px; } .fs-L { font-size: 20px; } .fs-XL { font-size: 24px; } .fs-XXL { font-size: 28px; }
 .wcontent.scrollmode { width: max-content; min-width: 200px; max-width: 400px; text-align: left; }
 .wcontent.scrollmode .seg { margin: 0; }
 
@@ -868,8 +868,10 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
       <label>Content font size</label>
       <select id="md-fontsz">
         <option value="S">Small</option>
-        <option value="M" selected>Medium</option>
-        <option value="L">Large</option>
+        <option value="M">Medium</option>
+        <option value="L" selected>Large</option>
+        <option value="XL">X-Large</option>
+        <option value="XXL">XX-Large</option>
       </select>
       <div id="md-linked"></div>
       <div id="md-srs" style="display:none"></div>
@@ -919,8 +921,13 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
       <button id="bulk-run-raw">Add as-is (no AI)</button>
       <span class="muted" id="bulk-status"></span>
     </div>
+    <label>Or fetch from a URL</label>
+    <div class="row">
+      <input type="url" id="bulk-url" class="grow" placeholder="module.json (a file next to this page) or https://&#8230;">
+      <button id="bulk-fetch" class="small">Fetch</button>
+    </div>
     <label>Or paste the JSON</label>
-    <p class="muted" style="margin:0 0 6px">Some in-app webviews block file choosers &#8212; pasting always works.</p>
+    <p class="muted" style="margin:0 0 6px">Some in-app webviews can't open file choosers &#8212; the URL and paste paths always work.</p>
     <textarea id="bulk-paste" placeholder='{"items":[...]}' style="min-height:110px"></textarea>
     <div class="row" style="margin-top:8px">
       <button id="bulk-clip" class="small">Paste from clipboard</button>
@@ -1105,6 +1112,11 @@ html[data-theme="light"] .stage::before { background: radial-gradient(closest-si
     <p class="muted" id="imp-desc"></p>
     <label>Choose a file</label>
     <input type="file" id="imp-file" accept="*/*">
+    <label>Or fetch from a URL</label>
+    <div class="row">
+      <input type="url" id="imp-url" class="grow" placeholder="export.json (next to this page) or https://&#8230;">
+      <button id="imp-fetch" class="small">Fetch</button>
+    </div>
     <label>Or paste the JSON</label>
     <textarea id="imp-paste" style="min-height:120px" placeholder='{ &#8230; }'></textarea>
     <div class="row" style="margin-top:10px">
@@ -1412,7 +1424,7 @@ function inlineAppCss(){
     '.wcontent .blk{margin:2px 0}.wcontent .seg{display:table;margin:0 auto;max-width:100%;white-space:nowrap}' +
     '.wcontent .cont-end::after{content:" \\21B4";color:#555;font-size:.8em}' +
     '.wcontent .cont-start::before{content:"\\21B3 ";color:#555;font-size:.8em}' +
-    '.wcontent svg{display:block;margin:0 auto}.fs-S{font-size:13px}.fs-M{font-size:16px}.fs-L{font-size:20px}' +
+    '.wcontent svg{display:block;margin:0 auto}.fs-S{font-size:13px}.fs-M{font-size:16px}.fs-L{font-size:20px}.fs-XL{font-size:24px}.fs-XXL{font-size:28px}' +
     '.wcontent.scrollmode{width:max-content;min-width:200px;max-width:400px;text-align:left}.wcontent.scrollmode .seg{margin:0}' +
     '.blk.overflow{outline:none!important}';
 }
@@ -1552,7 +1564,7 @@ function newEditBuffer(type, from){
   var b = from ? deepCopy(from) : {
     id: uid(type), type: type, title:'',
     created: nowSec(), modified: nowSec(),
-    cats: [], tags: [], notes: '', fontsz: 'M'
+    cats: [], tags: [], notes: '', fontsz: 'L'
   };
   if (!from) {
     if (type==='db') b.blocks = [{type:'math', src:'', color:'black'}];
@@ -2228,7 +2240,7 @@ function processBulk(spec, useAi){
       var preformatted = raw.blocks !== undefined || raw.qblocks !== undefined ||
         (Array.isArray(raw.variants) && raw.variants[0] &&
          raw.variants[0].qblocks !== undefined);
-      if (raw.fontsz === 'S' || raw.fontsz === 'M' || raw.fontsz === 'L') base.fontsz = raw.fontsz;
+      if (['S','M','L','XL','XXL'].indexOf(raw.fontsz) >= 0) base.fontsz = raw.fontsz;
       var work;
       if (!useAi || preformatted){
         // As-is path: trust the JSON exactly; loose strings become single
@@ -2865,6 +2877,7 @@ function impOpen(mode){
     ? 'A full database export (.mathref.json). It loads alongside your existing databases.'
     : 'A single item export (.item.json). The copy gets a fresh id, fully independent of the original.';
   $('imp-paste').value = '';
+  $('imp-url').value = '';
   try { $('imp-file').value = ''; } catch (e) { }
   $('imp-modal').classList.add('open');
 }
@@ -2881,6 +2894,24 @@ function pasteClipboardInto(id){
       else toast('Clipboard is empty');
     }, function(){ toast('Clipboard blocked here — long-press the box and paste'); });
   } else toast('Clipboard blocked here — long-press the box and paste');
+}
+
+// Webview-proof file access: fetch the JSON over HTTP into the paste box.
+// A bare filename resolves against this page's own host, so a file dropped
+// next to index.html needs no CORS and no picker.
+function fetchJsonInto(urlId, targetId){
+  var u = ($(urlId).value || '').trim();
+  if (!u){ toast('Enter a URL first'); return; }
+  toast('Fetching…');
+  fetch(u).then(function(r){
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.text();
+  }).then(function(t){
+    $(targetId).value = t;
+    toast('Fetched ' + Math.max(1, Math.round(t.length / 1024)) + ' KB — review below, then import');
+  }).catch(function(e){
+    toast('Fetch failed: ' + (e.message || e) + ' — cross-origin URLs need CORS');
+  });
 }
 
 /* ================================ shell ==================================== */
@@ -3090,6 +3121,8 @@ document.addEventListener('DOMContentLoaded', function(){
   $('imp-modal').onclick = function(e){ if (e.target === $('imp-modal')) impClose(); };
   $('imp-clip').onclick = function(){ pasteClipboardInto('imp-paste'); };
   $('imp-go').onclick = function(){ impRun($('imp-paste').value); };
+  $('imp-fetch').onclick = function(){ fetchJsonInto('imp-url', 'imp-paste'); };
+  $('bulk-fetch').onclick = function(){ fetchJsonInto('bulk-url', 'bulk-paste'); };
   $('imp-file').onchange = function(){
     if (!this.files[0]) return;
     var reader = new FileReader(), self = this;
